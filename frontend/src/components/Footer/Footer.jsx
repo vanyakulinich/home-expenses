@@ -7,26 +7,24 @@ import List from "@material-ui/core/List";
 // core components
 import footerStyle from "assets/jss/material-dashboard-react/components/footerStyle";
 
-import {Link} from 'react-router-dom'
+import {Link} from 'react-router-dom';
 
 function Footer({ ...props }) {
-  const { classes } = props;
+  const { classes, routes } = props;
   return (
     <footer className={classes.footer}>
       <div className={classes.container}>
         <div className={classes.left}>
           <List className={classes.list}>
-            <ListItem className={classes.inlineBlock}>
-              <Link to='/signin' className={classes.block}>
-                Sign In
-              </Link>
-            </ListItem>
-            <ListItem className={classes.inlineBlock}>
-              <Link to='/signup' className={classes.inlineBlock}>
-                  Sign Up
-              </Link>
-            </ListItem>
-            
+
+          {routes.map((item)=>{
+            if (item.redirect || item.path ==='/verify') return null;
+            return <ListItem className={classes.inlineBlock} key={item.path}>
+                    <Link to={item.path} className={classes.block}>
+                      {item.sidebarName}
+                    </Link>
+                  </ListItem>
+          })}
           </List>
         </div>
       </div>
