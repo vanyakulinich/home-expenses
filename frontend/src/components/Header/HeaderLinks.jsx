@@ -1,6 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import { Manager, Target, Popper } from "react-popper";
+import {Link} from 'react-router-dom';
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -77,19 +78,19 @@ class HeaderLinks extends React.Component {
                       onClick={this.handleClose}
                       className={classes.dropdownItem}
                     >
-                      Sign In
+                      <Link to='/signin'>Sign In</Link>
                     </MenuItem>
                     <MenuItem
                       onClick={this.handleClose}
                       className={classes.dropdownItem}
                     >
-                      Sign Up
+                      <Link to='/signup'>Sign Up</Link>
                     </MenuItem>
                     <MenuItem
                       onClick={this.handleClose}
                       className={classes.dropdownItem}
                     >
-                      Sign out
+                      <Link to='/'>Sign out</Link>
                     </MenuItem>
                   </MenuList>
                 </Paper>
