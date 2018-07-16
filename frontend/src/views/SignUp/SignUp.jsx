@@ -20,6 +20,7 @@ const styles = {
     }
 }
 
+
 const SignUp = (props)=>{
     const {classes} = props;
     return <Fragment>

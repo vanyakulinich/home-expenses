@@ -14,13 +14,13 @@ import SignIn from 'views/SignIn/SignIn.jsx';
 import SignUp from 'views/SignUp/SignUp.jsx';
 import VerifyEmail from 'views/VerifyEmail/VerifyEmail.jsx';
 const dashboardRoutes = [
-  // {
-  //   path: "/dashboard",
-  //   sidebarName: "Dashboard",
-  //   navbarName: "Material Dashboard",
-  //   icon: Dashboard,
-  //   component: DashboardPage
-  // },
+  {
+    path: "/dashboard",
+    sidebarName: "Dashboard",
+    navbarName: "Material Dashboard",
+    icon: Dashboard,
+    component: DashboardPage
+  },
   // {
   //   path: "/user",
   //   sidebarName: "User Profile",
@@ -86,8 +86,8 @@ const dashboardRoutes = [
   },
   {
     path: "/verify",
-    sidebarName: "VerifyEmail",
-    navbarName: "VerifyEmail",
+    sidebarName: "Verify Email",
+    navbarName: "Verify Email",
     icon: Person,
     component: VerifyEmail
   },
