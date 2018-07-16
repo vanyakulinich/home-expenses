@@ -7,6 +7,8 @@ import List from "@material-ui/core/List";
 // core components
 import footerStyle from "assets/jss/material-dashboard-react/components/footerStyle";
 
+import {Link} from 'react-router-dom'
+
 function Footer({ ...props }) {
   const { classes } = props;
   return (
@@ -15,35 +17,18 @@ function Footer({ ...props }) {
         <div className={classes.left}>
           <List className={classes.list}>
             <ListItem className={classes.inlineBlock}>
-              <a href="#home" className={classes.block}>
-                Home
-              </a>
+              <Link to='/signin' className={classes.block}>
+                Sign In
+              </Link>
             </ListItem>
             <ListItem className={classes.inlineBlock}>
-              <a href="#company" className={classes.block}>
-                Company
-              </a>
+              <Link to='/signup' className={classes.inlineBlock}>
+                  Sign Up
+              </Link>
             </ListItem>
-            <ListItem className={classes.inlineBlock}>
-              <a href="#portfolio" className={classes.block}>
-                Portfolio
-              </a>
-            </ListItem>
-            <ListItem className={classes.inlineBlock}>
-              <a href="#blog" className={classes.block}>
-                Blog
-              </a>
-            </ListItem>
+            
           </List>
         </div>
-        <p className={classes.right}>
-          <span>
-            &copy; {1900 + new Date().getYear()}{" "}
-            <a href="https://www.creative-tim.com" className={classes.a}>
-              Creative Tim
-            </a>, made with love for a better web
-          </span>
-        </p>
       </div>
     </footer>
   );
