@@ -24,7 +24,6 @@ const dashboardRoutes = [
     navbarName: "Material Dashboard",
     icon: Dashboard,
     component: DashboardPage,
-    signedUser: true
   },
   {
     path: "/reports",
@@ -67,13 +66,6 @@ const dashboardRoutes = [
   //   navbarName: "Icons",
   //   icon: BubbleChart,
   //   component: Icons
-  // },
-  // {
-  //   path: "/maps",
-  //   sidebarName: "Maps",
-  //   navbarName: "Map",
-  //   icon: LocationOn,
-  //   component: Maps
   // },
   // {
   //   path: "/notifications",

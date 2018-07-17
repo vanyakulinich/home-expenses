@@ -4,7 +4,8 @@ import { createBrowserHistory } from "history";
 import {Router, Route, Switch } from "react-router-dom";
 import {createStore, applyMiddleware, compose} from 'redux';
 import {Provider} from 'react-redux';
-import {ConnectedRouter, routerMiddleware} from 'react-router-redux';   
+import {ConnectedRouter, routerMiddleware} from 'react-router-redux';
+import thunk from 'redux-thunk';   
 
 import "assets/css/material-dashboard-react.css?v=1.3.0";
 
@@ -25,7 +26,7 @@ const routing = routerMiddleware(history);
 const store = createStore(
     allReducers,
     compose(
-      applyMiddleware(routing),
+      applyMiddleware(routing, thunk),
       window.devToolsExtension && window.devToolsExtension()
     )
 );

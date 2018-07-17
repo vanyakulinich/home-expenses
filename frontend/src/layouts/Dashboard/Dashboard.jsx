@@ -3,6 +3,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Switch, Route, Redirect } from "react-router-dom";
 import {connect} from 'react-redux'
+import mobileOpen from '../../actions/mobileOpen.jsx'
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
@@ -31,15 +32,9 @@ const switchRoutes = (
 );
 
 class App extends React.Component {
-  state = {
-    mobileOpen: false
-  };
-  handleDrawerToggle = () => {
-    this.setState({ mobileOpen: !this.state.mobileOpen });
-  };
-  getRoute() {
-    return this.props.location.pathname !== "/maps";
-  }
+  
+  handleDrawerToggle = () => this.props.mobileOpen(!this.props.mobile);
+
   componentDidMount() {
     if (navigator.platform.indexOf("Win") > -1) {
       const ps = new PerfectScrollbar(this.refs.mainPanel);
@@ -48,13 +43,14 @@ class App extends React.Component {
   componentDidUpdate(e) {
     if (e.history.location.pathname !== e.location.pathname) {
       this.refs.mainPanel.scrollTop = 0;
-      if(this.state.mobileOpen){
-        this.setState({mobileOpen: false});
+      if(this.props.mobileOpen){
+        this.handleDrawerToggle(false)
       }
     }
   }
+
   render() {
-    const { classes, ...rest } = this.props;
+    const {token, mobile, classes, ...rest } = this.props;
     return (
       <div className={classes.wrapper}>
         <Sidebar
@@ -63,25 +59,20 @@ class App extends React.Component {
           logo={logo}
           image={image}
           handleDrawerToggle={this.handleDrawerToggle}
-          open={this.state.mobileOpen}
+          open={mobile}
           color="blue"
-          {...rest}
-        />
-        <div className={classes.mainPanel} ref="mainPanel">
-          <Header
-            routes={dashboardRoutes}
-            handleDrawerToggle={this.handleDrawerToggle}
-            {...rest}
-          />
-          {/* On the /maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
-          {this.getRoute() ? (
-            <div className={classes.content}>
-              <div className={classes.container}>{switchRoutes}</div>
-            </div>
-          ) : (
-            <div className={classes.map}>{switchRoutes}</div>
-          )}
-          {/* {this.getRoute() ? <Footer /> : null} */}
+          {...rest}/>
+        
+        <div className={classes.mainPanel} ref="mainPanel">  
+        <Header
+          routes={dashboardRoutes}
+          handleDrawerToggle={this.handleDrawerToggle}
+          {...rest}/>
+            
+          <div className={classes.content}>
+            <div className={classes.container}>{switchRoutes}</div>
+          </div>
+          
           <Footer routes = {dashboardRoutes}/>
         </div>
       </div>
@@ -93,4 +84,13 @@ App.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default connect()(withStyles(dashboardStyle)(App));
+const mapStateToProps = state =>({
+  token: state.token,
+  mobile: state.mobile
+
+})
+const mapActionToProps = {
+  mobileOpen: mobileOpen
+}
+
+export default connect(mapStateToProps, mapActionToProps)(withStyles(dashboardStyle)(App));
