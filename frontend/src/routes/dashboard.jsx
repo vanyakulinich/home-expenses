@@ -13,6 +13,7 @@ import UpgradeToPro from "views/UpgradeToPro/UpgradeToPro.jsx";
 import SignIn from 'views/SignIn/SignIn.jsx';
 import SignUp from 'views/SignUp/SignUp.jsx';
 import VerifyEmail from 'views/VerifyEmail/VerifyEmail.jsx';
+import Config from 'views/Config/Config.jsx';
 const dashboardRoutes = [
   {
     path: "/dashboard",
@@ -20,6 +21,13 @@ const dashboardRoutes = [
     navbarName: "Material Dashboard",
     icon: Dashboard,
     component: DashboardPage
+  },
+  {
+    path: "/config",
+    sidebarName: "Config",
+    navbarName: "Config",
+    icon: Dashboard,
+    component: Config
   },
   {
     path: "/user",

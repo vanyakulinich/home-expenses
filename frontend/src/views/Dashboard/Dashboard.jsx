@@ -58,7 +58,7 @@ class Dashboard extends React.Component {
     const { classes } = this.props;
     return (
       <div>
-        {/* <Grid container>
+        <Grid container>
           <GridItem xs={12} sm={6} md={3}>
             <Card>
               <CardHeader color="warning" stats icon>
@@ -276,7 +276,7 @@ class Dashboard extends React.Component {
               </CardBody>
             </Card>
           </GridItem>
-        </Grid> */}
+        </Grid>
 
         <Card>
           <CardHeader color='info'>
