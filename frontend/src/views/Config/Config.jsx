@@ -10,9 +10,7 @@ import CardIcon from "components/Card/CardIcon.jsx";
 import {Clear, ArrowUpward, ArrowDownward, Loupe} from "@material-ui/icons";
 
 const styles = {
-    cardMain: {
-    },
-    cardBody: {
+    configBody: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'flex-start',
@@ -20,37 +18,17 @@ const styles = {
     },
 }
 
-const inputProps = {
-    disableUnderline: true
-}
-
-
 const Config = (props)=>{
     const {classes} = props;
     return(
-        <Card className={classes.cardMain}>
+        <Card>
             <CardHeader color="primary">
                 <h3>Edit Categories</h3>
-                <h5>Please config tyour categories</h5>
+                <h5>Please config your categories</h5>
             </CardHeader>
-            <CardBody className={classes.cardBody}>
+            <CardBody className={classes.configBody}>
                 <List>
-                    <ListItem>
-                        <TextField value='Category' InputProps = {inputProps}/>
-                        <Button color="info">
-                            <ArrowUpward/>
-                        </Button>
-                        <Button color="info">
-                            <ArrowDownward/>
-                        </Button>
-                        <Button color="warning">
-                            <Clear/>
-                        </Button>
-                        <Button color="primary">
-                            <Loupe/>
-                        </Button>
-                    </ListItem>
-                    <Divider/>
+                    <Category/>
                 </List>
             </CardBody>
         </Card>
