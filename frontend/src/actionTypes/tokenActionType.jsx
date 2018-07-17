@@ -1,0 +1,2 @@
+const TOKEN_ACTION = 'TEST_ACTION'
+export default TOKEN_ACTION

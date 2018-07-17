@@ -16,6 +16,7 @@ import VerifyEmail from 'views/VerifyEmail/VerifyEmail.jsx';
 import Config from 'views/Config/Config.jsx';
 import Reports from 'views/Reports/Reports.jsx';
 
+
 const dashboardRoutes = [
   {
     path: "/dashboard",
@@ -81,13 +82,6 @@ const dashboardRoutes = [
   //   icon: Notifications,
   //   component: NotificationsPage
   // },
-  // {
-  //   path: "/upgrade-to-pro",
-  //   sidebarName: "Upgrade To PRO",
-  //   navbarName: "Upgrade To PRO",
-  //   icon: Unarchive,
-  //   component: UpgradeToPro
-  // },
   {
     path: "/signin",
     sidebarName: "Sign In",
@@ -103,13 +97,17 @@ const dashboardRoutes = [
     component: SignUp
   },
   { 
+    hidden: true,
     path: "/verify",
     sidebarName: "Verify Email",
     navbarName: "Verify Email",
     icon: Person,
     component: VerifyEmail
   },
-  { redirect: true, path: "/", to: "/dashboard", navbarName: "Redirect" }
+  { redirect: true, 
+    path: "/", 
+    to: localStorage.getItem('token') ? "/dashboard" : '/signin', 
+    navbarName: "Redirect" }
 ];
 
 export default dashboardRoutes;

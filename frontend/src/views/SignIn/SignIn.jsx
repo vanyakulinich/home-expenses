@@ -23,6 +23,8 @@ const styles = {
 const signInClick =()=> {
     let [email, pass] = document.querySelectorAll('[type="text"]');
     console.log(email.value, pass.value);
+    // localStorage.setItem('token', 'token')
+    // localStorage.clear()
 }
 
 

@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux'
-import testReducer from './testReducer.jsx'
+import tokenReducer from './tokenReducer.jsx'
 
 const allReducers = combineReducers({
-    test: testReducer,
+    token: tokenReducer,
     router: routerReducer
 })
 export default allReducers
