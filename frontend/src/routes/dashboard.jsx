@@ -17,6 +17,8 @@ import Config from 'views/Config/Config.jsx';
 import Reports from 'views/Reports/Reports.jsx';
 
 
+const isToken = localStorage.getItem('token') ? true : false
+
 const dashboardRoutes = [
   {
     path: "/dashboard",
@@ -24,20 +26,23 @@ const dashboardRoutes = [
     navbarName: "Material Dashboard",
     icon: Dashboard,
     component: DashboardPage,
+    token: true
   },
   {
     path: "/reports",
     sidebarName: "Reports",
     navbarName: "Reports",
     icon: Dashboard,
-    component: Reports
+    component: Reports,
+    token: true
   },
   {
     path: "/config",
     sidebarName: "Config",
     navbarName: "Config",
     icon: Dashboard,
-    component: Config
+    component: Config,
+    token: true
   },
   // {
   //   path: "/user",
@@ -79,14 +84,16 @@ const dashboardRoutes = [
     sidebarName: "Sign In",
     navbarName: "SignIn",
     icon: Person,
-    component: SignIn
+    component: SignIn,
+    token: false
   },
   {
     path: "/signup",
     sidebarName: "Sign Up",
     navbarName: "SignUp",
     icon: Person,
-    component: SignUp
+    component: SignUp,
+    token: false
   },
   { 
     hidden: true,
@@ -94,12 +101,13 @@ const dashboardRoutes = [
     sidebarName: "Verify Email",
     navbarName: "Verify Email",
     icon: Person,
-    component: VerifyEmail
+    component: VerifyEmail,
   },
   { redirect: true, 
     path: "/", 
-    to: localStorage.getItem('token') ? "/dashboard" : '/signin', 
-    navbarName: "Redirect" }
+    to: isToken ? "/dashboard" : '/signin', 
+    navbarName: "Redirect",
+  }
 ];
 
 export default dashboardRoutes;

@@ -11,13 +11,14 @@ import {Link} from 'react-router-dom';
 
 function Footer({ ...props }) {
   const { classes, routes } = props;
+  console.log(routes)
   return (
     <footer className={classes.footer}>
       <div className={classes.container}>
         <div className={classes.left}>
           <List className={classes.list}>
             {routes.map((item)=>{
-              if (item.redirect || item.path ==='/verify') return null;
+              // if (item.redirect || item.hidden) return null;
               return <ListItem className={classes.inlineBlock} key={item.path}>
                     <Link to={item.path} className={classes.block}>
                       {item.sidebarName}

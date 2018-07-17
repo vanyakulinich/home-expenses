@@ -64,8 +64,8 @@ class HeaderLinks extends React.Component {
               classNames({ [classes.popperClose]: !open }) +
               " " +
               classes.pooperResponsive
-            }
-          >
+            }>
+
             <ClickAwayListener onClickAway={this.handleClose}>
               <Grow
                 in={open}

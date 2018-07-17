@@ -21,15 +21,6 @@ import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboar
 import image from "assets/img/sidebar-2.jpg";
 import logo from "assets/img/reactlogo.png";
 
-const switchRoutes = (
-  <Switch>
-    {dashboardRoutes.map((prop, key) => {
-      if (prop.redirect)
-        return <Redirect from={prop.path} to={prop.to} key={key}/>;
-      return <Route path={prop.path} component={prop.component} key={key} />;
-    })}
-  </Switch>
-);
 
 class App extends React.Component {
   
@@ -51,10 +42,15 @@ class App extends React.Component {
 
   render() {
     const {token, mobile, classes, ...rest } = this.props;
+
+    const routesForRender = dashboardRoutes.filter(route=>{
+      if(route.token === !!token) return route
+    }) 
+
     return (
       <div className={classes.wrapper}>
         <Sidebar
-          routes={dashboardRoutes}
+          routes={routesForRender}
           logoText={"Home Exprenses"}
           logo={logo}
           image={image}
@@ -65,15 +61,23 @@ class App extends React.Component {
         
         <div className={classes.mainPanel} ref="mainPanel">  
         <Header
-          routes={dashboardRoutes}
+          routes={routesForRender}
           handleDrawerToggle={this.handleDrawerToggle}
           {...rest}/>
             
           <div className={classes.content}>
-            <div className={classes.container}>{switchRoutes}</div>
+            <div className={classes.container}>
+            {
+              <Switch>
+                {dashboardRoutes.map((prop, key) => {
+                  if (prop.redirect) return <Redirect from={prop.path} to={prop.to} key={key}/>;
+                  return <Route path={prop.path} component={prop.component} key={key} />;
+                })}
+              </Switch>
+            }</div>
           </div>
           
-          <Footer routes = {dashboardRoutes}/>
+          <Footer routes = {routesForRender}/>
         </div>
       </div>
     );
