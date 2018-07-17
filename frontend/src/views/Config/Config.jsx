@@ -30,6 +30,7 @@ const Config = (props)=>{
                 <List>
                     <Category/>
                 </List>
+                <Button color="primary">ADD CATEGORY</Button>
             </CardBody>
         </Card>
     )

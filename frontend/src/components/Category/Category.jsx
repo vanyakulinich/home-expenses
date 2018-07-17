@@ -21,7 +21,7 @@ const Category = ()=>{
                 <Button color="warning">
                     <Clear/>
                 </Button>
-                <Button color="primary">
+                <Button color="info">
                     <Loupe/>
                 </Button>
             </ListItem>
