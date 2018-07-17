@@ -44,7 +44,7 @@ class App extends React.Component {
     const {token, mobile, classes, ...rest } = this.props;
 
     const routesForRender = dashboardRoutes.filter(route=>{
-      if(route.token === !!token) return route
+      if(route.token !== !!token) return route
     }) 
 
     return (
