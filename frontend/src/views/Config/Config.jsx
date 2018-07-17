@@ -17,9 +17,12 @@ const styles = {
         flexDirection: 'column',
         alignItems: 'flex-start',
         justifyContent: 'space-around',
-    }
+    },
 }
 
+const inputProps = {
+    disableUnderline: true
+}
 
 
 const Config = (props)=>{
@@ -33,7 +36,7 @@ const Config = (props)=>{
             <CardBody className={classes.cardBody}>
                 <List>
                     <ListItem>
-                        <TextField value='Category'/>
+                        <TextField value='Category' InputProps = {inputProps}/>
                         <Button color="info">
                             <ArrowUpward/>
                         </Button>
