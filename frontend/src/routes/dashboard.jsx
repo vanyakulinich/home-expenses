@@ -14,6 +14,8 @@ import SignIn from 'views/SignIn/SignIn.jsx';
 import SignUp from 'views/SignUp/SignUp.jsx';
 import VerifyEmail from 'views/VerifyEmail/VerifyEmail.jsx';
 import Config from 'views/Config/Config.jsx';
+import Reports from 'views/Reports/Reports.jsx';
+
 const dashboardRoutes = [
   {
     path: "/dashboard",
@@ -21,6 +23,13 @@ const dashboardRoutes = [
     navbarName: "Material Dashboard",
     icon: Dashboard,
     component: DashboardPage
+  },
+  {
+    path: "/reports",
+    sidebarName: "Reports",
+    navbarName: "Reports",
+    icon: Dashboard,
+    component: Reports
   },
   {
     path: "/config",
