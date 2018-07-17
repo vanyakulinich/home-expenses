@@ -28,8 +28,10 @@ let categories = [
     }
 ]
 
+
 const Config = (props)=>{
     const {classes} = props;
+
     return(
         <Card>
             <CardHeader color="primary">
