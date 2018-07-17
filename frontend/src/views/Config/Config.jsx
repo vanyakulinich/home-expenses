@@ -18,6 +18,16 @@ const styles = {
     },
 }
 
+// fake categories
+let categories = [
+    {   
+        name: 'category1',
+    },
+    {
+        name: 'category2',
+    }
+]
+
 const Config = (props)=>{
     const {classes} = props;
     return(
@@ -28,7 +38,11 @@ const Config = (props)=>{
             </CardHeader>
             <CardBody className={classes.configBody}>
                 <List>
-                    <Category/>
+                    {categories.map(item=>{
+                        console.log(item.name)
+                        return <Category categoryName={item.name} key={item.name}/>
+                    })}
+                    {/* <Category/> */}
                 </List>
                 <Button color="primary">ADD CATEGORY</Button>
             </CardBody>

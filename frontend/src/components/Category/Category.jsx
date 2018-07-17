@@ -7,11 +7,13 @@ const inputProps = {
     disableUnderline: true
 }
 // reusable category component
-const Category = ()=>{
+const Category = (props)=>{
+    const {categoryName} = props
+    console.log(categoryName)
     return(
        <Fragment>
            <ListItem>
-                <TextField value='Category' InputProps = {inputProps}/>
+                <TextField value={categoryName} InputProps = {inputProps}/>
                 <Button color="info">
                     <ArrowUpward/>
                 </Button>
