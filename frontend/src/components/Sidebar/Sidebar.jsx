@@ -97,7 +97,7 @@ const Sidebar = ({ ...props }) => {
         <Drawer
           anchor="left"
           variant="permanent"
-          open
+          // open
           classes={{
             paper: classes.drawerPaper
           }}

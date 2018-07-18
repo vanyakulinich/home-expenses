@@ -2,6 +2,7 @@ import React from "react";
 import classNames from "classnames";
 import { Manager, Target, Popper } from "react-popper";
 import {Link} from 'react-router-dom';
+import {connect} from 'react-redux';
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -33,7 +34,7 @@ class HeaderLinks extends React.Component {
     this.setState({ open: false });
   };
   render() {
-    const { classes } = this.props;
+    const { classes} = this.props;
     const { open } = this.state;
     return (
         <div className={classes.searchWrapper}>
