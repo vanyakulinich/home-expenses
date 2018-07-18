@@ -17,8 +17,6 @@ import Config from 'views/Config/Config.jsx';
 import Reports from 'views/Reports/Reports.jsx';
 
 
-const isToken = localStorage.getItem('token') ? true : false
-
 const dashboardRoutes = [
   {
     path: "/dashboard",
@@ -68,7 +66,10 @@ const dashboardRoutes = [
     icon: Person,
     component: VerifyEmail,
   },
-  { redirect: true, path: "/", navbarName: "Redirect" }
+  { 
+    path: "/", 
+    navbarName: "Redirect"
+  }
 ];
 
 export default dashboardRoutes;
