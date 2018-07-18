@@ -11,7 +11,6 @@ import "assets/css/material-dashboard-react.css?v=1.3.0";
 import indexRoutes from "routes/index.jsx";
 
 const appHistory = createBrowserHistory();
-
 ReactDOM.render(
   <Provider store={store}>
     <ConnectedRouter history={appHistory}>
@@ -23,7 +22,6 @@ ReactDOM.render(
     </ConnectedRouter>
   </Provider>, document.getElementById("root")
 );
-
 
 export default appHistory;
 

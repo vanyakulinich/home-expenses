@@ -11,7 +11,6 @@ import {Link} from 'react-router-dom';
 
 function Footer({ ...props }) {
   const { classes, routes } = props;
-  console.log(routes)
   return (
     <footer className={classes.footer}>
       <div className={classes.container}>

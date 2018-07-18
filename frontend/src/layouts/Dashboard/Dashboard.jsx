@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { Switch, Route, Redirect } from "react-router-dom";
 import {connect} from 'react-redux'
 import mobileOpen from '../../actions/mobileOpen.jsx'
+import isToken from '../../actions/isToken.jsx'
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
@@ -27,9 +28,11 @@ class App extends React.Component {
   handleDrawerToggle = () => this.props.mobileOpen(!this.props.mobile);
 
   componentDidMount() {
-    if (navigator.platform.indexOf("Win") > -1) {
-      const ps = new PerfectScrollbar(this.refs.mainPanel);
-    }
+    // if (navigator.platform.indexOf("Win") > -1) {
+    //   const ps = new PerfectScrollbar(this.refs.mainPanel);
+    // }
+    // this.props.isToken(localStorage.getItem('token'))
+    // this.props.isToken('token')
   }
   componentDidUpdate(e) {
     if (e.history.location.pathname !== e.location.pathname) {
@@ -91,7 +94,8 @@ const mapStateToProps = state =>({
 
 })
 const mapActionToProps = {
-  mobileOpen: mobileOpen
+  mobileOpen,
+  isToken
 }
 
 export default connect(mapStateToProps, mapActionToProps)(withStyles(dashboardStyle)(App));

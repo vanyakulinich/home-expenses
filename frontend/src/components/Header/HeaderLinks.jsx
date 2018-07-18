@@ -1,8 +1,10 @@
-import React from "react";
+import React, {Fragment} from "react";
 import classNames from "classnames";
 import { Manager, Target, Popper } from "react-popper";
 import {Link} from 'react-router-dom';
 import {connect} from 'react-redux';
+
+import isToken from '../../actions/isToken.jsx'
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -33,8 +35,13 @@ class HeaderLinks extends React.Component {
   handleClose = () => {
     this.setState({ open: false });
   };
+
+  signOut = ()=>{
+    this.props.IsToken(null)
+  }
+
   render() {
-    const { classes} = this.props;
+    const {classes, token} = this.props;
     const { open } = this.state;
     return (
         <div className={classes.searchWrapper}>
@@ -74,26 +81,33 @@ class HeaderLinks extends React.Component {
                 style={{ transformOrigin: "0 0 0" }}
               >
                 <Paper className={classes.dropdown}>
-                  <MenuList role="menu">
-                    <MenuItem
-                      onClick={this.handleClose}
-                      className={classes.dropdownItem}
-                    >
-                      <Link to='/signin'>Sign In</Link>
-                    </MenuItem>
-                    <MenuItem
-                      onClick={this.handleClose}
-                      className={classes.dropdownItem}
-                    >
-                      <Link to='/signup'>Sign Up</Link>
-                    </MenuItem>
-                    <MenuItem
-                      onClick={this.handleClose}
-                      className={classes.dropdownItem}
-                    >
-                      <Link to='/'>Sign out</Link>
-                    </MenuItem>
-                  </MenuList>
+                  {
+                    token ? (
+                      <MenuList role="menu">
+                          <MenuItem
+                          onClick={this.handleClose}
+                          className={classes.dropdownItem}
+                        >
+                          <Link to='/' onClick = {this.signOut}>Sign out</Link>
+                        </MenuItem>
+                      </MenuList>
+                    ) : (
+                      <MenuList role="menu">
+                          <MenuItem
+                          onClick={this.handleClose}
+                          className={classes.dropdownItem}
+                        >
+                          <Link to='/signin'>Sign In</Link>
+                        </MenuItem>
+                        <MenuItem
+                          onClick={this.handleClose}
+                          className={classes.dropdownItem}
+                        >
+                          <Link to='/signup'>Sign Up</Link>
+                        </MenuItem>
+                      </MenuList>
+                    )
+                  }
                 </Paper>
               </Grow>
             </ClickAwayListener>
@@ -104,4 +118,11 @@ class HeaderLinks extends React.Component {
   }
 }
 
-export default withStyles(headerLinksStyle)(HeaderLinks);
+const mapStateToProps = state=>({
+  token: state.token
+})
+const mapActionsToProps = {
+  isToken
+}
+
+export default connect(mapStateToProps, mapActionsToProps)(withStyles(headerLinksStyle)(HeaderLinks));
