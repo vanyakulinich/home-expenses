@@ -16,8 +16,8 @@ import Header from "components/Header/Header.jsx";
 import Footer from "components/Footer/Footer.jsx";
 import Sidebar from "components/Sidebar/Sidebar.jsx";
 
-import dashboardRoutes from "routes/dashboard.jsx";
-import SwitchRoutes from "routes/index.jsx";
+// routes (array of objects)
+import appRoutes from "routes/appRoutes.jsx";
 
 import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx";
 
@@ -27,10 +27,7 @@ import logo from "assets/img/reactlogo.png";
 
 class App extends React.Component {
   
-  handleDrawerToggle = () => this.props.mobileOpen(!this.props.mobile);
-
   componentDidMount() {
-    // localStorage.getItem('token') && this.getToken()
     if (navigator.platform.indexOf("Win") > -1) {
       const ps = new PerfectScrollbar(this.refs.mainPanel);
     }
@@ -41,22 +38,24 @@ class App extends React.Component {
     }
   }
 
-  getToken = ()=> this.props.isToken(localStorage.getItem('token'))
+  handleDrawerToggle = () => this.props.mobileOpen(!this.props.mobile);
 
   render() {
-    console.log(this.props.location)
-    const {token, mobile, classes, ...rest } = this.props;
+    const {mobile, classes, ...rest } = this.props;
     
+    const userToken  = localStorage.getItem('token');
     
-    let tokenLocalStorage  = localStorage.getItem('token')
-    const routesForRender = dashboardRoutes.filter(route=>{
-      if(route.token === !!tokenLocalStorage) return route
-    }) 
+    // filter routes from routes array for sidebar, header and footer
+    const routesForSidebarFooterHeader = appRoutes.filter(route=>{
+      if(route.token === !!userToken) return route
+      }) 
 
     return (
+    
       <div className={classes.wrapper}>
-        <Sidebar
-          routes={routesForRender}
+        
+        <Sidebar 
+          routes={routesForSidebarFooterHeader}
           logoText={"Home Exprenses"}
           logo={logo}
           image={image}
@@ -65,35 +64,31 @@ class App extends React.Component {
           color="blue"
           {...rest}/>
         
-        <div className={classes.mainPanel} ref="mainPanel">  
-        <Header
-          routes={routesForRender}
-          handleDrawerToggle={this.handleDrawerToggle}
-          {...rest}/>
+        <div className={classes.mainPanel} ref="mainPanel">
+
+          <Header
+            routes={routesForSidebarFooterHeader}
+            handleDrawerToggle={this.handleDrawerToggle}
+            {...rest}/>
             
           <div className={classes.content}>
             <div className={classes.container}>
-            {/* <SwitchRoutes token = {localStorage.getItem('token')}/> */}
-            {
-              <Switch>
-                 { 
-                  dashboardRoutes.map((prop, key) => {
-                  if (prop.path=='/') {
-                    return <Redirect to={tokenLocalStorage ?'/dashboard':'/signin'} key={key}/>
-                  } 
-                  if(prop.token === !!localStorage.getItem('token')) {
-                    return <Route path={prop.path} 
-                          component={prop.component} 
-                          key={key} />;
-                  }
-                  
-                })}
-              </Switch>
-            }
+                 {// routes for rendering in App
+                 <Switch>
+                  {appRoutes.map((prop, key) => {
+                    if (prop.path=='/') {
+                      return <Redirect to={userToken ?'/dashboard':'/signin'} key={key}/>
+                    } 
+                    if(prop.token === !!userToken) {
+                      return <Route path={prop.path} component={prop.component} key={key} />;
+                    }
+                  })}
+                </Switch>}
             </div>
           </div>
-          
-          <Footer routes = {routesForRender}/>
+
+          <Footer routes = {routesForSidebarFooterHeader}/>
+
         </div>
       </div>
     );

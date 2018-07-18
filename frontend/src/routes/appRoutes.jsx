@@ -19,7 +19,7 @@ import Reports from 'views/Reports/Reports.jsx';
 
 
 
-const dashboardRoutes = [
+const appRoutes = [
   {
     path: "/dashboard",
     sidebarName: "Dashboard",
@@ -75,4 +75,4 @@ const dashboardRoutes = [
   }
 ];
 
-export default dashboardRoutes;
+export default appRoutes;
