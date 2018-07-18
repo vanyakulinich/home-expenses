@@ -34,9 +34,6 @@ class App extends React.Component {
   componentDidUpdate(e) {
     if (e.history.location.pathname !== e.location.pathname) {
       this.refs.mainPanel.scrollTop = 0;
-      if(this.props.mobileOpen){
-        this.handleDrawerToggle(false)
-      }
     }
   }
 

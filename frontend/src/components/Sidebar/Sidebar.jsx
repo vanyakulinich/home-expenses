@@ -16,11 +16,15 @@ import HeaderLinks from "components/Header/HeaderLinks.jsx";
 import sidebarStyle from "assets/jss/material-dashboard-react/components/sidebarStyle.jsx";
 
 const Sidebar = ({ ...props }) => {
+  
   // verifies if routeName is the one active (in browser input)
   function activeRoute(routeName) {
     return props.location.pathname.indexOf(routeName) > -1 ? true : false;
   }
+
+
   const { classes, color, logo, image, logoText, routes } = props;
+
   var links = (
     <List className={classes.list}>
       {routes.map((prop, key) => {
@@ -55,6 +59,8 @@ const Sidebar = ({ ...props }) => {
       })}
     </List>
   );
+
+
   var brand = (
     <div className={classes.logo}>
       <Link to="/" className={classes.logoLink}>
@@ -65,6 +71,9 @@ const Sidebar = ({ ...props }) => {
       </Link>
     </div>
   );
+  
+  
+  // returned component
   return (
     <div>
       <Hidden mdUp>
@@ -97,7 +106,7 @@ const Sidebar = ({ ...props }) => {
         <Drawer
           anchor="left"
           variant="permanent"
-          // open
+          open
           classes={{
             paper: classes.drawerPaper
           }}
