@@ -1,6 +1,6 @@
 import TOKEN_ACTION from '../actionTypes/tokenActionType.jsx'
-
-export default function testAction(state = null, { type, token }) {
+import { combineReducers } from 'redux';
+ const token=(state = null, { type, token })=>{
     switch (type) {
         case TOKEN_ACTION:
             return token;
@@ -8,3 +8,7 @@ export default function testAction(state = null, { type, token }) {
             return state;
     }
 }
+
+export default combineReducers({
+    token,
+});
