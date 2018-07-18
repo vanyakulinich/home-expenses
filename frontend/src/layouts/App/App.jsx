@@ -77,17 +77,6 @@ class App extends React.Component {
                   if (prop.path=='/') {
                     return <Redirect to={tokenLocalStorage ?'/dashboard':'/signin'} key={key}/>
                   } 
-                  
-                  // return <Route path={prop.path} render={()=>{
-                  //       if(tokenLocalStorage && prop.token) {
-                  //         return prop.component
-                  //       } else {
-                  //         return null
-                  //       }
-                  //     }}
-                  //       key={key} />;
-
-
                   return <Route path={prop.path} 
                           component={prop.component} 
                           key={key} />;
