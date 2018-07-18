@@ -6,13 +6,20 @@ import dashboardRoutes from './dashboard.jsx'
 // const indexRoutes = [{ path: "/", component: Dashboard }];
 
 // const indexRoutes = { path: "/", component: Dashboard };
-const SwitchRoutes =()=> (
+const SwitchRoutes =(token)=> (
     <Switch>
-      {dashboardRoutes.map((prop, key) => {
-        if (prop.redirect)
-          return <Redirect from={prop.path} to={prop.to} key={key}/>;
-        return <Route path={prop.path} component={prop.component} key={key} />;
-      })}
+      {
+        dashboardRoutes.map((prop, key) => {
+          if (prop.path=='/') {
+            return <Redirect to={token ?'/dashboard':'/signin'} key={key}/>
+          } 
+          if(prop.token === !!localStorage.getItem('token')) {
+            return <Route path={prop.path} 
+                  component={prop.component} 
+                  key={key} />;
+          }
+      })
+      }
     </Switch>
   );
 

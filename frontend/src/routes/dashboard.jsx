@@ -67,6 +67,7 @@ const dashboardRoutes = [
     navbarName: "Verify Email",
     icon: Person,
     component: VerifyEmail,
+    token: false
   },
   { 
     path: "/", 

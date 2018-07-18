@@ -46,6 +46,8 @@ class App extends React.Component {
   render() {
     console.log(this.props.location)
     const {token, mobile, classes, ...rest } = this.props;
+    
+    
     let tokenLocalStorage  = localStorage.getItem('token')
     const routesForRender = dashboardRoutes.filter(route=>{
       if(route.token === !!tokenLocalStorage) return route
@@ -71,6 +73,7 @@ class App extends React.Component {
             
           <div className={classes.content}>
             <div className={classes.container}>
+            {/* <SwitchRoutes token = {localStorage.getItem('token')}/> */}
             {
               <Switch>
                  { 
@@ -78,9 +81,12 @@ class App extends React.Component {
                   if (prop.path=='/') {
                     return <Redirect to={tokenLocalStorage ?'/dashboard':'/signin'} key={key}/>
                   } 
-                  return <Route path={prop.path} 
+                  if(prop.token === !!localStorage.getItem('token')) {
+                    return <Route path={prop.path} 
                           component={prop.component} 
                           key={key} />;
+                  }
+                  
                 })}
               </Switch>
             }
