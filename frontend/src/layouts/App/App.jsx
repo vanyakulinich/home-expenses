@@ -1,10 +1,11 @@
-/* eslint-disable */
+// /* eslint-disable */
 import React from "react";
 import PropTypes from "prop-types";
 import { Switch, Route, Redirect } from "react-router-dom";
 import {connect} from 'react-redux'
 import mobileOpen from '../../actions/mobileOpen.jsx'
 import isToken from '../../actions/isToken.jsx'
+import redirection from '../../actions/redirect.jsx'
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
@@ -28,15 +29,12 @@ class App extends React.Component {
   handleDrawerToggle = () => this.props.mobileOpen(!this.props.mobile);
 
   componentDidMount() {
-    // if (navigator.platform.indexOf("Win") > -1) {
-    //   const ps = new PerfectScrollbar(this.refs.mainPanel);
-    // }
-    // this.props.isToken(localStorage.getItem('token'))
     // this.props.isToken('token')
   }
   componentDidUpdate(e) {
     if (e.history.location.pathname !== e.location.pathname) {
       this.refs.mainPanel.scrollTop = 0;
+
     }
   }
 
@@ -69,8 +67,10 @@ class App extends React.Component {
             <div className={classes.container}>
             {
               <Switch>
-                {dashboardRoutes.map((prop, key) => {
-                  if (prop.redirect) return <Redirect to={prop.to} key={key}/>;
+                 { 
+                  dashboardRoutes.map((prop, key) => {
+                  if (prop.redirect) return <Redirect to={token?'/dashboard':'/signin'} 
+                                              key={key}/>
                   return <Route path={prop.path} component={prop.component} key={key} />;
                 })}
               </Switch>
@@ -95,7 +95,8 @@ const mapStateToProps = state =>({
 })
 const mapActionToProps = {
   mobileOpen,
-  isToken
+  isToken,
+  redirection,
 }
 
 export default connect(mapStateToProps, mapActionToProps)(withStyles(dashboardStyle)(App));

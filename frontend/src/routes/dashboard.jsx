@@ -15,6 +15,7 @@ import SignUp from 'views/SignUp/SignUp.jsx';
 import VerifyEmail from 'views/VerifyEmail/VerifyEmail.jsx';
 import Config from 'views/Config/Config.jsx';
 import Reports from 'views/Reports/Reports.jsx';
+import store from '../store'
 
 
 const isToken = localStorage.getItem('token') ? true : false
@@ -44,41 +45,6 @@ const dashboardRoutes = [
     component: Config,
     token: true
   },
-  // {
-  //   path: "/user",
-  //   sidebarName: "User Profile",
-  //   navbarName: "Profile",
-  //   icon: Person,
-  //   component: UserProfile
-  // },
-  // {
-  //   path: "/table",
-  //   sidebarName: "Table List",
-  //   navbarName: "Table List",
-  //   icon: ContentPaste,
-  //   component: TableList
-  // },
-  // {
-  //   path: "/typography",
-  //   sidebarName: "Typography",
-  //   navbarName: "Typography",
-  //   icon: LibraryBooks,
-  //   component: Typography
-  // },
-  // {
-  //   path: "/icons",
-  //   sidebarName: "Icons",
-  //   navbarName: "Icons",
-  //   icon: BubbleChart,
-  //   component: Icons
-  // },
-  // {
-  //   path: "/notifications",
-  //   sidebarName: "Notifications",
-  //   navbarName: "Notifications",
-  //   icon: Notifications,
-  //   component: NotificationsPage
-  // },
   {
     path: "/signin",
     sidebarName: "Sign In",
@@ -103,11 +69,7 @@ const dashboardRoutes = [
     icon: Person,
     component: VerifyEmail,
   },
-  { redirect: true, 
-    path: "/", 
-    to: isToken ? "/dashboard" : '/signin', 
-    navbarName: "Redirect",
-  }
+  { redirect: true, path: "/", navbarName: "Redirect" }
 ];
 
 export default dashboardRoutes;

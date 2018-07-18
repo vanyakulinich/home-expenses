@@ -8,17 +8,14 @@ import store from './store'
 
 import "assets/css/material-dashboard-react.css?v=1.3.0";
 
-import indexRoutes from "routes/index.jsx";
+import App from "layouts/App/App.jsx";
 
 const appHistory = createBrowserHistory();
+
 ReactDOM.render(
   <Provider store={store}>
     <ConnectedRouter history={appHistory}>
-        <Switch>
-          {indexRoutes.map((prop, key) => {
-            return <Route path={prop.path} component={prop.component} key={key} />;
-          })}
-        </Switch>
+      <Route path='/' component={App}/>
     </ConnectedRouter>
   </Provider>, document.getElementById("root")
 );
