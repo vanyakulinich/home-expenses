@@ -1,4 +1,4 @@
-// /* eslint-disable */
+/* eslint-disable */
 import React from "react";
 import PropTypes from "prop-types";
 import { Switch, Route, Redirect } from "react-router-dom";
@@ -37,17 +37,17 @@ class App extends React.Component {
   componentDidUpdate(e) {
     if (e.history.location.pathname !== e.location.pathname) {
       this.refs.mainPanel.scrollTop = 0;
-
     }
   }
 
   getToken = ()=> this.props.isToken(localStorage.getItem('token'))
 
   render() {
+    console.log(this.props.location)
     const {token, mobile, classes, ...rest } = this.props;
     let tokenLocalStorage  = localStorage.getItem('token')
     const routesForRender = dashboardRoutes.filter(route=>{
-      if(route.token === !!token) return route
+      if(route.token === !!tokenLocalStorage) return route
     }) 
 
     return (
