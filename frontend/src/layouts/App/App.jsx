@@ -17,6 +17,7 @@ import Footer from "components/Footer/Footer.jsx";
 import Sidebar from "components/Sidebar/Sidebar.jsx";
 
 import dashboardRoutes from "routes/dashboard.jsx";
+import SwitchRoutes from "routes/index.jsx";
 
 import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx";
 
@@ -82,7 +83,8 @@ class App extends React.Component {
                           key={key} />;
                 })}
               </Switch>
-            }</div>
+            }
+            </div>
           </div>
           
           <Footer routes = {routesForRender}/>

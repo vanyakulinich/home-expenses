@@ -28,6 +28,12 @@ let categories = [
     }
 ]
 
+const addCategory =()=>{
+    let newCategory = {
+        name: 'New Category'
+    }
+}
+
 
 const Config = (props)=>{
     const {classes} = props;
@@ -46,7 +52,8 @@ const Config = (props)=>{
                     })}
                     {/* <Category/> */}
                 </List>
-                <Button color="primary">ADD CATEGORY</Button>
+                <Button color="primary"
+                onClick = {addCategory}>ADD CATEGORY</Button>
             </CardBody>
         </Card>
     )

@@ -1,4 +1,4 @@
-import React, {Fragment} from "react";
+import React, {Component} from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
 import {TextField, Button} from "@material-ui/core";
 import Card from "components/Card/Card.jsx";
@@ -20,10 +20,24 @@ const styles = {
     }
 }
 
+class SignUp extends Component {
+    constructor(props) {
+        super(props)
+    }
 
-const SignUp = (props)=>{
-    const {classes} = props;
-    return <Fragment>
+    userInput = ()=>{
+        let [email, pass, rePass]  = document.querySelectorAll('[type="text"]')
+        console.log(email.value, pass.value, rePass.value)
+
+        if(pass.value !== rePass.value) console.log('ok')
+
+
+    }
+
+
+    render(){
+        const {classes} = this.props;
+        return(
         <Card className={classes.cardMain}>
             <CardHeader color="primary">
                 <h3>Sign into Home Expense App</h3>
@@ -33,11 +47,15 @@ const SignUp = (props)=>{
                 <TextField label='Enter Email'/>
                 <TextField label='Enter password'/>
                 <TextField label='Repeat password'/>
-                <Button variant='outlined' color='primary'>Sign Up</Button>
+                <Button variant='outlined' 
+                        color='primary'
+                        onClick={this.userInput}>Sign Up</Button>
                 <Link to='/signin'>already have an account? Sign in</Link>
             </CardBody>
         </Card>
-    </Fragment>
+        )
+    }
 }
+
 
 export default withStyles(styles)(SignUp);
