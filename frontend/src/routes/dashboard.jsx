@@ -15,7 +15,6 @@ import SignUp from 'views/SignUp/SignUp.jsx';
 import VerifyEmail from 'views/VerifyEmail/VerifyEmail.jsx';
 import Config from 'views/Config/Config.jsx';
 import Reports from 'views/Reports/Reports.jsx';
-import store from '../store'
 
 
 const isToken = localStorage.getItem('token') ? true : false
@@ -27,7 +26,7 @@ const dashboardRoutes = [
     navbarName: "Material Dashboard",
     icon: Dashboard,
     component: DashboardPage,
-    token: true
+    token: true,
   },
   {
     path: "/reports",
@@ -35,7 +34,7 @@ const dashboardRoutes = [
     navbarName: "Reports",
     icon: Dashboard,
     component: Reports,
-    token: true
+    token: true,
   },
   {
     path: "/config",

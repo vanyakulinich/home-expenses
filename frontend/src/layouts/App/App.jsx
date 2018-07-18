@@ -29,7 +29,11 @@ class App extends React.Component {
   handleDrawerToggle = () => this.props.mobileOpen(!this.props.mobile);
 
   componentDidMount() {
-    // this.props.isToken('token')
+    localStorage.getItem('token') && this.getToken()
+
+    if (navigator.platform.indexOf("Win") > -1) {
+      const ps = new PerfectScrollbar(this.refs.mainPanel);
+    }
   }
   componentDidUpdate(e) {
     if (e.history.location.pathname !== e.location.pathname) {
@@ -37,6 +41,8 @@ class App extends React.Component {
 
     }
   }
+
+  getToken = ()=> this.props.isToken(localStorage.getItem('token'))
 
   render() {
     const {token, mobile, classes, ...rest } = this.props;
@@ -69,9 +75,21 @@ class App extends React.Component {
               <Switch>
                  { 
                   dashboardRoutes.map((prop, key) => {
-                  if (prop.redirect) return <Redirect to={token?'/dashboard':'/signin'} 
-                                              key={key}/>
-                  return <Route path={prop.path} component={prop.component} key={key} />;
+                  if (prop.path=='/') {
+                    let token  = localStorage.getItem('token')
+                    return <Redirect to={token?'/dashboard':'/signin'} key={key}/>
+                  }
+
+                  return <Route path={prop.path} 
+                          
+                        // render={()=>{
+                        //    return (prop.token === !!token) ? prop.component:<Redirect to='/'/>
+                          
+                        // }}
+
+                          component={prop.component} 
+                      
+                          key={key} />;
                 })}
               </Switch>
             }</div>
