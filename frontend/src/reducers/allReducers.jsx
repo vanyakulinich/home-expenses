@@ -6,6 +6,6 @@ import mobileOpenReducer from './mobileOpenReducer.jsx'
 const allReducers = combineReducers({
     mobile: mobileOpenReducer,
     token: tokenReducer,
-    router: routerReducer
+    router: routerReducer,
 })
-export default allReducers
+export default allReducers;
