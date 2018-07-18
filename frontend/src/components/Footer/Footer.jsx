@@ -18,7 +18,7 @@ function Footer({ ...props }) {
         <div className={classes.left}>
           <List className={classes.list}>
             {routes.map((item)=>{
-              // if (item.redirect || item.hidden) return null;
+              if (item.redirect || item.hidden) return null;
               return <ListItem className={classes.inlineBlock} key={item.path}>
                     <Link to={item.path} className={classes.block}>
                       {item.sidebarName}

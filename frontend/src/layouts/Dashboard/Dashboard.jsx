@@ -41,7 +41,7 @@ class App extends React.Component {
     const {token, mobile, classes, ...rest } = this.props;
 
     const routesForRender = dashboardRoutes.filter(route=>{
-      if(route.token !== !!token) return route
+      if(route.token === !!token) return route
     }) 
 
     return (
@@ -67,7 +67,7 @@ class App extends React.Component {
             {
               <Switch>
                 {dashboardRoutes.map((prop, key) => {
-                  if (prop.redirect) return <Redirect from={prop.path} to={prop.to} key={key}/>;
+                  if (prop.redirect) return <Redirect to={prop.to} key={key}/>;
                   return <Route path={prop.path} component={prop.component} key={key} />;
                 })}
               </Switch>
