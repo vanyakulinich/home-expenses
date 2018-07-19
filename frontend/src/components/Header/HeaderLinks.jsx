@@ -37,10 +37,11 @@ class HeaderLinks extends React.Component {
 
 
   render() {
-    const {classes} = this.props;
+    const {classes, user} = this.props;
     const { open } = this.state;
     return (
         <div className={classes.searchWrapper}>
+        <span>{user}</span>
         <Manager className={classes.manager}>
           <Target>
             <Button
@@ -115,7 +116,7 @@ class HeaderLinks extends React.Component {
 }
 
 const mapStateToProps = state=>({
-  
+  user: state.user
 })
 const mapActionsToProps = {
   
