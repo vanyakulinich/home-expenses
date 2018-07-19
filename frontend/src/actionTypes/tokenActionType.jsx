@@ -1,2 +1,0 @@
-const TOKEN_ACTION = 'TOKEN_ACTION'
-export default TOKEN_ACTION

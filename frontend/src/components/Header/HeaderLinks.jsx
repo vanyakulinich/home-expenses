@@ -4,7 +4,6 @@ import { Manager, Target, Popper } from "react-popper";
 import {Link} from 'react-router-dom';
 import {connect} from 'react-redux';
 
-import isToken from '../../actions/isToken.jsx'
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -36,12 +35,9 @@ class HeaderLinks extends React.Component {
     this.setState({ open: false });
   };
 
-  signOut = ()=>{
-    this.props.IsToken(null)
-  }
 
   render() {
-    const {classes, token} = this.props;
+    const {classes} = this.props;
     const { open } = this.state;
     return (
         <div className={classes.searchWrapper}>
@@ -82,13 +78,13 @@ class HeaderLinks extends React.Component {
               >
                 <Paper className={classes.dropdown}>
                   {
-                    token ? (
+                    localStorage.getItem('token') ? (
                       <MenuList role="menu">
                           <MenuItem
                           onClick={this.handleClose}
                           className={classes.dropdownItem}
                         >
-                          <Link to='/' onClick = {this.signOut}>Sign out</Link>
+                          <Link to='/'>Sign out</Link>
                         </MenuItem>
                       </MenuList>
                     ) : (
@@ -119,10 +115,10 @@ class HeaderLinks extends React.Component {
 }
 
 const mapStateToProps = state=>({
-  token: state.token
+  
 })
 const mapActionsToProps = {
-  isToken
+  
 }
 
 export default connect(mapStateToProps, mapActionsToProps)(withStyles(headerLinksStyle)(HeaderLinks));

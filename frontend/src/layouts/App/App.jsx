@@ -4,8 +4,6 @@ import PropTypes from "prop-types";
 import { Switch, Route, Redirect } from "react-router-dom";
 import {connect} from 'react-redux'
 import mobileOpen from '../../actions/mobileOpen.jsx'
-import isToken from '../../actions/isToken.jsx'
-import redirection from '../../actions/redirect.jsx'
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
@@ -100,14 +98,11 @@ App.propTypes = {
 };
 
 const mapStateToProps = state =>({
-  token: state.token,
   mobile: state.mobile
 
 })
 const mapActionToProps = {
   mobileOpen,
-  isToken,
-  redirection,
 }
 
 export default connect(mapStateToProps, mapActionToProps)(withStyles(dashboardStyle)(App));
