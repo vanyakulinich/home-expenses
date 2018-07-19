@@ -84,27 +84,24 @@ class HeaderLinks extends React.Component {
                   {
                     user ? (
                       <MenuList role="menu">
-                          <MenuItem
-                          onClick={this.handleClose}
-                          className={classes.dropdownItem}
-                        >
-                          <Link to='/signin' onClick={this.signOut}>Sign out</Link>
-                        </MenuItem>
+                        <Link to='/signin' onClick={this.signOut}>
+                          <MenuItem onClick={this.handleClose} className={classes.dropdownItem}>
+                            Sign out
+                          </MenuItem>
+                        </Link>
                       </MenuList>
                     ) : (
                       <MenuList role="menu">
-                          <MenuItem
-                          onClick={this.handleClose}
-                          className={classes.dropdownItem}
-                        >
-                          <Link to='/signin'>Sign In</Link>
-                        </MenuItem>
-                        <MenuItem
-                          onClick={this.handleClose}
-                          className={classes.dropdownItem}
-                        >
-                          <Link to='/signup'>Sign Up</Link>
-                        </MenuItem>
+                        <Link to='/signin'>
+                          <MenuItem onClick={this.handleClose} className={classes.dropdownItem}>
+                            Sign In
+                          </MenuItem>
+                        </Link>
+                        <Link to='/signup'>
+                          <MenuItem onClick={this.handleClose} className={classes.dropdownItem}>
+                            Sign Up
+                          </MenuItem>
+                        </Link>
                       </MenuList>
                     )
                   }
