@@ -10,6 +10,23 @@ function Server(db) {
         console.log(req.body)
         let {email, pass} = req.body;
 
+        UserModel.findOne({email, pass}, (er, user)=>{
+
+            // res.send(user)
+
+            user.token = 'token'
+            user.save((er)=>{
+                if(er) console.log(er)
+            })
+
+            // UserModel.update({token: 'token', ...user}, (er, raw)=>{
+            //     console.log(raw)
+            // })
+            
+        })
+
+
+        res.sendStatus(200)
 
 
 
