@@ -3,6 +3,7 @@ import classNames from "classnames";
 import { Manager, Target, Popper } from "react-popper";
 import {Link} from 'react-router-dom';
 import {connect} from 'react-redux';
+import signOutUser from '../../actions/signOutUser.jsx'
 
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -34,6 +35,8 @@ class HeaderLinks extends React.Component {
   handleClose = () => {
     this.setState({ open: false });
   };
+
+  signOut=()=>this.props.signOutUser()
 
 
   render() {
@@ -79,13 +82,13 @@ class HeaderLinks extends React.Component {
               >
                 <Paper className={classes.dropdown}>
                   {
-                    localStorage.getItem('token') ? (
+                    user ? (
                       <MenuList role="menu">
                           <MenuItem
                           onClick={this.handleClose}
                           className={classes.dropdownItem}
                         >
-                          <Link to='/'>Sign out</Link>
+                          <Link to='/signin' onClick={this.signOut}>Sign out</Link>
                         </MenuItem>
                       </MenuList>
                     ) : (
@@ -119,7 +122,7 @@ const mapStateToProps = state=>({
   user: state.user
 })
 const mapActionsToProps = {
-  
+  signOutUser
 }
 
 export default connect(mapStateToProps, mapActionsToProps)(withStyles(headerLinksStyle)(HeaderLinks));

@@ -2,7 +2,7 @@ import SIGN_USER from '../actionTypes/signUser.jsx';
 import {push} from 'react-router-redux';
 
 
-export default function signIn(user, signType) {
+export default function signUser(user, signType) {
     return (dispatch)=>{
         let fetchOptions = {
             method: 'POST',
@@ -18,7 +18,6 @@ export default function signIn(user, signType) {
                     user: data.email
                 })
             })
-            // .then(() => dispatch(push('/')))
             .catch(e => console.log(e))
     }
 }
