@@ -1,6 +1,6 @@
 import SIGN_USER from '../actionTypes/signUser.jsx';
 // import {push} from 'react-router-redux';
-import appHistory from '../index';
+import appHistory from '../index'; // c bindActionCreators еще не разобрался
 
 
 export default function signUser(user, signType) {
@@ -13,14 +13,17 @@ export default function signUser(user, signType) {
         fetch(`http://localhost:3001/${signType}`, fetchOptions)
             .then(res => res.json())
             .then(data => {
-                console.log(data)
-                localStorage.setItem('token', data.token)
-                dispatch({
-                    type: SIGN_USER,
-                    user: user.email
-                })
+                if(data.token) {
+                    localStorage.setItem('token', data.token)
+                    dispatch({
+                        type: SIGN_USER,
+                        user: user.email
+                    })
+                    appHistory.push('/dashboard')
+                } else {
+                    console.log('no user check input or sign up')
+                }
             })
-            .then(() =>appHistory.push('/')) // c bindActionCreators еще не разобрался
             .catch(e => console.log(e))
     }
     

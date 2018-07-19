@@ -23,7 +23,7 @@ function Server(db) {
                     res.json({ token })
                 })
             } else {
-                res.send('nouser')
+                res.json('nouser')
             }
         })
     })
