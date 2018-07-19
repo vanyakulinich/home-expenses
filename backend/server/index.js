@@ -1,10 +1,12 @@
 const server = require('./config')
 
 
-function Server() {
+function Server(db) {
+
+    let {UserModel} = db;
+    console.log(UserModel)
     
-    
-    server.get('/', (req,res)=>{
+    server.get('/test', (req,res)=>{
         res.send('ok')
     })
 
