@@ -10,40 +10,22 @@ function Server(db) {
         console.log(req.body)
         let {email, pass} = req.body;
 
+       
         UserModel.findOne({email, pass}, (er, user)=>{
+            if(er) console.log(er)
 
-            // res.send(user)
-
-            user.token = 'token'
-            user.save((er)=>{
-                if(er) console.log(er)
-            })
-
-            // UserModel.update({token: 'token', ...user}, (er, raw)=>{
-            //     console.log(raw)
-            // })
-            
+            if(user) {
+                jwt.sign({ email, pass }, 'secretKey', (er, token) => {
+                    user.token = token
+                    user.save((er)=>{
+                    if(er) console.log(er)
+                    })
+                    res.json({ token })
+                })
+            } else {
+                res.send('nouser')
+            }
         })
-
-
-        res.sendStatus(200)
-
-
-
-        // jwt.sign({ email, pass }, 'secretKey', (er, token) => {
-
-        //     let newUser = new UserModel({
-        //         token, 
-        //         email,
-        //         pass
-        //     })
-        //     newUser.save(er=>{
-        //         if(er) throw er
-        //         console.log('user signed')
-        //     })
-
-        //     res.json({ token })
-        // })
     })
 
 
