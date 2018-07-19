@@ -1,16 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { createBrowserHistory } from "history";
-import {Route} from "react-router-dom";
+import {Route,} from "react-router-dom";
 import {Provider} from 'react-redux';
 import {ConnectedRouter} from 'react-router-redux';
-import store from './store'
+import store from './store';
 
 import "assets/css/material-dashboard-react.css?v=1.3.0";
 
 import App from "layouts/App/App.jsx";
-localStorage.clear()
+
+localStorage.clear();
+
 const appHistory = createBrowserHistory();
+
 ReactDOM.render(
   <Provider store={store}>
     <ConnectedRouter history={appHistory}>
