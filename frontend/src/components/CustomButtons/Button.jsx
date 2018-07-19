@@ -37,6 +37,7 @@ function RegularButton({ ...props }) {
     [classes.justIcon]: justIcon,
     [className]: className
   });
+  console.log(children)
   return (
     <Button {...rest} classes={muiClasses} className={btnClasses}>
       {children}
