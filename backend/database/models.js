@@ -5,7 +5,8 @@ const Schema = mongoose.Schema;
 
 // users schema
 const UserSchema = new Schema({
-    token: Boolean,
+    isToken: Boolean,
+    token: String,
     email: String,
     pass: String
 });
