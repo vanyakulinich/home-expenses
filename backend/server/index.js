@@ -48,6 +48,26 @@ function Server(db) {
 
     })
 
+    server.post('/signout', (req, res)=>{
+
+        console.log(req.body)
+
+        // let newUser = new UserModel({
+        //     token: null, 
+        //     email,
+        //     pass
+        // })
+        // newUser.save(er=>{
+        //     if(er) throw er
+        //     console.log('new user signed up')
+        // })
+
+        res.sendStatus(200)
+
+    })
+
+
+
 // test routes for postman
     server.get('/test', (req,res)=>{
         res.send('ok')

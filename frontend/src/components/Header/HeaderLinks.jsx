@@ -36,7 +36,7 @@ class HeaderLinks extends React.Component {
     this.setState({ open: false });
   };
 
-  signOut=()=>this.props.signOutUser()
+  signOut=()=>this.props.signOutUser(this.props.user)
 
 
   render() {
