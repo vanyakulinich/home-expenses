@@ -5,6 +5,9 @@ import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import {Link} from "react-router-dom";
+import {connect} from 'react-redux';
+import signUser from '../../actions/signUser.jsx'
+
 
 const styles = {
     cardMain: {
@@ -21,16 +24,20 @@ const styles = {
 }
 
 class SignUp extends Component {
-    constructor(props) {
-        super(props)
-    }
-
+    
     userInput = ()=>{
         let [email, pass, rePass]  = document.querySelectorAll('[type="text"]')
         console.log(email.value, pass.value, rePass.value)
 
-        if(pass.value !== rePass.value) console.log('ok')
-
+        if(pass.value === rePass.value) {
+            let newUser = {
+                email: email.value,
+                pass: pass.value
+            }
+            // this.props.signUser(newUser, 'signup')
+        } else {
+            console.log('no')
+        }
 
     }
 
@@ -57,5 +64,9 @@ class SignUp extends Component {
     }
 }
 
+const mapActionsToProps = {
+    signUser
+}
 
-export default withStyles(styles)(SignUp);
+
+export default connect(null, mapActionsToProps)(withStyles(styles)(SignUp));
