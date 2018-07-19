@@ -5,9 +5,6 @@ function Server(db) {
 
     let {UserModel} = db;
     
-    server.get('/test', (req,res)=>{
-        res.send('ok')
-    })
 
     server.post('/signin', (req, res)=>{
         console.log(req.body)
@@ -27,6 +24,11 @@ function Server(db) {
 
             res.json({ token })
         })
+    })
+
+// test routes for postman
+    server.get('/test', (req,res)=>{
+        res.send('ok')
     })
 
 

@@ -39,9 +39,9 @@ class App extends React.Component {
   handleDrawerToggle = () => this.props.mobileOpen(!this.props.mobile);
 
   render() {
-    const {mobile, classes, ...rest } = this.props;
+    const {mobile, user, classes, ...rest } = this.props;
     
-    const userToken  = localStorage.getItem('token');
+    let userToken  = localStorage.getItem('token');
     
     // filter routes from routes array for sidebar, header and footer
     const routesForSidebarFooterHeader = appRoutes.filter(route=>{

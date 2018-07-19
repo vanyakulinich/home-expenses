@@ -10,7 +10,7 @@ const routing = routerMiddleware(appHistory);
 const store = createStore(
     allReducers,
     compose(
-      applyMiddleware(routing, thunk),
+      applyMiddleware(thunk, routing),
       window.devToolsExtension && window.devToolsExtension()
     )
 );

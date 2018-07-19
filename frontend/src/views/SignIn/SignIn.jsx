@@ -29,7 +29,7 @@ class SignIn extends Component {
         console.log(email.value, pass.value);
         let user = {
             email: email.value,
-            password: pass.value
+            pass: pass.value
         }
        this.props.signUser(user, 'signin')
     }

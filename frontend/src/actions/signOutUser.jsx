@@ -4,11 +4,11 @@ import {push} from 'react-router-redux';
 
 export default function signOutUser() {
     return (dispatch)=>{
+        localStorage.clear()
         dispatch({
             type: SIGN_USER,
             user: null
         })
-        // .then(()=>dispatch(push('/signup')))
     }
 }
 
