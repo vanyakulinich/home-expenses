@@ -21,7 +21,10 @@ export default function signUser(user, signType) {
                     })
                     appHistory.push('/dashboard')
                 } else {
-                    console.log('no user check input or sign up')
+                    dispatch({
+                        type: SIGN_USER,
+                        user: 'nouser'
+                    })
                 }
             })
             .catch(e => console.log(e))

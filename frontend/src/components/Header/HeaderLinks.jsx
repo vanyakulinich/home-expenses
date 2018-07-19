@@ -44,7 +44,7 @@ class HeaderLinks extends React.Component {
     const { open } = this.state;
     return (
         <div className={classes.searchWrapper}>
-        <span>{user}</span>
+        <span>{(user==='nouser')? null : user}</span>
         <Manager className={classes.manager}>
           <Target>
             <Button
@@ -82,7 +82,7 @@ class HeaderLinks extends React.Component {
               >
                 <Paper className={classes.dropdown}>
                   {
-                    user ? (
+                    (user && user!=='nouser') ? (
                       <MenuList role="menu">
                         <Link to='/signin' onClick={this.signOut}>
                           <MenuItem onClick={this.handleClose} className={classes.dropdownItem}>

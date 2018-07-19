@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, {Fragment, Component} from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
 import {TextField, Button} from "@material-ui/core";
 import Card from "components/Card/Card.jsx";
@@ -27,37 +27,47 @@ class SignIn extends Component {
     signInClick =()=> {
         let [email, pass] = document.querySelectorAll('[type="text"]');
         console.log(email.value, pass.value);
-        let user = {
+        let signInUser = {
             email: email.value,
             pass: pass.value
         }
-       this.props.signUser(user, 'signin')
+       this.props.signUser(signInUser, 'signin')
     }
 
     render() {
-        const {classes} = this.props;
+        const {classes, user} = this.props;
+
+        const tip = (user==='nouser') ? 'check input or sign up' : null
+
         return(
-            <Card className={classes.cardMain}>
-                <CardHeader color="primary">
-                    <h3>Sign into Home Expense App</h3>
-                    <h5>Please enter your email and password</h5>
-                </CardHeader>
-                <CardBody className={classes.cardBody}>
-                    <TextField label='Enter Email' className = 'userInputs'/>
-                    <TextField label='Enter password' className = 'userInputs'/>
-                    <Button variant='outlined' 
-                            color='primary'
-                            onClick={this.signInClick}>Sign In</Button>
-                    <Link to='/signup'>first-time user? Sign up</Link>
-                </CardBody>
-            </Card>
+            <Fragment>
+                <div>{tip}</div>
+                <Card className={classes.cardMain}>
+                    <CardHeader color="primary">
+                        <h3>Sign into Home Expense App</h3>
+                        <h5>Please enter your email and password</h5>
+                    </CardHeader>
+                    <CardBody className={classes.cardBody}>
+                        <TextField label='Enter Email' className = 'userInputs'/>
+                        <TextField label='Enter password' className = 'userInputs'/>
+                        <Button variant='outlined' 
+                                color='primary'
+                                onClick={this.signInClick}>Sign In</Button>
+                        <Link to='/signup'>first-time user? Sign up</Link>
+                    </CardBody>
+                </Card>
+            </Fragment>
         )
     }
     
 }
 
+const mapStateToProps = state=>({
+    user: state.user
+})
+
 const mapActionsToProps = {
     signUser
 }
 
-export default connect(null, mapActionsToProps)(withStyles(styles)(SignIn));
+export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(SignIn));
