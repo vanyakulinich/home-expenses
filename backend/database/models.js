@@ -19,14 +19,25 @@ const UnverifiedUsersSchema = new Schema ({
 const UnverifiedUsersModel = mongoose.model('VerifyUsers', UnverifiedUsersSchema)
 
 // general user data schema
-const UserDataSchema = new Schema({
-    user: String,
-    categories: Object,
-})
-const UserDataModel = mongoose.model('AllUserData', UserDataSchema)
+// const UserDataSchema = new Schema({
+//     user: String,
+//     categories: Object,
+// })
+// const UserDataModel = mongoose.model('AllUserData', UserDataSchema)
 
 
 
+
+// // single category schema and model
+// const SingleCategorySchema = new Schema({
+//     user: String,
+//     name: String,
+//     value: Number,
+//     date: {type: Date, default: new Date().toLocaleDateString()}, // date format is for change
+//     children: Boolean,
+//     parent: Boolean,
+// })
+// const SingleCategoryModel = mongoose.model('Single Categories', SingleCategorySchema)
 
 // single category schema and model
 const SingleCategorySchema = new Schema({
@@ -38,13 +49,19 @@ const SingleCategorySchema = new Schema({
 })
 const SingleCategoryModel = mongoose.model('Single Categories', SingleCategorySchema)
 
+const UserDataSchema = new Schema({
+    user: String,
+    children: [SingleCategorySchema]
+})
 
+const UserDataModel = mongoose.model('UsersData', UserDataSchema)
 
 // exported models
 const models = {
     UserModel,
     UnverifiedUsersModel,
-    SingleCategoryModel
+    SingleCategoryModel,
+    UserDataModel
 }
 
 module.exports = models;

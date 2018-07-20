@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 
 function Server(db) {
 
-    let {UserModel, UnverifiedUsersModel, SingleCategoryModel} = db;
+    let {UserModel, UnverifiedUsersModel, SingleCategoryModel, UserDataModel} = db;
     
     // sign in route
     server.post('/signin', (req, res)=>{
@@ -99,46 +99,47 @@ function Server(db) {
 // ---------------------
 // test routes for postman
 
-    server.get('/allusers', (req,res)=>{
-        UserModel.find({pass:/./}, (err, users)=>{
+server.route('/userdata')
+    .get((req,res)=>{
+        UserDataModel.find({user: 'test'}, (err, data)=>{
             if(err) console.log(err)
-            res.json(users)
+            res.json(data)
         })
     })
-
-    server.get('/allcats', (req,res)=>{
-        SingleCategoryModel.find({name: /./}, (err, cats)=>{
-            if(err) console.log(err)
-            res.json(cats)
-        })
-    })
-
-    server.delete('/delusers', (req, res)=>{
-        UserModel.deleteMany({pass: /./}, er=>{
+    .delete((req, res)=>{
+        UserDataModel.deleteMany({user: 'test'}, er=>{
             if(er) console.log(er)})
         res.sendStatus(200)
     })
-//    del test categories
-    server.delete('/delcats', (req, res)=>{
-        SingleCategoryModel.deleteMany({name: /./}, er=>{
-            if(er) console.log(er)})
-        res.sendStatus(200)
-    })
-
-    server.post('/cat', (req, res)=>{
-
-        let {name, value} = req.body
-
-        let fakeCateg = new SingleCategoryModel({
-            name,
-            value,
-            children: true,
-            parent: false,
+    .post((req, res)=>{
+        let {name, value, user} = req.body
+        let fakeUserData = new UserDataModel({
+            user,
+            children: [{name,
+                        value,
+                        children: true,
+                        parent: false,}]
         })
-
-        fakeCateg.save(er=>{
+        fakeUserData.save(er=>{
             if(er) console.log(er)
             res.send('cat posted')
+        })
+    })
+    .put((req,res)=>{
+        UserDataModel.findOne({user: 'test'}, (err, data)=>{
+            if(err) console.log(err)
+
+            let newcat = new SingleCategoryModel({
+                name: 'test2',
+                value: 30,
+                children: false,
+                parent: false
+            })
+            data.children.push(newcat)
+            data.save(er=>{
+                if(er) console.log(er)
+                res.send('ok')
+            })
         })
     })
 }
