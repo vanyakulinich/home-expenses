@@ -51,17 +51,30 @@ function Server(db) {
                 })
                 unverifiedUser.save(er=>{
                     if(er) console.log(er);
-                    console.log(`http://localhost:3000/verify${verifyKey}`)
+                    console.log(`http://localhost:3000/verify`)
+                    console.log(verifyKey)
                     res.sendStatus(200)
                 })
             }
         })
     })
 
+    server.post('/verify', (req, res)=>{
+        let{email, verifyKey} = req.body;
 
+        UnverifiedUsersModel.findOne({email, verifyKey}, (er, user)=>{
 
+            let{email, pass} = user;
 
-
+            jwt.sign({ email, pass }, 'secretKey', (er, token) => {
+                let newUser = new UserModel({token, email, pass})
+                newUser.save((er)=>{
+                    if(er) console.log(er)
+                })
+                res.json({ token })
+            })
+        })
+    })
 
 
 
