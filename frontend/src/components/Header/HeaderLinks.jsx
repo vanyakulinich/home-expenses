@@ -38,7 +38,6 @@ class HeaderLinks extends React.Component {
 
   signOut=()=>{
     let token = localStorage.getItem('token')
-    console.log(token)
     this.props.signOutUser(token)
   }
 

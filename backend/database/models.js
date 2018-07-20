@@ -2,32 +2,43 @@ const mongoose = require('./dbConnect');
 
 const Schema = mongoose.Schema;
 
-
-// users schema
+// users schema and model
 const UserSchema = new Schema({
     token: String,
     email: String,
-    pass: String
+    pass: String,
+    data: {type: Schema.Types.Array, ref: 'UserDataModel'}
 });
-// user model
 const UserModel = mongoose.model('Users', UserSchema);
 
-
-// unverified user schema
+// unverified user schema and model
 const UnverifiedUsersSchema = new Schema ({
     email: String,
     pass: String,
     verifyKey: String
 })
-
 const UnverifiedUsersModel = mongoose.model('VerifyUsers', UnverifiedUsersSchema)
+
+// general user data schema
+const UserDataSchema = new Schema({
+    _id: Schema.Types.ObjectId,
+    categories: Array,
+})
+const UserDataModel = mongoose.model('AllUserData', UserDataSchema)
+
+
+
+
+
 
 
 
 // exported models
 const models = {
+    mongoose,
     UserModel,
-    UnverifiedUsersModel
+    UnverifiedUsersModel,
+    UserDataModel,
 }
 
 module.exports = models;
