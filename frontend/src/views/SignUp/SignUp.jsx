@@ -6,7 +6,7 @@ import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import {Link} from "react-router-dom";
 import {connect} from 'react-redux';
-import signUser from '../../actions/signUser.jsx'
+import signUpUser from '../../actions/signUpUser.jsx'
 
 
 const styles = {
@@ -24,21 +24,22 @@ const styles = {
 }
 
 class SignUp extends Component {
+
+    // tellUserToCheckMail = ()
     
     userInput = ()=>{
         let [email, pass, rePass]  = document.querySelectorAll('[type="text"]')
-        console.log(email.value, pass.value, rePass.value)
-
+    
         if(pass.value === rePass.value) {
             let newUser = {
                 email: email.value,
                 pass: pass.value
             }
-            // this.props.signUser(newUser, 'signup')
+            this.props.signUpUser(newUser)
+            email.value = pass.value = rePass.value = '';
         } else {
-            console.log('no')
+            console.log('wrong input')
         }
-
     }
 
 
@@ -65,7 +66,7 @@ class SignUp extends Component {
 }
 
 const mapActionsToProps = {
-    signUser
+    signUpUser
 }
 
 

@@ -1,0 +1,3 @@
+const VERIFY_STATUS = 'VERIFY_STATUS';
+
+export default VERIFY_STATUS;

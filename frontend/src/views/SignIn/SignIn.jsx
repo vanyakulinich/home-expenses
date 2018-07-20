@@ -26,12 +26,12 @@ class SignIn extends Component {
    
     signInClick =()=> {
         let [email, pass] = document.querySelectorAll('[type="text"]');
-        console.log(email.value, pass.value);
         let signInUser = {
             email: email.value,
             pass: pass.value
         }
        this.props.signUser(signInUser, 'signin')
+       email.value = pass.value= '';
     }
 
     render() {

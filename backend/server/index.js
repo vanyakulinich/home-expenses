@@ -41,21 +41,18 @@ function Server(db) {
         let {email, pass} = req.body
 
         UserModel.findOne({email, pass}, (er, user)=>{
-            console.log(user)
             if(user) res.json('userExists')
             if(!user) {
                 let verifyKey = Math.round(1000 + Math.random()*8000)
-                
                 let unverifiedUser = new UnverifiedUsersModel({
                     email,
                     pass,
                     verifyKey
                 })
-
                 unverifiedUser.save(er=>{
-                    if(er) console.log(er)
-                    console.log('http://localhost:3000/verify')
-                    res.json({verifyKey})
+                    if(er) console.log(er);
+                    console.log(`http://localhost:3000/verify${verifyKey}`)
+                    res.sendStatus(200)
                 })
             }
         })
