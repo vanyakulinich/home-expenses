@@ -88,7 +88,6 @@ function Server(db) {
                     console.log('unverified user deleted')
                 })
             }
-            
         })
         .catch(e=>console.log(e))
     })
