@@ -1,4 +1,4 @@
-const server = require('./config')
+const server = require('./config');
 const jwt = require('jsonwebtoken');
 
 function Server(db) {
