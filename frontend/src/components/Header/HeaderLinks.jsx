@@ -36,8 +36,11 @@ class HeaderLinks extends React.Component {
     this.setState({ open: false });
   };
 
-  signOut=()=>this.props.signOutUser(this.props.user)
-
+  signOut=()=>{
+    let token = localStorage.getItem('token')
+    console.log(token)
+    this.props.signOutUser(token)
+  }
 
   render() {
     const {classes, user} = this.props;
@@ -84,11 +87,11 @@ class HeaderLinks extends React.Component {
                   {
                     (user && user!=='nouser') ? (
                       <MenuList role="menu">
-                        <Link to='/signin' onClick={this.signOut}>
-                          <MenuItem onClick={this.handleClose} className={classes.dropdownItem}>
+                          <MenuItem onClick={this.handleClose} 
+                                    onClick={this.signOut}
+                                    className={classes.dropdownItem}>
                             Sign out
                           </MenuItem>
-                        </Link>
                       </MenuList>
                     ) : (
                       <MenuList role="menu">

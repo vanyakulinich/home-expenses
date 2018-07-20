@@ -1,40 +1,25 @@
 import SIGN_USER from '../actionTypes/signUser.jsx';
-import {push} from 'react-router-redux';
+import appHistory from '../index'
 
-
-export default function signOutUser(user) {
+export default function signOutUser(token) {
     return (dispatch)=>{
 
         let fetchOptions = {
             method: 'POST',
-            body: JSON.stringify({user}),
+            body: JSON.stringify({token}),
             headers: { "Content-Type": "application/json" }
         }
         fetch(`http://localhost:3001/signout`, fetchOptions)
             .then(res => console.log(res.status))
-        //     .then(data => {
-        //         if(data.token) {
-        //             localStorage.setItem('token', data.token)
-        //             dispatch({
-        //                 type: SIGN_USER,
-        //                 user: user.email
-        //             })
-        //             appHistory.push('/dashboard')
-        //         } else {
-        //             dispatch({
-        //                 type: SIGN_USER,
-        //                 user: 'nouser'
-        //             })
-        //         }
-        //     })
-        //     .catch(e => console.log(e))
-
-
-        // localStorage.clear()
-        // dispatch({
-        //     type: SIGN_USER,
-        //     user: null
-        // })
+            .then(() => {
+                dispatch({
+                    type: SIGN_USER,
+                    user: null
+                })
+                localStorage.clear()
+                appHistory.push('/signin')
+            })
+            .catch(e => console.log(e))
     }
 }
 
