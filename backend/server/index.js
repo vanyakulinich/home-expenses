@@ -70,10 +70,18 @@ function Server(db) {
                 let newUser = new UserModel({token, email, pass})
                 newUser.save((er)=>{
                     if(er) console.log(er)
+                    console.log('new user added')
                 })
                 res.json({ token })
             })
         })
+        .then(()=>{
+            UnverifiedUsersModel.deleteOne({verifyKey}, er=>{
+                if(er) console.log(er)
+                console.log('unverified user deleted')
+            })
+        })
+        .catch(e=>console.log(e))
     })
 
 
