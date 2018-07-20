@@ -54,6 +54,7 @@ function Server(db) {
 
                 unverifiedUser.save(er=>{
                     if(er) console.log(er)
+                    console.log('http://localhost:3000/verify')
                     res.json({verifyKey})
                 })
             }
