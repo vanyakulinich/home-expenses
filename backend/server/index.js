@@ -64,6 +64,11 @@ function Server(db) {
 
         UnverifiedUsersModel.findOne({email, verifyKey}, (er, user)=>{
 
+            if(!user) {
+                res.json('nouser');
+                return null
+            }
+
             let{email, pass} = user;
 
             jwt.sign({ email, pass }, 'secretKey', (er, token) => {
@@ -74,12 +79,16 @@ function Server(db) {
                 })
                 res.json({ token })
             })
+            return true
         })
-        .then(()=>{
-            UnverifiedUsersModel.deleteOne({verifyKey}, er=>{
-                if(er) console.log(er)
-                console.log('unverified user deleted')
-            })
+        .then((userExists)=>{
+            if(userExists) {
+                UnverifiedUsersModel.deleteOne({verifyKey}, er=>{
+                    if(er) console.log(er)
+                    console.log('unverified user deleted')
+                })
+            }
+            
         })
         .catch(e=>console.log(e))
     })

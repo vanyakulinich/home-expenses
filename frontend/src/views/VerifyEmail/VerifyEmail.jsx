@@ -5,6 +5,7 @@ import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import {Link} from "react-router-dom";
+import signUser from '../../actions/signUser.jsx'
 
 const styles = {
     cardMain: {
@@ -20,6 +21,19 @@ const styles = {
     }
 }
 
+const verifyUser = ()=>{
+
+    let [email, verifyKey] = document.querySelectorAll('[type="text"]');
+        let verifyUser = {
+            email: email.value,
+            verifyKey: verifyKey.value
+        }
+       email.value = verifyKey.value= '';
+
+
+    signUser(verifyUser, '/verify')
+}
+
 const VerifyEmail = (props)=>{
     const {classes} = props;
     return <Fragment>
@@ -31,7 +45,10 @@ const VerifyEmail = (props)=>{
             <CardBody className={classes.cardBody}>
                 <TextField label='Email address'/>
                 <TextField label='Verification code'/>
-                <Button variant='outlined' color='primary'>Verify</Button>
+                <Button 
+                    variant='outlined' 
+                    color='primary'
+                    onClick={verifyUser}>Verify</Button>
                 <Link to='/signin'>already have an account? Sign in</Link>
             </CardBody>
         </Card>
