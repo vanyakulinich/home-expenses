@@ -14,10 +14,21 @@ const UserSchema = new Schema({
 const UserModel = mongoose.model('Users', UserSchema);
 
 
+// unverified user schema
+const UnverifiedUsersSchema = new Schema ({
+    email: String,
+    pass: String,
+    verifyKey: String
+})
+
+const UnverifiedUsersModel = mongoose.model('VerifyUsers', UnverifiedUsersSchema)
+
+
 
 // exported models
 const models = {
-    UserModel
+    UserModel,
+    UnverifiedUsersModel
 }
 
 module.exports = models;

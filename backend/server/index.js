@@ -3,9 +3,9 @@ const jwt = require('jsonwebtoken');
 
 function Server(db) {
 
-    let {UserModel} = db;
+    let {UserModel, UnverifiedUsersModel} = db;
     
-// sign in route
+    // sign in route
     server.post('/signin', (req, res)=>{
         let {email, pass} = req.body;
         UserModel.findOne({email, pass}, (er, user)=>{
@@ -25,24 +25,7 @@ function Server(db) {
         })
     })
 
-
-//  sign up route
-    server.post('/signup', (req, res)=>{
-        let {email, pass} = req.body
-        let newUser = new UserModel({
-            token: null, 
-            email,
-            pass
-        })
-        newUser.save(er=>{
-            if(er) throw er
-            console.log('new user signed up')
-        })
-        res.sendStatus(200)
-
-    })
-
-//  sign out route
+    //  sign out route
     server.post('/signout', (req, res)=>{
         let {token} = req.body;
         UserModel.findOneAndUpdate({token}, {token: null}, (er)=>{
@@ -50,6 +33,33 @@ function Server(db) {
             res.send('signedOut')
         })
     })
+
+
+
+//  sign up route
+    server.post('/signup', (req, res)=>{
+        let {email, pass} = req.body
+
+        UserModel.findOne({email, pass}, (er, user)=>{
+            console.log(user)
+            if(user) res.json('userExists')
+            if(!user) {
+                let verifyKey = Math.round(1000 + Math.random()*8000)
+                
+                let unverifiedUser = new UnverifiedUsersModel({
+                    email,
+                    pass,
+                    verifyKey
+                })
+
+                unverifiedUser.save(er=>{
+                    if(er) console.log(er)
+                    res.json({verifyKey})
+                })
+            }
+        })
+    })
+
 
 
 
@@ -67,16 +77,30 @@ function Server(db) {
 
 
     server.get('/allusers', (req,res)=>{
-        UserModel.find({pass:/[a-z]/}, (err, users)=>{
+        UserModel.find({pass:/./}, (err, users)=>{
             if(err) console.log(err)
             res.json(users)
         })
     })
 
     server.get('/delusers', (req, res)=>{
-        UserModel.deleteMany({pass: /[a-z]/}, er=>{
+        UserModel.deleteMany({pass: /./}, er=>{
             if(er) console.log(er)})
         res.sendStatus(200)
+    })
+
+    server.get('/unverified', (req, res)=>{
+        UnverifiedUsersModel.find({pass:/./}, (err, users)=>{
+            if(err) console.log(err)
+            res.json(users)
+        })
+    })
+
+    server.get('/delunverified', (req, res)=>{
+        UnverifiedUsersModel.deleteMany({pass:/./}, er=>{
+            if(er) console.log(er)
+            res.sendStatus(200)
+        })
     })
 }
 
