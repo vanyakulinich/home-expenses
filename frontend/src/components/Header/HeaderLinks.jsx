@@ -36,83 +36,86 @@ class HeaderLinks extends React.Component {
     this.setState({ open: false });
   };
 
-  signOut=()=>{
-    let token = localStorage.getItem('token')
-    this.props.signOutUser(token)
-  }
+  signOut=()=>this.props.signOutUser()
 
   render() {
     const {classes, user} = this.props;
     const { open } = this.state;
+    const checkUser = (user && 
+                      user !== 'nouser' &&
+                      user !== 'isuser' &&
+                      user !== 'notverified') ? true : false
     return (
         <div className={classes.searchWrapper}>
-        <span>{(user==='nouser')? null : user}</span>
-        <Manager className={classes.manager}>
-          <Target>
-            <Button
-              color={window.innerWidth > 959 ? "transparent" : "white"}
-              justIcon={window.innerWidth > 959}
-              simple={!(window.innerWidth > 959)}
-              aria-label="Notifications"
-              aria-owns={open ? "menu-list" : null}
-              aria-haspopup="true"
-              onClick={this.handleClick}
-              className={classes.buttonLink}
-            >
-              <Person className={classes.icons} />
-              <Hidden mdUp>
-                <p onClick={this.handleClick} className={classes.linkText}>
-                  Notification
-                </p>
-              </Hidden>
-            </Button>
-          </Target>
-          <Popper
-            placement="bottom-start"
-            eventsEnabled={open}
-            className={
-              classNames({ [classes.popperClose]: !open }) +
-              " " +
-              classes.pooperResponsive
-            }>
-
-            <ClickAwayListener onClickAway={this.handleClose}>
-              <Grow
-                in={open}
-                id="menu-list"
-                style={{ transformOrigin: "0 0 0" }}
+          <span>{(checkUser)? user : null}</span>
+          <Manager className={classes.manager}>
+            <Target>
+              <Button
+                color={window.innerWidth > 959 ? "transparent" : "white"}
+                justIcon={window.innerWidth > 959}
+                simple={!(window.innerWidth > 959)}
+                aria-label="Notifications"
+                aria-owns={open ? "menu-list" : null}
+                aria-haspopup="true"
+                onClick={this.handleClick}
+                className={classes.buttonLink}
               >
-                <Paper className={classes.dropdown}>
-                  {
-                    (user && user!=='nouser') ? (
-                      <MenuList role="menu">
-                          <MenuItem onClick={this.handleClose} 
-                                    onClick={this.signOut}
-                                    className={classes.dropdownItem}>
-                            Sign out
-                          </MenuItem>
-                      </MenuList>
-                    ) : (
-                      <MenuList role="menu">
-                        <Link to='/signin'>
-                          <MenuItem onClick={this.handleClose} className={classes.dropdownItem}>
-                            Sign In
-                          </MenuItem>
-                        </Link>
-                        <Link to='/signup'>
-                          <MenuItem onClick={this.handleClose} className={classes.dropdownItem}>
-                            Sign Up
-                          </MenuItem>
-                        </Link>
-                      </MenuList>
-                    )
-                  }
-                </Paper>
-              </Grow>
-            </ClickAwayListener>
-          </Popper>
-        </Manager>
-      </div>
+                <Person className={classes.icons} />
+                <Hidden mdUp>
+                  <p onClick={this.handleClick} className={classes.linkText}>
+                    Notification
+                  </p>
+                </Hidden>
+              </Button>
+            </Target>
+            <Popper
+              placement="bottom-start"
+              eventsEnabled={open}
+              className={
+                classNames({ [classes.popperClose]: !open }) +
+                " " +
+                classes.pooperResponsive
+              }>
+
+              <ClickAwayListener onClickAway={this.handleClose}>
+                <Grow
+                  in={open}
+                  id="menu-list"
+                  style={{ transformOrigin: "0 0 0" }}
+                >
+                  <Paper className={classes.dropdown}>
+                    {
+                      (checkUser) ? (
+                        <MenuList role="menu">
+                          <Link to='/signin'>
+                            <MenuItem onClick={this.handleClose} 
+                                      onClick={this.signOut}
+                                      className={classes.dropdownItem}>
+                              Sign out
+                            </MenuItem>
+                          </Link>
+                        </MenuList>
+                      ) : (
+                        <MenuList role="menu">
+                          <Link to='/signin'>
+                            <MenuItem onClick={this.handleClose} className={classes.dropdownItem}>
+                              Sign In
+                            </MenuItem>
+                          </Link>
+                          <Link to='/signup'>
+                            <MenuItem onClick={this.handleClose} className={classes.dropdownItem}>
+                              Sign Up
+                            </MenuItem>
+                          </Link>
+                        </MenuList>
+                      )
+                    }
+                  </Paper>
+                </Grow>
+              </ClickAwayListener>
+            </Popper>
+          </Manager>
+        </div>
     );
   }
 }

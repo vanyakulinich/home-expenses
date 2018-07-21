@@ -13,9 +13,11 @@ const CategorySchema = new Schema({
 
 // user schema, includes category schemas as children
 const UserSchema = new Schema({
+    userId: {type: Date, default: Date.now}, // this can be usefull if the app will expand and admin user appears
     email: String,
     pass: String,
-    token: String, // before token, email verification key is stored here
+    verified: Boolean,
+    verifyKey: Number,
     categories: [CategorySchema]
 });
 

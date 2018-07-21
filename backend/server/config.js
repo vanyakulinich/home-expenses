@@ -12,9 +12,9 @@ const JwtStrategy = passportJWT.Strategy;
 const jwtOptions = {}
 jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 jwtOptions.secretOrKey = 'secretKey';
-
+// strategy init
 const strategy = new JwtStrategy(jwtOptions, function(jwt_payload, next) {
-    UserModel.findOne({email: jwt_payload.email}, (er, user)=>{
+    UserModel.findOne({email: jwt_payload.email, pass: jwt_payload.pass}, (er, user)=>{
         if(er) console.log(er)
         next(null, (user ? user : false))
     }) 

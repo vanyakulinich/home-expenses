@@ -13,10 +13,8 @@ function Server(db) {
         let {email, pass} = req.body;
         UserModel.findOne({email, pass}, (er, user)=>{
             if(er) console.log(er)
-
             if(user) {
                 jwt.sign({ email, pass }, 'secretKey', (er, token) => {
-                    user.token = token
                     user.save((er)=>{
                     if(er) console.log(er)
                     })
@@ -28,58 +26,47 @@ function Server(db) {
         })
     })
 
-    //  sign out route
-    server.post('/signout', (req, res)=>{
-        let {token} = req.body;
-        UserModel.findOneAndUpdate({token}, {token: null}, (er)=>{
-            if(er) console.log(er)
-            res.send('signedOut')
-        })
-    })
-
-//  sign up route
+    // sign up route
     server.post('/signup', (req, res)=>{
         let {email, pass} = req.body
 
         UserModel.findOne({email, pass}, (er, user)=>{
-            if(user) res.json('userExists')
+            if(user) res.send('isuser')
             if(!user) {
-                let verifyKey = Math.round(1000 + Math.random()*8000)
+                let verifyKey = Math.round(1000 + Math.random()*8999)
+        
                 let newUser = new UserModel({
                     email,
                     pass,
-                    token: verifyKey,
+                    verified: false,
+                    verifyKey,
                 })
-
                 newUser.save(er=>{
                     if(er) console.log(er)
-                    console.log("http://localhost:3001/verify")
+                    console.log(`http://localhost:3000/verify`)
                     console.log(verifyKey)
-                    res.json('saved')
+                    res.send('verify')
                 })
             }
         })
     })
-
+    // email verification route 
     server.post('/verify', (req, res)=>{
-        let{email, verifyKey} = req.body;
-
-        UserModel.findOne({email, token: verifyKey}, (er, user)=>{
-
-            if(!user) res.json('nouser');
-
-            let{email} = user;
-
-            jwt.sign({ email }, 'secretKey', (er, token) => {
-
-                user.token = token;
-
+        let{ email, verifyKey } = req.body;
+        UserModel.findOne({email, verifyKey}, (er, user)=>{
+            if(er) console.log(er)
+            if(!user) {
+                res.json('nouser');
+            }
+            let{email, pass} = user;
+            jwt.sign({email, pass}, 'secretKey', (er, token) => {
+                user.verified = true;
+                user.verifyKey = 0;
                 user.save(er=>{
                     if(er) console.log(er)
                     res.json({token})
                 })
             })
-            return true
         })
     })
 
@@ -138,6 +125,14 @@ function Server(db) {
     server.get('/test', passport.authenticate('jwt', { session: false }), (req, res)=>{
         console.log(req.user.categories)
         res.json(req.user)
+    })
+    server.post(/\a/, (req, res)=>{
+        console.log(req.url)
+        let str= req.url
+        let result = str.split('a')[1]
+        console.log(result)
+
+        res.send('ok')
     })
 }
 

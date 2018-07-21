@@ -25,8 +25,6 @@ const styles = {
 
 class SignUp extends Component {
 
-    // tellUserToCheckMail = ()
-    
     userInput = ()=>{
         let [email, pass, rePass]  = document.querySelectorAll('[type="text"]')
     
@@ -42,11 +40,15 @@ class SignUp extends Component {
         }
     }
 
-
     render(){
-        const {classes} = this.props;
+        const {classes, user} = this.props;
+        const isUser = (user==='isuser') ? <span>you are registered</span> : null
+        const toVerify = (user === 'notverified') ? <span>check your email</span> : null 
         return(
+        
         <Card className={classes.cardMain}>
+            {isUser || toVerify}
+
             <CardHeader color="primary">
                 <h3>Sign into Home Expense App</h3>
                 <h5>Please enter your email and password</h5>
@@ -64,10 +66,12 @@ class SignUp extends Component {
         )
     }
 }
-
+const mapStateToProps = state =>({
+    user: state.user
+})
 const mapActionsToProps = {
     signUpUser
 }
 
 
-export default connect(null, mapActionsToProps)(withStyles(styles)(SignUp));
+export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(SignUp));
