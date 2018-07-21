@@ -36,6 +36,7 @@ function Server(db) {
                 let verifyKey = Math.round(1000 + Math.random()*8999)
         
                 let newUser = new UserModel({
+                    userId: Date.now(),
                     email,
                     pass,
                     verified: false,

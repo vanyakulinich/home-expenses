@@ -13,7 +13,7 @@ const CategorySchema = new Schema({
 
 // user schema, includes category schemas as children
 const UserSchema = new Schema({
-    userId: {type: Date, default: Date.now}, // this can be usefull if the app will expand and admin user appears
+    userId: Number, // this can be usefull if the app will expand and admin user appears
     email: String,
     pass: String,
     verified: Boolean,
