@@ -1,6 +1,9 @@
-const server = require('./config');
+const {server, passport} = require('./config');
 const jwt = require('jsonwebtoken');
 
+
+
+// server function
 function Server(db) {
 
     let {UserModel, CategoryModel} = db;
@@ -65,9 +68,9 @@ function Server(db) {
 
             if(!user) res.json('nouser');
 
-            let{email, pass} = user;
+            let{email} = user;
 
-            jwt.sign({ email, pass }, 'secretKey', (er, token) => {
+            jwt.sign({ email }, 'secretKey', (er, token) => {
 
                 user.token = token;
 
@@ -84,53 +87,57 @@ function Server(db) {
 
 
 
-// ---------------------
-// test routes for postman
-
-server.route('/userdata')
-    .get((req,res)=>{
-        UserModel.find({email: /./}, (err, data)=>{
-            if(err) console.log(err)
-            res.json(data)
-        })
-    })
-    .delete((req, res)=>{
-        UserModel.deleteMany({email: /./}, er=>{
-            if(er) console.log(er)})
-        res.sendStatus(200)
-    })
-
-    // finished here
-    .post((req, res)=>{
-        let {name, value, user} = req.body
-        let fakeUserData = new UserDataModel({
-            user,
-            categories: [{name,
-                        value,
-                        children: true,
-                        parent: false,}]
-        })
-        fakeUserData.save(er=>{
-            if(er) console.log(er)
-            res.send('cat posted')
-        })
-    })
-    .put((req,res)=>{
-        UserDataModel.findOne({user: 'test'}, (err, data)=>{
-            if(err) console.log(err)
-
-            let newcat = new SingleCategoryModel({
-                name: 'test2',
-                value: 30,
-                children: false,
-                parent: false
+    // ---------------------
+    // test routes for postman
+    server.route('/userdata')
+        .get((req,res)=>{
+            UserModel.find({email: /./}, (err, data)=>{
+                if(err) console.log(err)
+                res.json(data)
             })
-            data.categories.push(newcat)
-            data.save(er=>{
+        })
+        .delete((req, res)=>{
+            UserModel.deleteMany({email: /./}, er=>{
+                if(er) console.log(er)})
+            res.sendStatus(200)
+        })
+
+        // finished here
+        .post((req, res)=>{
+            let {name, value, user} = req.body
+            let fakeUserData = new UserDataModel({
+                user,
+                categories: [{name,
+                            value,
+                            children: true,
+                            parent: false,}]
+            })
+            fakeUserData.save(er=>{
                 if(er) console.log(er)
-                res.send('ok')
+                res.send('cat posted')
             })
         })
+        .put((req,res)=>{
+            UserDataModel.findOne({user: 'test'}, (err, data)=>{
+                if(err) console.log(err)
+
+                let newcat = new SingleCategoryModel({
+                    name: 'test2',
+                    value: 30,
+                    children: false,
+                    parent: false
+                })
+                data.categories.push(newcat)
+                data.save(er=>{
+                    if(er) console.log(er)
+                    res.send('ok')
+                })
+            })
+        })
+
+    server.get('/test', passport.authenticate('jwt', { session: false }), (req, res)=>{
+        console.log(req.user.categories)
+        res.json(req.user)
     })
 }
 
