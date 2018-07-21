@@ -51,7 +51,7 @@ const SingleCategoryModel = mongoose.model('Single Categories', SingleCategorySc
 
 const UserDataSchema = new Schema({
     user: String,
-    children: [SingleCategorySchema]
+    categories: [SingleCategorySchema]
 })
 
 const UserDataModel = mongoose.model('UsersData', UserDataSchema)

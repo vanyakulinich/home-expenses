@@ -115,7 +115,7 @@ server.route('/userdata')
         let {name, value, user} = req.body
         let fakeUserData = new UserDataModel({
             user,
-            children: [{name,
+            categories: [{name,
                         value,
                         children: true,
                         parent: false,}]
@@ -135,7 +135,7 @@ server.route('/userdata')
                 children: false,
                 parent: false
             })
-            data.children.push(newcat)
+            data.categories.push(newcat)
             data.save(er=>{
                 if(er) console.log(er)
                 res.send('ok')
