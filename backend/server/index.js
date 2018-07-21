@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 
 function Server(db) {
 
-    let {UserModel, UnverifiedUsersModel, SingleCategoryModel, UserDataModel} = db;
+    let {UserModel, CategoryModel} = db;
     
     // sign in route
     server.post('/signin', (req, res)=>{
@@ -34,8 +34,6 @@ function Server(db) {
         })
     })
 
-
-
 //  sign up route
     server.post('/signup', (req, res)=>{
         let {email, pass} = req.body
@@ -44,16 +42,15 @@ function Server(db) {
             if(user) res.json('userExists')
             if(!user) {
                 let verifyKey = Math.round(1000 + Math.random()*8000)
-                let unverifiedUser = new UnverifiedUsersModel({
+                let newUser = new UserModel({
                     email,
                     pass,
-                    verifyKey
+                    token: verifyKey,
                 })
-                unverifiedUser.save(er=>{
-                    if(er) console.log(er);
-                    console.log(`http://localhost:3000/verify`)
-                    console.log(verifyKey)
-                    res.sendStatus(200)
+
+                newUser.save(er=>{
+                    if(er) console.log(er)
+                    res.json('saved')
                 })
             }
         })
@@ -62,34 +59,23 @@ function Server(db) {
     server.post('/verify', (req, res)=>{
         let{email, verifyKey} = req.body;
 
-        UnverifiedUsersModel.findOne({email, verifyKey}, (er, user)=>{
+        UserModel.findOne({email, token: verifyKey}, (er, user)=>{
 
-            if(!user) {
-                res.json('nouser');
-                return null
-            }
+            if(!user) res.json('nouser');
 
             let{email, pass} = user;
 
             jwt.sign({ email, pass }, 'secretKey', (er, token) => {
-                let newUser = new UserModel({token, email, pass})
-                newUser.save((er)=>{
+
+                user.token = token;
+
+                user.save(er=>{
                     if(er) console.log(er)
-                    console.log('new user added')
+                    res.json({token})
                 })
-                res.json({ token })
             })
             return true
         })
-        .then((userExists)=>{
-            if(userExists) {
-                UnverifiedUsersModel.deleteOne({verifyKey}, er=>{
-                    if(er) console.log(er)
-                    console.log('unverified user deleted')
-                })
-            }
-        })
-        .catch(e=>console.log(e))
     })
 
 
@@ -101,16 +87,18 @@ function Server(db) {
 
 server.route('/userdata')
     .get((req,res)=>{
-        UserDataModel.find({user: 'test'}, (err, data)=>{
+        UserModel.find({email: /./}, (err, data)=>{
             if(err) console.log(err)
             res.json(data)
         })
     })
     .delete((req, res)=>{
-        UserDataModel.deleteMany({user: 'test'}, er=>{
+        UserModel.deleteMany({email: /./}, er=>{
             if(er) console.log(er)})
         res.sendStatus(200)
     })
+
+    // finished here
     .post((req, res)=>{
         let {name, value, user} = req.body
         let fakeUserData = new UserDataModel({

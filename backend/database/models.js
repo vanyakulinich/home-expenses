@@ -2,35 +2,45 @@ const mongoose = require('./dbConnect');
 
 const Schema = mongoose.Schema;
 
-// users schema and model
+// schemas
+// single category schema
+const CategorySchema = new Schema({ 
+    name: String,
+    value: Number,
+    date: {type: Date, default: new Date().toLocaleDateString()}, // date format will be changed soon
+    parentName: String,
+})
+
+// user schema, includes category schemas as children
 const UserSchema = new Schema({
-    token: String,
     email: String,
     pass: String,
+    token: String, // before token, email verification key is stored here
+    categories: [CategorySchema]
 });
+
+// models
+const CategoryModel = mongoose.model('Categories', CategorySchema);
 const UserModel = mongoose.model('Users', UserSchema);
 
-// unverified user schema and model
-const UnverifiedUsersSchema = new Schema ({
-    email: String,
-    pass: String,
-    verifyKey: String
-})
-const UnverifiedUsersModel = mongoose.model('VerifyUsers', UnverifiedUsersSchema)
 
-// general user data schema
-// const UserDataSchema = new Schema({
-//     user: String,
-//     categories: Object,
+
+
+
+// const UserModel = mongoose.model('Users', UserSchema);
+
+// // unverified user schema and model
+// const UnverifiedUsersSchema = new Schema ({
+//     email: String,
+//     pass: String,
+//     verifyKey: String
 // })
-// const UserDataModel = mongoose.model('AllUserData', UserDataSchema)
-
+// const UnverifiedUsersModel = mongoose.model('VerifyUsers', UnverifiedUsersSchema)
 
 
 
 // // single category schema and model
 // const SingleCategorySchema = new Schema({
-//     user: String,
 //     name: String,
 //     value: Number,
 //     date: {type: Date, default: new Date().toLocaleDateString()}, // date format is for change
@@ -39,29 +49,20 @@ const UnverifiedUsersModel = mongoose.model('VerifyUsers', UnverifiedUsersSchema
 // })
 // const SingleCategoryModel = mongoose.model('Single Categories', SingleCategorySchema)
 
-// single category schema and model
-const SingleCategorySchema = new Schema({
-    name: String,
-    value: Number,
-    date: {type: Date, default: new Date().toLocaleDateString()}, // date format is for change
-    children: Boolean,
-    parent: Boolean,
-})
-const SingleCategoryModel = mongoose.model('Single Categories', SingleCategorySchema)
+// const UserDataSchema = new Schema({
+//     user: String,
+//     categories: [SingleCategorySchema]
+// })
 
-const UserDataSchema = new Schema({
-    user: String,
-    categories: [SingleCategorySchema]
-})
-
-const UserDataModel = mongoose.model('UsersData', UserDataSchema)
+// const UserDataModel = mongoose.model('UsersData', UserDataSchema)
 
 // exported models
 const models = {
     UserModel,
-    UnverifiedUsersModel,
-    SingleCategoryModel,
-    UserDataModel
+    CategoryModel,
+    // UnverifiedUsersModel,
+    // SingleCategoryModel,
+    // UserDataModel
 }
 
 module.exports = models;
