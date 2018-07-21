@@ -50,6 +50,8 @@ function Server(db) {
 
                 newUser.save(er=>{
                     if(er) console.log(er)
+                    console.log("http://localhost:3001/verify")
+                    console.log(verifyKey)
                     res.json('saved')
                 })
             }
