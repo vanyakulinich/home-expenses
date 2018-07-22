@@ -1,7 +1,6 @@
 const {server, passport} = require('./config');
 const jwt = require('jsonwebtoken');
-
-
+var _ = require('lodash');
 
 // server function
 function Server(db) {
@@ -83,14 +82,34 @@ function Server(db) {
             res.send(req.user)
         })
         .put(passport.authenticate('jwt', {session: false}), (req, res)=>{
-            let changedCategory  = req.user.categories.find((item, i)=> {
-                if(!item.name) {
-                    console.log(i)
-                    return i
-                }
-            })
-            console.log(changedCategory)
+
+            console.log(req)
+            
+            // let changedCategory  = req.user.categories.find((item, i)=> {
+            //     if(!item.name) {
+            //         console.log(i)
+            //         return i
+            //     }
+            // })
+            // console.log(changedCategory)
             // req.user.categories[changedCategory].name = 'name added'; 
+            // req.user.save(er=>{
+            //     if(er) console.log(er)
+            // })
+            res.json(req.user)
+        })
+        .delete(passport.authenticate('jwt', {session: false}), (req, res)=>{
+            
+            console.log(req.body);
+            // let {name} = req.body;
+            // let newList = _.remove(req.user.categories, (el=>{
+            //     return el.name === name
+            // }))
+            // console.log(newList);
+            // req.user.categories = newList
+            
+            
+            // // req.user.categories[changedCategory].name = 'name added'; 
             // req.user.save(er=>{
             //     if(er) console.log(er)
             // })

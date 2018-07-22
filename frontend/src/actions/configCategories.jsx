@@ -1,14 +1,15 @@
 import USER_DATA from '../actionTypes/userDataType.jsx';
 
-export default function addCategory() {
+export default function configCategories(method, body) {
     return (dispatch)=>{
-
         let fetchOptions = {
-            method: 'POST',
+            method,
+            body,
             headers: { 
                 "Authorization": "Bearer "+localStorage.getItem('token')
             }
         }
+        console.log(fetchOptions)
         fetch(`http://localhost:3001/userdata`, fetchOptions)
             .then(res => res.json())
             .then((data) => {

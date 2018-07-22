@@ -8,7 +8,7 @@ import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import Button from 'components/CustomButtons/Button.jsx'
 import Category from "components/Category/Category.jsx";
-import addCategory from '../../actions/addCategory.jsx'
+import configCategories from '../../actions/configCategories.jsx'
 
 
 const styles = {
@@ -28,7 +28,13 @@ class Config extends Component {
 
 
     addCategory =()=>{
-        this.props.addCategory()
+        this.props.configCategories('POST')
+    }
+
+
+    choseItem=(e)=>{
+        console.log(e.target)
+        // this.props.configCategories
     }
 
  
@@ -37,8 +43,8 @@ class Config extends Component {
         const {classes, userData} = this.props;
         const categories = userData ? (
             <List>
-                {userData.map(item=>{
-                    return <Category categoryName={item.name} key={item.name}/>       
+                {userData.map((item, key)=>{
+                    return <Category categoryName={item.name} key={key}/>       
                 })}
             </List>) : null
 
@@ -66,7 +72,7 @@ const mapStateToProps = state=>({
 
 const mapActionsToProps = {
     getUserData,
-    addCategory
+    configCategories
   }
 
 export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(Config));
