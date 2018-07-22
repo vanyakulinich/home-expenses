@@ -1,5 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
+import {connect} from 'react-redux';
+import getUserData from '../../actions/getUserData.jsx';
 // react plugin for creating charts
 import ChartistGraph from "react-chartist";
 // @material-ui/core
@@ -47,6 +49,12 @@ class Dashboard extends React.Component {
   state = {
     value: 0
   };
+
+  componentDidMount() {
+    // this.getUserData()
+  }
+
+
   handleChange = (event, value) => {
     this.setState({ value });
   };
@@ -55,7 +63,7 @@ class Dashboard extends React.Component {
     this.setState({ value: index });
   };
   render() {
-    const { classes } = this.props;
+    const { classes, userData} = this.props;
     return (
       <div>
         <Card>
@@ -64,6 +72,7 @@ class Dashboard extends React.Component {
             <h5>Please enter new expenses here</h5>         
           </CardHeader>
           <CardBody>
+            {userData ? null : <span>no data</span>}
             <TextField
               id="select-currency"
               select
@@ -112,9 +121,19 @@ class Dashboard extends React.Component {
   }
 }
 
-// Dashboard.propTypes = {
-//   classes: PropTypes.object.isRequired
-// };
+Dashboard.propTypes = {
+  classes: PropTypes.object.isRequired
+};
 
-export default withStyles(dashboardStyle)(Dashboard);
+const mapStateToProps = state=>({
+  userData: state.userData
+})
+
+const mapActionsToProps = {
+  getUserData
+}
+
+
+
+export default connect(mapStateToProps, mapActionsToProps)(withStyles(dashboardStyle)(Dashboard));
 

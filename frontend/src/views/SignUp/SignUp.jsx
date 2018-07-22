@@ -50,7 +50,7 @@ class SignUp extends Component {
             {isUser || toVerify}
 
             <CardHeader color="primary">
-                <h3>Sign into Home Expense App</h3>
+                <h3>Register in Home Expense App</h3>
                 <h5>Please enter your email and password</h5>
             </CardHeader>
             <CardBody className={classes.cardBody}>
