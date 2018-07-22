@@ -8,6 +8,7 @@ import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import Button from 'components/CustomButtons/Button.jsx'
 import Category from "components/Category/Category.jsx";
+import addCategory from '../../actions/addCategory.jsx'
 
 
 const styles = {
@@ -26,11 +27,9 @@ class Config extends Component {
       }
 
 
-    // addCategory =()=>{
-    //     let newCategory = {
-    //         name: 'New Category'
-    //     }
-    // }
+    addCategory =()=>{
+        this.props.addCategory()
+    }
 
  
 
@@ -66,7 +65,8 @@ const mapStateToProps = state=>({
 })
 
 const mapActionsToProps = {
-    getUserData
+    getUserData,
+    addCategory
   }
 
 export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(Config));
