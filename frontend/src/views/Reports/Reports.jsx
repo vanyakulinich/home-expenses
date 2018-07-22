@@ -1,4 +1,6 @@
-import React from "react";
+import React, {Component} from "react";
+import {connect} from 'react-redux';
+import getUserData from '../../actions/getUserData.jsx'
 import withStyles from "@material-ui/core/styles/withStyles";
 import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
@@ -14,12 +16,17 @@ const styles = {
         justifyContent: 'space-around'
     }
 }
+class Reports extends Component {
 
-const Reports = (props)=>{
-    const date = new Date().toLocaleDateString() 
-    const {classes} = props
-    return (
-        <Card>
+    componentDidMount() {
+        if(!this.props.userData) getUserData()
+      }
+
+    render(){
+        const date = new Date().toLocaleDateString() 
+        const {classes} = this.props
+        return(
+            <Card>
             <CardHeader color='info'>
                 <h3>Expenses reports</h3>   
                 <h5>Here is some expenses reports</h5>         
@@ -50,8 +57,16 @@ const Reports = (props)=>{
                 />
             </CardBody>
         </Card>
-    )
+        )
+    }
 }
 
+const mapStateToProps = state=>({
+    userData: state.userData
+})
 
-export default withStyles(styles)(Reports);
+const mapActionsToProps = {
+    getUserData
+  }
+
+export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(Reports));

@@ -18,7 +18,7 @@ function Server(db) {
                     user.save((er)=>{
                     if(er) console.log(er)
                     })
-                    res.json({ token })
+                    res.json({ token, email })
                 })
             } else {
                 res.json('nouser')

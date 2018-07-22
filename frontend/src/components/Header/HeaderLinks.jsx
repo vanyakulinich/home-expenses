@@ -1,4 +1,4 @@
-import React, {Fragment} from "react";
+import React from "react";
 import classNames from "classnames";
 import { Manager, Target, Popper } from "react-popper";
 import {Link} from 'react-router-dom';
@@ -15,28 +15,29 @@ import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Hidden from "@material-ui/core/Hidden";
 // @material-ui/icons
 import Person from "@material-ui/icons/Person";
-import Notifications from "@material-ui/icons/Notifications";
-import Dashboard from "@material-ui/icons/Dashboard";
-import Search from "@material-ui/icons/Search";
 // core components
-import CustomInput from "components/CustomInput/CustomInput.jsx";
 import Button from "components/CustomButtons/Button.jsx";
 
 import headerLinksStyle from "assets/jss/material-dashboard-react/components/headerLinksStyle";
 
 class HeaderLinks extends React.Component {
   state = {
-    open: false
+    open: false,
   };
+
   handleClick = () => {
     this.setState({ open: !this.state.open });
   };
 
   handleClose = () => {
     this.setState({ open: false });
+
   };
 
-  signOut=()=>this.props.signOutUser()
+  signOut = ()=>{
+    this.handleClose()
+    this.props.signOutUser()
+  }
 
   render() {
     const {classes, user} = this.props;
@@ -88,8 +89,7 @@ class HeaderLinks extends React.Component {
                       (checkUser) ? (
                         <MenuList role="menu">
                           <Link to='/signin'>
-                            <MenuItem onClick={this.handleClose} 
-                                      onClick={this.signOut}
+                            <MenuItem onClick={this.signOut} 
                                       className={classes.dropdownItem}>
                               Sign out
                             </MenuItem>
