@@ -5,8 +5,7 @@ export default function getUserData() {
         let fetchOptions = {
             method: 'GET',
             headers: { 
-                "Content-Type": "application/json" ,
-                "Authorization": "JWT "+localStorage.getItem('token')
+                "Authorization": "Bearer "+localStorage.getItem('token')
             }
         }
         fetch(`http://localhost:3001/userdata`, fetchOptions)

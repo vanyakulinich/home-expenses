@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 function Server(db) {
 
     let {UserModel, CategoryModel} = db;
-    
+    // routes
     // sign in route
     server.post('/signin', (req, res)=>{
         let {email, pass} = req.body;
@@ -25,7 +25,6 @@ function Server(db) {
             }
         })
     })
-
     // sign up route
     server.post('/signup', (req, res)=>{
         let {email, pass} = req.body
@@ -56,9 +55,7 @@ function Server(db) {
         let{ email, verifyKey } = req.body;
         UserModel.findOne({email, verifyKey}, (er, user)=>{
             if(er) console.log(er)
-            if(!user) {
-                res.json('nouser');
-            }
+            if(!user) res.json('nouser');
             let{email, pass} = user;
             jwt.sign({email, pass}, 'secretKey', (er, token) => {
                 user.verified = true;
@@ -71,13 +68,23 @@ function Server(db) {
         })
     })
 
+    // secured route with passport auth for working with user data
+    server.route('/userdata')
+        .get(passport.authenticate('jwt', {session: false}), (req, res)=>{
+            console.log(req.user.categories)
+            res.json(req.user)
+        })
 
 
 
+    // server.get('/test', passport.authenticate('jwt', { session: false }), (req, res)=>{
+    //         console.log(req.user.categories)
+    //         res.json(req.user)
+    //     })
 
     // ---------------------
     // test routes for postman
-    server.route('/userdata')
+    server.route('/users')
         .get((req,res)=>{
             UserModel.find({email: /./}, (err, data)=>{
                 if(err) console.log(err)
@@ -91,50 +98,38 @@ function Server(db) {
         })
 
         // finished here
-        .post((req, res)=>{
-            let {name, value, user} = req.body
-            let fakeUserData = new UserDataModel({
-                user,
-                categories: [{name,
-                            value,
-                            children: true,
-                            parent: false,}]
-            })
-            fakeUserData.save(er=>{
-                if(er) console.log(er)
-                res.send('cat posted')
-            })
-        })
-        .put((req,res)=>{
-            UserDataModel.findOne({user: 'test'}, (err, data)=>{
-                if(err) console.log(err)
+        // .post((req, res)=>{
+        //     let {name, value, user} = req.body
+        //     let fakeUserData = new UserDataModel({
+        //         user,
+        //         categories: [{name,
+        //                     value,
+        //                     children: true,
+        //                     parent: false,}]
+        //     })
+        //     fakeUserData.save(er=>{
+        //         if(er) console.log(er)
+        //         res.send('cat posted')
+        //     })
+        // })
+        // .put((req,res)=>{
+        //     UserDataModel.findOne({user: 'test'}, (err, data)=>{
+        //         if(err) console.log(err)
 
-                let newcat = new SingleCategoryModel({
-                    name: 'test2',
-                    value: 30,
-                    children: false,
-                    parent: false
-                })
-                data.categories.push(newcat)
-                data.save(er=>{
-                    if(er) console.log(er)
-                    res.send('ok')
-                })
-            })
-        })
+        //         let newcat = new SingleCategoryModel({
+        //             name: 'test2',
+        //             value: 30,
+        //             children: false,
+        //             parent: false
+        //         })
+        //         data.categories.push(newcat)
+        //         data.save(er=>{
+        //             if(er) console.log(er)
+        //             res.send('ok')
+        //         })
+        //     })
+        // })
 
-    server.get('/test', passport.authenticate('jwt', { session: false }), (req, res)=>{
-        console.log(req.user.categories)
-        res.json(req.user)
-    })
-    server.post(/\a/, (req, res)=>{
-        console.log(req.url)
-        let str= req.url
-        let result = str.split('a')[1]
-        console.log(result)
-
-        res.send('ok')
-    })
 }
 
 

@@ -51,7 +51,7 @@ class Dashboard extends React.Component {
   };
 
   componentDidMount() {
-    // this.getUserData()
+    this.props.getUserData()
   }
 
 
