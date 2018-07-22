@@ -6,7 +6,9 @@ export default function configCategories(method, body) {
             method,
             body: JSON.stringify(body),
             headers: { 
-                "Authorization": "Bearer "+localStorage.getItem('token')
+                "Content-Type": "application/json",
+                "Authorization": "Bearer "+localStorage.getItem('token'),
+                
             }
         }
         console.log(fetchOptions)
@@ -16,7 +18,7 @@ export default function configCategories(method, body) {
                 console.log('DATA UPDATED ON SERVER')
                 dispatch({
                     type: USER_DATA,
-                    data: data.categories
+                    data,
                 })
             })
             .catch(e => console.log(e))

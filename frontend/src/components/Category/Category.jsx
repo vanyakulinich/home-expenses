@@ -13,12 +13,7 @@ const inputProps = {
 class Category extends Component{
 
     deleteCategory = ()=>{
-        let item = {
-            name: 'this.props.categoryName'
-        }
-        console.log(item)
-        console.log(JSON.stringify(item))
-        this.props.configCategories('PUT', this.props.categoryName)
+        this.props.configCategories('DELETE', {name: this.props.categoryName})
     }
 
     renameCategory=(e)=>{

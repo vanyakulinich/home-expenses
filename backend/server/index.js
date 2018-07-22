@@ -75,12 +75,13 @@ function Server(db) {
         })
         .post(passport.authenticate('jwt', {session: false}), (req, res)=>{
             console.log(req.body)
-            let newCat = new CategoryModel({name: 'New Category'})
+            let newCat = new CategoryModel({name: req.body.name})
             req.user.categories = [...req.user.categories, newCat]
             req.user.save(er=>{
                 if(er) console.log(er)
             })
-            res.send(req.user)
+            res.json(req.user.categories)
+            
         })
         // .put(passport.authenticate('jwt', {session: false}), (req, res)=>{
 
@@ -99,21 +100,19 @@ function Server(db) {
         //     // })
         //     res.json(req.user)
         // })
-        .put(passport.authenticate('jwt', {session: false}), (req, res)=>{
+        .delete(passport.authenticate('jwt', {session: false}), (req, res)=>{
             
             console.log(req.body);
-            // let {name} = req.body;
             let newList = _.remove(req.user.categories, (el=>{
-                return el.name ==- 'New Category'
+                return el.name ==- req.body.name
             }))
             console.log(newList);
             req.user.categories = newList
             
-            
             req.user.save(er=>{
                 if(er) console.log(er)
             })
-            res.json(req.user)
+            res.json(req.user.categories)
         })
 
 
