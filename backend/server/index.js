@@ -74,7 +74,7 @@ function Server(db) {
             res.json(req.user)
         })
         .post(passport.authenticate('jwt', {session: false}), (req, res)=>{
-            // console.log(req.body)
+            console.log(req.body)
             let newCat = new CategoryModel({name: 'New Category'})
             req.user.categories = [...req.user.categories, newCat]
             req.user.save(er=>{

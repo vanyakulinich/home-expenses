@@ -29,6 +29,7 @@ class Category extends Component{
 
     render(){
         const {categoryName} = this.props
+        console.log(categoryName)
         return(
             <Fragment>
             <ListItem>

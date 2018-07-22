@@ -4,7 +4,7 @@ export default function configCategories(method, body) {
     return (dispatch)=>{
         let fetchOptions = {
             method,
-            body,
+            body: JSON.stringify(body),
             headers: { 
                 "Authorization": "Bearer "+localStorage.getItem('token')
             }

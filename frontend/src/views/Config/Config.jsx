@@ -28,7 +28,7 @@ class Config extends Component {
 
 
     addCategory =()=>{
-        this.props.configCategories('POST')
+        this.props.configCategories('POST', 'New Category')
     }
 
 
