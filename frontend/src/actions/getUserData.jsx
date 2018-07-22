@@ -12,7 +12,7 @@ export default function getUserData() {
         fetch(`http://localhost:3001/userdata`, fetchOptions)
             .then(res => res.json())
             .then((data) => {
-                console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+                console.log('DATA REQUSET TO SERVER')
                 dispatch({  
                     type: SIGN_USER, 
                     user: data.email

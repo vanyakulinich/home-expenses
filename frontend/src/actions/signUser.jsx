@@ -15,11 +15,6 @@ export default function signUser(user, signType) {
             .then(data => {
                 if(data.token) {
                     localStorage.setItem('token', data.token)
-                   
-                    // dispatch({
-                    //     type: SIGN_USER,
-                    //     user: data.email
-                    // })
                     appHistory.push('/dashboard')
                 } else {
                     dispatch({

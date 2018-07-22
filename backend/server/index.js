@@ -69,18 +69,38 @@ function Server(db) {
     })
 
     // secured route with passport auth for working with user data
+    // now the route is tested
     server.route('/userdata')
         .get(passport.authenticate('jwt', {session: false}), (req, res)=>{
-            console.log(req.user.categories)
+            res.json(req.user)
+        })
+        .post(passport.authenticate('jwt', {session: false}), (req, res)=>{
+            let newCat = new CategoryModel({name: req.body.name})
+            // console.log(req)
+            req.user.categories = [...req.user.categories, newCat]
+            req.user.save(er=>{
+                if(er) console.log(er)
+            })
+            res.send(req.user)
+        })
+        .put(passport.authenticate('jwt', {session: false}), (req, res)=>{
+            let changedCategory  = req.user.categories.find((item, i)=> {
+                if(!item.name) {
+                    console.log(i)
+                    return i
+                }
+            })
+            console.log(changedCategory)
+            // req.user.categories[changedCategory].name = 'name added'; 
+            // req.user.save(er=>{
+            //     if(er) console.log(er)
+            // })
             res.json(req.user)
         })
 
 
 
-    // server.get('/test', passport.authenticate('jwt', { session: false }), (req, res)=>{
-    //         console.log(req.user.categories)
-    //         res.json(req.user)
-    //     })
+
 
     // ---------------------
     // test routes for postman
@@ -97,38 +117,6 @@ function Server(db) {
             res.sendStatus(200)
         })
 
-        // finished here
-        // .post((req, res)=>{
-        //     let {name, value, user} = req.body
-        //     let fakeUserData = new UserDataModel({
-        //         user,
-        //         categories: [{name,
-        //                     value,
-        //                     children: true,
-        //                     parent: false,}]
-        //     })
-        //     fakeUserData.save(er=>{
-        //         if(er) console.log(er)
-        //         res.send('cat posted')
-        //     })
-        // })
-        // .put((req,res)=>{
-        //     UserDataModel.findOne({user: 'test'}, (err, data)=>{
-        //         if(err) console.log(err)
-
-        //         let newcat = new SingleCategoryModel({
-        //             name: 'test2',
-        //             value: 30,
-        //             children: false,
-        //             parent: false
-        //         })
-        //         data.categories.push(newcat)
-        //         data.save(er=>{
-        //             if(er) console.log(er)
-        //             res.send('ok')
-        //         })
-        //     })
-        // })
 
 }
 

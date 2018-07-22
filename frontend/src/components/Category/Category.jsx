@@ -9,7 +9,6 @@ const inputProps = {
 // reusable category component
 const Category = (props)=>{
     const {categoryName} = props
-    console.log(categoryName)
     return(
        <Fragment>
            <ListItem>

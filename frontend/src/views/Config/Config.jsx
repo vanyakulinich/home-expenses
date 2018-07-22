@@ -19,18 +19,6 @@ const styles = {
     },
 }
 
-// fake categories
-let categories = [
-    {   
-        name: 'category1',
-    },
-    {
-        name: 'category2',
-    }
-]
-
-
-
 class Config extends Component {
 
     componentDidMount() {
@@ -38,15 +26,23 @@ class Config extends Component {
       }
 
 
-    addCategory =()=>{
-        let newCategory = {
-            name: 'New Category'
-        }
-    }
+    // addCategory =()=>{
+    //     let newCategory = {
+    //         name: 'New Category'
+    //     }
+    // }
 
+ 
 
     render(){
-        const {classes} = this.props;
+        const {classes, userData} = this.props;
+        const categories = userData ? (
+            <List>
+                {userData.map(item=>{
+                    return <Category categoryName={item.name} key={item.name}/>       
+                })}
+            </List>) : null
+
         return (
             <Card>
             <CardHeader color="primary">
@@ -55,11 +51,7 @@ class Config extends Component {
             </CardHeader>
             <CardBody className={classes.configBody}>
                 <List>
-                    {categories.map(item=>{
-                        console.log(item.name)
-                        return <Category categoryName={item.name} key={item.name}/>
-                    })}
-                    {/* <Category/> */}
+                    {categories}
                 </List>
                 <Button color="primary"
                 onClick = {this.addCategory}>ADD CATEGORY</Button>

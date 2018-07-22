@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import { Switch, Route, Redirect } from "react-router-dom";
 import {connect} from 'react-redux'
 import mobileOpen from '../../actions/mobileOpen.jsx'
-import getUserData from '../../actions/getUserData.jsx'
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
@@ -33,7 +32,6 @@ class App extends React.Component {
   }
 
   componentDidUpdate(e) {
-    console.log(e)
     if (e.history.location.pathname !== e.location.pathname) {
       this.refs.mainPanel.scrollTop = 0;
     } 
@@ -107,7 +105,6 @@ const mapStateToProps = state =>({
 })
 const mapActionToProps = {
   mobileOpen,
-  getUserData
 }
 
 export default connect(mapStateToProps, mapActionToProps)(withStyles(dashboardStyle)(App));
