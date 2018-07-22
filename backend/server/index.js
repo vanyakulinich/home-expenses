@@ -104,7 +104,7 @@ function Server(db) {
             
             console.log(req.body);
             let newList = _.remove(req.user.categories, (el=>{
-                return el.name ==- req.body.name
+                return el.name == req.body.name
             }))
             console.log(newList);
             req.user.categories = newList
