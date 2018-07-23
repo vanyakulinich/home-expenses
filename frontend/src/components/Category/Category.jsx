@@ -11,8 +11,12 @@ import configCategories from '../../actions/configCategories.jsx';
 class Category extends Component{
 
     deleteCategory = ()=>{
-        console.log(this.props.id)
-        this.props.configCategories('DELETE', {id: this.props.id})
+        console.log(this.props)
+        let params = {
+            id: this.props.id,
+            parent: this.props.parent || null
+        }
+        this.props.configCategories('DELETE', params)
     }
 
 

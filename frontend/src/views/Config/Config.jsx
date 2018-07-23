@@ -43,11 +43,12 @@ class Config extends Component {
                 <h5>Please config your categories</h5>
             </CardHeader>
             <CardBody className={classes.configBody}>
-                <List>
-                    {userData ? <CategoryList 
-                        userData = {userData}   
-                        style = {classes.subCats}/> : null}
-                </List>
+               
+                    {userData ? 
+                        <CategoryList 
+                            userData = {userData}   
+                            style = {classes.subCats}/> : null}
+                
                 <Button color="primary"
                 onClick = {this.addCategory}>ADD CATEGORY</Button>
             </CardBody>

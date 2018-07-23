@@ -1,43 +1,37 @@
 import React from 'react';
-import withStyles from "@material-ui/core/styles/withStyles";
-import configCategories from '../../actions/configCategories.jsx'
 import {List, ListItem} from "@material-ui/core";
 import Category from './Category.jsx'
 
-const styles = {
-    subCats: {
-        display: 'block',
-    }
-}
 
 //  category list component
 const CategoryList = ({...props})=>{
     const {style, userData} = props
+    console.log(userData)
     return <List>
-                {userData.map((item)=>{ 
+                {userData.map((item, key)=>{ 
                     if(item.children.length > 0) {
-                    
-                        return <ListItem className = {style}>
+                        return <ListItem className = {style} key={key}>
                                     <Category 
-                                                categoryName={item.name} 
-                                                key={item._id} 
+                                                categoryName={item.name}
+                                                key={+item._id} 
                                                 id={item._id}/> 
                                     <List>
-                                        {item.children.map((subitem)=>{
-                                            return <ListItem>
+                                        {item.children.map((subitem, i)=>{
+                                            return <ListItem key={i}>
                                                         <Category 
-                                                            categoryName={subitem.name} 
-                                                            key={subitem._id} 
+                                                            categoryName={subitem.name}
+                                                            parent={item.name}
+                                                            key={+subitem._id} 
                                                             id={subitem._id}/>  
                                                     </ListItem>
                                         })}
                                     </List>
                                 </ListItem>   
                     } else {
-                        return <ListItem>
+                        return <ListItem key={key}>
                                     <Category 
                                         categoryName={item.name} 
-                                        key={item._id} 
+                                        key={+item._id} 
                                         id={item._id}/>  
                                 </ListItem>
                     }     
@@ -45,4 +39,4 @@ const CategoryList = ({...props})=>{
             </List>
 }
 
-export default withStyles(styles)(CategoryList);
+export default CategoryList;

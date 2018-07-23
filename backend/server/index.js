@@ -79,39 +79,34 @@ function Server(db) {
         .post(passport.authenticate('jwt', {session: false}), (req, res)=>{
             console.log(req.body)
             
-            
+            // adding subcategories
             if(req.body.parent)  {
-
                 let newCat = new CategoryModel({name: req.body.name, parentName: req.body.parent})
                 let parentItem = _.findIndex(req.user.categories, item=>{
                     return item.name ===req.body.parent})
-                    let listOfCategs = [...req.user.categories]
-                    listOfCategs[parentItem].children = [
+                    
+                let listOfCategs = [...req.user.categories]
+                
+                listOfCategs[parentItem].children = [
                     ...listOfCategs[parentItem].children,
                         newCat
                     ];
-
+                    
                 req.user.categories = [...listOfCategs]
-
-
-
                 req.user.save(er=>{
                     if(er) console.log(er)
                 })
-               
+               res.json(req.user.categories)
+            }  else {
 
-                return res.json(req.user.categories)
-            }
-
-
-            console.log(req.body)
+            // adding new category
             let newCat = new CategoryModel({name: req.body.name})
             req.user.categories = [...req.user.categories, newCat]
             req.user.save(er=>{
                 if(er) console.log(er)
             })
             res.json(req.user.categories)
-            
+            } 
         })
 
         // update user categories and subcategories
@@ -129,14 +124,35 @@ function Server(db) {
 
         // delete user categories and subcategories
         .delete(passport.authenticate('jwt', {session: false}), (req, res)=>{
-            let newList = _.filter(req.user.categories, (el=>{
-                return el._id != req.body.id
-            }))
-            req.user.categories = newList
-            req.user.save(er=>{
-                if(er) console.log(er)
-                 res.json(req.user.categories)  
-            })
+
+            // delete a subcategory
+            if(req.body.parent) {
+
+                let parentIndex = _.findIndex(req.user.categories, item=>{
+                    return item.name == req.body.parent})
+
+                let subCats = [...req.user.categories[parentIndex].children]
+                let newSubCats = _.filter(subCats, item=>item._id != req.body.id)
+
+                req.user.categories[parentIndex].children = [...newSubCats]
+               
+                req.user.save(er=>{
+                    if(er) console.log(er)
+                    res.json(req.user.categories)
+                })
+            } else {
+            // delete a category
+                let newList = _.filter(req.user.categories, (el=>{
+                    return el._id != req.body.id
+                }))
+                req.user.categories = newList
+                req.user.save(er=>{
+                    if(er) console.log(er)
+                    res.json(req.user.categories)  
+                })
+            }
+        
+           
         })
 
 
@@ -158,7 +174,12 @@ function Server(db) {
             res.sendStatus(200)
         })
 
-
+        server.route('/mongo')
+        .get((req, res)=>{
+            CategoryModel.find({name: /./}, (er, result)=>{
+                res.send(result)
+            })
+        })
 }
 
 
