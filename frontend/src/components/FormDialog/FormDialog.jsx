@@ -16,10 +16,10 @@ export default class FormDialog extends React.Component {
     open: false,
   };
 
-  inputProps = {
+  inputProp =()=>( {
     disableUnderline: true,
-    defaultValue: this.props.name
-  }
+    defaultValue: this.props.name,
+  })
 
 
   handleClickOpen = () => {
@@ -38,6 +38,8 @@ export default class FormDialog extends React.Component {
   }
 
   render() {
+
+    const propsForInput = this.inputProp()
     return (
       <div>
         <Button onClick={this.handleClickOpen}>{this.props.name}</Button>
@@ -52,7 +54,7 @@ export default class FormDialog extends React.Component {
               autoFocus
               margin="dense"
               id="name"
-              InputProps = {this.inputProps}
+              InputProps = {propsForInput}
               type="text"
               fullWidth
             />

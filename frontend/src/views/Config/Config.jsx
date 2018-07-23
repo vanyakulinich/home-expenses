@@ -44,10 +44,7 @@ class Config extends Component {
             </CardHeader>
             <CardBody className={classes.configBody}>
                
-                    {userData ? 
-                        <CategoryList 
-                            userData = {userData}   
-                            style = {classes.subCats}/> : null}
+                    {userData ? <CategoryList style = {classes.subCats}/> : null}
                 
                 <Button color="primary"
                 onClick = {this.addCategory}>ADD CATEGORY</Button>

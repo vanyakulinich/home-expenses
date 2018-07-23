@@ -116,6 +116,14 @@ function Server(db) {
 
             cats[renameIndex].name = req.body.name
 
+            let children = [...cats[renameIndex].children]
+            children = children.map(item=>{
+                item.parent = req.body.name
+                return item
+            })
+
+            cats[renameIndex].children = children
+
             req.user.categories = cats
 
             req.user.save(er =>{
@@ -137,31 +145,32 @@ function Server(db) {
         .post(passport.authenticate('jwt', {session: false}), (req, res)=>{
             // adding subcategories
             if(req.body.parent)  {
+                console.log(req.body)
                 let newCat = new CategoryModel({name: req.body.name, parentName: req.body.parent})
                 let parentItem = _.findIndex(req.user.categories, item=>{
                     return item.name ===req.body.parent})
                     
-                let listOfCategs = [...req.user.categories]
+                let cats = [...req.user.categories]
                 
-                listOfCategs[parentItem].children = [
-                    ...listOfCategs[parentItem].children,
-                        newCat
-                    ];
+                cats[parentItem].children.push(newCat)
                     
-                req.user.categories = [...listOfCategs]
+                req.user.categories = cats
                 req.user.save(er=>{
                     if(er) console.log(er)
                 })
                res.json(req.user.categories)
             }  else {
 
-            // adding new category
-            let newCat = new CategoryModel({name: req.body.name})
-            req.user.categories = [...req.user.categories, newCat]
-            req.user.save(er=>{
-                if(er) console.log(er)
-            })
-            res.json(req.user.categories)
+                // adding new category
+
+                let cats = [...req.user.categories]
+                let newCat = new CategoryModel({name: req.body.name})
+                cats.push(newCat)
+                req.user.categories = cats
+                req.user.save(er=>{
+                    if(er) console.log(er)
+                })
+                res.json(req.user.categories)
             } 
         })
 

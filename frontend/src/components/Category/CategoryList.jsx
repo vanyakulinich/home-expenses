@@ -1,30 +1,40 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {List, ListItem} from "@material-ui/core";
 import Category from './Category'
+import {connect} from 'react-redux';
 
 
-//  category list component
-const CategoryList = ({...props})=>{
-    const {style, userData} = props
-    console.log(userData)
-    return <List>
+
+class CategoryList extends Component {
+    render(){
+        const {style, userData} = this.props
+        return (
+             <List>
                 {userData.map((item, key)=>{ 
                     if(item.children.length > 0) {
-                        return <ListItem className = {style} key={key+item._id}>
+                        let subItem = [...item.children]
+                        
+                        return <ListItem className = {style} key={key}>
                                     <Category 
-                                                categoryName={item.name}
-                                                key={+item._id} 
-                                                id={item._id}
-                                                position={key}/> 
+                                            categoryName={item.name}
+                                            key={+item._id} 
+                                            id={item._id}
+                                            position={key}
+                                            parentPosition={null}
+                                            child={false}/> 
                                     <List>
-                                        {item.children.map((subitem, i)=>{
+                                        {subItem.map((sub, i)=>{
+                                            let name = sub.name
                                             return <ListItem key={i}>
                                                         <Category 
-                                                            categoryName={subitem.name}
+                                                            categoryName={name}
                                                             parent={item.name}
-                                                            key={+subitem._id} 
-                                                            id={subitem._id}
-                                                            position={i}/>  
+                                                            key={+sub._id} 
+                                                            id={sub._id}
+                                                            position={i}
+                                                            parentPosition={key}
+                                                            child={true}
+                                                            color={'primary'}/>  
                                                     </ListItem>
                                         })}
                                     </List>
@@ -33,13 +43,23 @@ const CategoryList = ({...props})=>{
                         return <ListItem key={key}>
                                     <Category 
                                         categoryName={item.name} 
-                                        key={key+item._id} 
+                                        key={+item._id} 
                                         id={item._id}
-                                        position={key}/>  
+                                        position={key}
+                                        parentPosition={null}
+                                        child={false}/>  
                                 </ListItem>
                     }     
                 })}
             </List>
+        )
+    }
 }
+//  category list component
 
-export default CategoryList;
+
+const mapStateToProps = state=>({
+    userData: state.userData
+})
+
+export default connect(mapStateToProps)(CategoryList);

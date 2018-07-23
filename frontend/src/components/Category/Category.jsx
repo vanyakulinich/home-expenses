@@ -11,10 +11,10 @@ import FormDialog from 'components/FormDialog/FormDialog.jsx'
 
 class Category extends Component{
 
-    configParams=(dir, name)=>({
+    configParams=(dir, name, parent)=>({
         name: name || this.props.categoryName,
         id: this.props.id,
-        parent: this.props.parent || null,
+        parent: parent || this.props.parent,
         direction: dir || null,
         position: this.props.position
     })
@@ -23,31 +23,32 @@ class Category extends Component{
 
     categoryUp = ()=>this.props.configCategories('PUT', this.configParams(true))
 
-    categoryDown = ()=>this.props.configCategories('PUT', this.configParams(false))
+    categoryDown = ()=>this.props.configCategories('PUT', this.configParams( false))
     
-    saveCategory = ()=>this.props.configCategories('PUT', this.configParams())
+    saveCategory = ()=>this.props.configCategories( 'PUT', this.configParams())
 
     addSubCategory = ()=>{
-        this.props.configCategories('POST', {name:'New Category', parent: this.props.categoryName})
+        let parent = this.props.categoryName
+        this.props.configCategories('POST', this.configParams(null, 'New Category', parent))
+        
     }
 
     changeCatName = (name)=>{
         this.props.configCategories('PUT', this.configParams(null, name), '/rename')
     }
     render(){
-        const {categoryName} = this.props;
-        
-
+        const {categoryName,color} = this.props;
+        const buttonColor = color ? color : 'info'
         return(
             <Fragment>
                 <FormDialog 
                     name = {categoryName}
                     save = {this.changeCatName}
                 />
-                 <Button color="info" onClick={this.categoryUp}>
+                 <Button color={buttonColor} onClick={this.categoryUp}>
                      <ArrowUpward/>
                  </Button>
-                 <Button color="info" onClick={this.categoryDown}>
+                 <Button color={buttonColor} onClick={this.categoryDown}>
                      <ArrowDownward/>
                  </Button>
                  <Button color="warning"
@@ -55,7 +56,7 @@ class Category extends Component{
                          name ={categoryName}>
                      <Clear/>
                  </Button>
-                 <Button color="info" onClick={this.addSubCategory}>
+                 <Button color={buttonColor} onClick={this.addSubCategory}>
                      <Loupe/>
                  </Button>
                  
@@ -64,9 +65,13 @@ class Category extends Component{
     }
 }
 
+const mapStateToProps = state=>({
+    userData: state.userData
+})
+
 const mapActionsToProps = ({
     configCategories
 })
 
 
-export default connect(null, mapActionsToProps)(Category);
+export default connect(mapStateToProps, mapActionsToProps)(Category);
