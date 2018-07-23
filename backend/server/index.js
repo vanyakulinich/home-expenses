@@ -185,16 +185,13 @@ function Server(db) {
 
                     let categories = [...req.user.categories[parentIndex].children]
 
-                    // if(req.body.position == 0 || req.body.position == categories.length-1) {
-                    //     return res.json(req.user.categories)
-                    // }
-
                     if(req.body.direction) {
                         if(req.body.position == 0) return res.json(req.user.categories)
                         let pos = req.body.position
-                        let buff= categories[pos-1]
-                        categories[pos-1] = categories[pos]
-                        categories[pos] = buff
+                        let buffOne= {...categories[pos-1]}
+                        let buffTwo = {...categories[pos]}
+                        categories[pos-1] = {...buffTwo}
+                        categories[pos] = {...buffOne}
     
                         req.user.categories[parentIndex].children = categories
                         req.user.save(er=>{
@@ -204,18 +201,17 @@ function Server(db) {
                     } else {
                         if(req.body.position == categories.length-1) return res.json(req.user.categories)
                         let pos = req.body.position
-                        let buff = categories[req.body.position+1]
-                        categories[pos+1] = categories[pos]
-                        categories[pos] = buff
+                        let buffOne = {...categories[pos+1]}
+                        let buffTwo = {...categories[pos]}
+                        categories[pos+1] = {...buffTwo}
+                        categories[pos] = {...buffOne}
                         req.user.categories[parentIndex].children = categories;
                         req.user.save(er=>{
                             if(er) console.log(er)
                         })
                     }
             } else {
-                // if(req.body.position == 0 || req.body.position == req.user.categories.length-1) {
-                //     return res.json(req.user.categories)
-                // }
+                
                 if(req.body.direction) {
                     if(req.body.position == 0) return res.json(req.user.categories)
                     let bufferAr = [...req.user.categories]
