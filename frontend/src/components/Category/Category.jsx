@@ -11,12 +11,31 @@ import configCategories from '../../actions/configCategories.jsx';
 class Category extends Component{
 
     deleteCategory = ()=>{
-        console.log(this.props)
         let params = {
             id: this.props.id,
             parent: this.props.parent || null
         }
         this.props.configCategories('DELETE', params)
+    }
+
+    categoryUp = ()=>{
+        let params = {
+            id: this.props.id,
+            parent: this.props.parent || null,
+            direction: true,
+            position: this.props.position
+        }
+        this.props.configCategories('PUT', params)
+    }
+
+    categoryDown = ()=>{
+        let params = {
+            id: this.props.id,
+            parent: this.props.parent || null,
+            direction: false,
+            position: this.props.position
+        }
+        this.props.configCategories('PUT', params)
     }
 
 
@@ -42,10 +61,10 @@ class Category extends Component{
                  <TextField InputProps = {inputProps}/>
                  <Button onClick={this.renameCategory}>save</Button>
                 </Fragment>
-                 <Button color="info">
+                 <Button color="info" onClick={this.categoryUp}>
                      <ArrowUpward/>
                  </Button>
-                 <Button color="info">
+                 <Button color="info" onClick={this.categoryDown}>
                      <ArrowDownward/>
                  </Button>
                  <Button color="warning"

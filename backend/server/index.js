@@ -111,15 +111,56 @@ function Server(db) {
 
         // update user categories and subcategories
         .put(passport.authenticate('jwt', {session: false}), (req, res)=>{
-            let changedItemIndex = _.findIndex(req.user.categories, item=>{
-                return item.name ===req.body.oldname})
+
+            console.log(req.body)
+            // changing positions
+
+            // Subcategory
+            if(req.body.parent) {
+                
+                // let parentIndex = _.findIndex(req.user.categories, item=>{
+                //     return item.name == req.body.parent})
+
+                //     let subCats = [...req.user.categories[parentIndex].children]
 
 
-            req.user.categories[changedItemIndex].name = req.body.newname;
-            req.user.save(er=>{
-                if(er) console.log(er)
-            })
-            res.json(req.user)
+                //     if(req.body.position == 0 || req.body.position== subCats.length) {
+                //         return res.json(req.user.categories)
+                //     }
+
+                //     let buffer = subCats.splice(0, req.body.position)
+                //    console.log(buffer)
+            } else {
+                if(req.body.direction) {
+                    let bufferAr = [...req.user.categories]
+                    let pos = req.body.position
+                    let buff= bufferAr[pos-1]
+                    bufferAr[pos-1] = bufferAr[pos]
+                    bufferAr[pos] = buff
+
+                    req.user.categories = bufferAr
+                    req.user.save(er=>{
+                        if(er) console.log(er)
+                    })
+                    
+                } else {
+
+                }
+
+               
+            }
+
+
+
+            // let changedItemIndex = _.findIndex(req.user.categories, item=>{
+            //     return item.name ===req.body.oldname})
+
+
+            // req.user.categories[changedItemIndex].name = req.body.newname;
+            // req.user.save(er=>{
+            //     if(er) console.log(er)
+            // })
+            res.json(req.user.categories)
         })
 
         // delete user categories and subcategories
