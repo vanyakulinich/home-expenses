@@ -65,13 +65,10 @@ class Category extends Component{
     }
 }
 
-const mapStateToProps = state=>({
-    userData: state.userData
-})
 
 const mapActionsToProps = ({
     configCategories
 })
 
 
-export default connect(mapStateToProps, mapActionsToProps)(Category);
+export default connect(null, mapActionsToProps)(Category);

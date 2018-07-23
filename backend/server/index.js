@@ -174,7 +174,7 @@ function Server(db) {
             } 
         })
 
-        // update user categories and subcategories
+        // update user categories and subcategories position
         .put(passport.authenticate('jwt', {session: false}), (req, res)=>{
             
             
@@ -191,23 +191,23 @@ function Server(db) {
 
                     if(req.body.direction) {
                         if(req.body.position == 0) return res.json(req.user.categories)
-                        let bufferAr = [...req.user.categories]
                         let pos = req.body.position
-                        let buff= bufferAr[pos-1]
-                        bufferAr[pos-1] = bufferAr[pos]
-                        bufferAr[pos] = buff
+                        let buff= categories[pos-1]
+                        categories[pos-1] = categories[pos]
+                        categories[pos] = buff
     
-                        req.user.categories = bufferAr
+                        req.user.categories[parentIndex].children = categories
                         req.user.save(er=>{
                             if(er) console.log(er)
                         })
                         
                     } else {
-                        if(req.body.position == req.user.categories.length-1) return res.json(req.user.categories)
+                        if(req.body.position == categories.length-1) return res.json(req.user.categories)
+                        let pos = req.body.position
                         let buff = categories[req.body.position+1]
-                        categories[req.body.position+1] = categories[req.body.position]
-                        categories[req.body.position] = buff
-                        req.user.categories = categories;
+                        categories[pos+1] = categories[pos]
+                        categories[pos] = buff
+                        req.user.categories[parentIndex].children = categories;
                         req.user.save(er=>{
                             if(er) console.log(er)
                         })
