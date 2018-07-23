@@ -1,6 +1,6 @@
 import React from 'react';
 import {List, ListItem} from "@material-ui/core";
-import Category from './Category.jsx'
+import Category from './Category'
 
 
 //  category list component

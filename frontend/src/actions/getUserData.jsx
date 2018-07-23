@@ -1,5 +1,5 @@
-import USER_DATA from '../actionTypes/userDataType.jsx'
-import SIGN_USER from '../actionTypes/signUser.jsx'
+import USER_DATA from '../actionTypes/userDataType'
+import SIGN_USER from '../actionTypes/signUser'
 
 export default function getUserData() {
     return (dispatch)=>{

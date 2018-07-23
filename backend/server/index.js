@@ -67,18 +67,74 @@ function Server(db) {
         })
     })
 
+
+
     // secured route with passport auth for working with user data
     // now the route is tested
-    server.route('/userdata')
-    // get user data
-        .get(passport.authenticate('jwt', {session: false}), (req, res)=>{
-            res.json(req.user)
-        })
 
+
+    // ниже есть повторяющийся код еще не оптимизированно
+    // есть также ерунда которая будет переписана
+
+    // get user data
+    server.get('/userdata', passport.authenticate('jwt', {session: false}), (req, res)=>{
+        res.json(req.user)
+    })
+
+    // config categories routes
+
+     // rename category
+     server.put('/userdata/config/rename', passport.authenticate('jwt', {session: false}), (req, res)=>{
+
+        console.log(req.body)
+
+        if(req.body.parent) {
+            let cats = [...req.user.categories]
+
+
+            let parentIndex = _.findIndex(cats, item=>{
+                return item.name == req.body.parent})
+
+            let subCats = [...cats[parentIndex].children]
+
+            let renameIndex = _.findIndex(subCats, item=> item._id == req.body.id)
+
+            subCats[renameIndex].name = req.body.name
+
+            cats[parentIndex].children = subCats
+            req.user.categories = cats
+
+            req.user.save(er =>{
+                if(er) console.log(er)
+            })
+
+            
+
+        } else {
+            let cats = [...req.user.categories]
+            let renameIndex = _.findIndex(cats, item=> item._id == req.body.id)
+
+            cats[renameIndex].name = req.body.name
+
+            req.user.categories = cats
+
+            req.user.save(er =>{
+                if(er) console.log(er)
+            })
+
+        }
+
+        res.json(req.user.categories)
+    })
+
+
+
+
+
+
+    server.route('/userdata/config')
         // adding new categories and subcategories
         .post(passport.authenticate('jwt', {session: false}), (req, res)=>{
-            console.log(req.body)
-            
             // adding subcategories
             if(req.body.parent)  {
                 let newCat = new CategoryModel({name: req.body.name, parentName: req.body.parent})
@@ -111,27 +167,48 @@ function Server(db) {
 
         // update user categories and subcategories
         .put(passport.authenticate('jwt', {session: false}), (req, res)=>{
-
-            console.log(req.body)
-            // changing positions
-
-            // Subcategory
+            
+            
             if(req.body.parent) {
-                
-                // let parentIndex = _.findIndex(req.user.categories, item=>{
-                //     return item.name == req.body.parent})
 
-                //     let subCats = [...req.user.categories[parentIndex].children]
+                let parentIndex = _.findIndex(req.user.categories, item=>{
+                    return item.name == req.body.parent})
 
+                    let categories = [...req.user.categories[parentIndex].children]
 
-                //     if(req.body.position == 0 || req.body.position== subCats.length) {
-                //         return res.json(req.user.categories)
-                //     }
+                    // if(req.body.position == 0 || req.body.position == categories.length-1) {
+                    //     return res.json(req.user.categories)
+                    // }
 
-                //     let buffer = subCats.splice(0, req.body.position)
-                //    console.log(buffer)
+                    if(req.body.direction) {
+                        if(req.body.position == 0) return res.json(req.user.categories)
+                        let bufferAr = [...req.user.categories]
+                        let pos = req.body.position
+                        let buff= bufferAr[pos-1]
+                        bufferAr[pos-1] = bufferAr[pos]
+                        bufferAr[pos] = buff
+    
+                        req.user.categories = bufferAr
+                        req.user.save(er=>{
+                            if(er) console.log(er)
+                        })
+                        
+                    } else {
+                        if(req.body.position == req.user.categories.length-1) return res.json(req.user.categories)
+                        let buff = categories[req.body.position+1]
+                        categories[req.body.position+1] = categories[req.body.position]
+                        categories[req.body.position] = buff
+                        req.user.categories = categories;
+                        req.user.save(er=>{
+                            if(er) console.log(er)
+                        })
+                    }
             } else {
+                // if(req.body.position == 0 || req.body.position == req.user.categories.length-1) {
+                //     return res.json(req.user.categories)
+                // }
                 if(req.body.direction) {
+                    if(req.body.position == 0) return res.json(req.user.categories)
                     let bufferAr = [...req.user.categories]
                     let pos = req.body.position
                     let buff= bufferAr[pos-1]
@@ -144,7 +221,15 @@ function Server(db) {
                     })
                     
                 } else {
-
+                    if(req.body.position == req.user.categories.length-1) return res.json(req.user.categories)
+                    let categories= [...req.user.categories]
+                    let buff = categories[req.body.position+1]
+                    categories[req.body.position+1] = categories[req.body.position]
+                    categories[req.body.position] = buff
+                    req.user.categories = categories;
+                    req.user.save(er=>{
+                        if(er) console.log(er)
+                    })
                 }
 
                
@@ -152,14 +237,7 @@ function Server(db) {
 
 
 
-            // let changedItemIndex = _.findIndex(req.user.categories, item=>{
-            //     return item.name ===req.body.oldname})
 
-
-            // req.user.categories[changedItemIndex].name = req.body.newname;
-            // req.user.save(er=>{
-            //     if(er) console.log(er)
-            // })
             res.json(req.user.categories)
         })
 
@@ -195,7 +273,8 @@ function Server(db) {
         
            
         })
-
+    
+       
 
 
 

@@ -1,66 +1,49 @@
 import React, {Fragment, Component} from 'react';
 import {connect} from 'react-redux';
-import {TextField, ListItem, Divider} from "@material-ui/core";
+import {TextField, ListItem, Divider, Dialog} from "@material-ui/core";
 import Button from 'components/CustomButtons/Button.jsx'
 import {Clear, ArrowUpward, ArrowDownward, Loupe} from "@material-ui/icons";
-import configCategories from '../../actions/configCategories.jsx';
+import configCategories from '../../actions/configCategories';
 
+import FormDialog from 'components/FormDialog/FormDialog.jsx'
 
 // reusable category component
 
 class Category extends Component{
 
-    deleteCategory = ()=>{
-        let params = {
-            id: this.props.id,
-            parent: this.props.parent || null
-        }
-        this.props.configCategories('DELETE', params)
-    }
+    configParams=(dir, name)=>({
+        name: name || this.props.categoryName,
+        id: this.props.id,
+        parent: this.props.parent || null,
+        direction: dir || null,
+        position: this.props.position
+    })
 
-    categoryUp = ()=>{
-        let params = {
-            id: this.props.id,
-            parent: this.props.parent || null,
-            direction: true,
-            position: this.props.position
-        }
-        this.props.configCategories('PUT', params)
-    }
+    deleteCategory = ()=>this.props.configCategories('DELETE', this.configParams())
 
-    categoryDown = ()=>{
-        let params = {
-            id: this.props.id,
-            parent: this.props.parent || null,
-            direction: false,
-            position: this.props.position
-        }
-        this.props.configCategories('PUT', params)
-    }
+    categoryUp = ()=>this.props.configCategories('PUT', this.configParams(true))
 
-
-    saveCategory = ()=>{
-        this.props.configCategories('PUT', {name: this.props.categoryName})
-    }
+    categoryDown = ()=>this.props.configCategories('PUT', this.configParams(false))
+    
+    saveCategory = ()=>this.props.configCategories('PUT', this.configParams())
 
     addSubCategory = ()=>{
         this.props.configCategories('POST', {name:'New Category', parent: this.props.categoryName})
     }
 
+    changeCatName = (name)=>{
+        this.props.configCategories('PUT', this.configParams(null, name), '/rename')
+    }
     render(){
         const {categoryName} = this.props;
-        const inputProps = {
-            disableUnderline: true,
-            defaultValue: categoryName
-        }
+        
 
         return(
             <Fragment>
-            
-                <Fragment>
-                 <TextField InputProps = {inputProps}/>
-                 <Button onClick={this.renameCategory}>save</Button>
-                </Fragment>
+                <FormDialog 
+                    name = {categoryName}
+                    save = {this.changeCatName}
+                />
                  <Button color="info" onClick={this.categoryUp}>
                      <ArrowUpward/>
                  </Button>
@@ -75,8 +58,7 @@ class Category extends Component{
                  <Button color="info" onClick={this.addSubCategory}>
                      <Loupe/>
                  </Button>
-            
-             {/* <Divider/> */}
+                 
          </Fragment>
         )
     }
