@@ -2,12 +2,11 @@ import React, {Component} from "react";
 import {connect} from 'react-redux';
 import getUserData from '../../actions/getUserData.jsx'
 import withStyles from "@material-ui/core/styles/withStyles";
-import {TextField, List, ListItem, Divider} from "@material-ui/core";
+import {List} from "@material-ui/core";
 import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import Button from 'components/CustomButtons/Button.jsx'
-import Category from "components/Category/Category.jsx";
 import configCategories from '../../actions/configCategories.jsx'
 import CategoryList from '../../components/Category/CategoryList.jsx'
 
@@ -34,11 +33,7 @@ class Config extends Component {
         this.props.configCategories('POST', {name:'New Category'})
     }
 
-    addSubCategory = (parent)=>{
-        this.props.configCategories('POST', {name:'New Category', parent: parent})
-    }
- 
-
+   
     render(){
         const {classes, userData} = this.props;
         return (

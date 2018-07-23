@@ -15,17 +15,13 @@ class Category extends Component{
         this.props.configCategories('DELETE', {id: this.props.id})
     }
 
-    renameCategory=(e)=>{
-        console.log(e.target.value)
-        console.log(e.target)
-    }
 
     saveCategory = ()=>{
         this.props.configCategories('PUT', {name: this.props.categoryName})
     }
 
     addSubCategory = ()=>{
-        this.props.addSubCategory(this.props.categoryName)
+        this.props.configCategories('POST', {name:'New Category', parent: this.props.categoryName})
     }
 
     render(){
