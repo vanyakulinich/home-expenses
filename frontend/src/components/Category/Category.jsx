@@ -37,7 +37,7 @@ class Category extends Component{
 
         return(
             <Fragment>
-            <ListItem>
+            
                 <Fragment>
                  <TextField InputProps = {inputProps}/>
                  <Button onClick={this.renameCategory}>save</Button>
@@ -56,8 +56,8 @@ class Category extends Component{
                  <Button color="info" onClick={this.addSubCategory}>
                      <Loupe/>
                  </Button>
-             </ListItem>
-             <Divider/>
+            
+             {/* <Divider/> */}
          </Fragment>
         )
     }

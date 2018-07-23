@@ -78,20 +78,22 @@ function Server(db) {
             if(req.body.parent)  {
 
                 let newCat = new CategoryModel({name: req.body.name, parentName: req.body.parent})
-                req.user.categories = [...req.user.categories, newCat]
+                let parentItem = _.findIndex(req.user.categories, item=>{
+                    return item.name ===req.body.parent})
+                    let listOfCategs = [...req.user.categories]
+                    listOfCategs[parentItem].children = [
+                    ...listOfCategs[parentItem].children,
+                        newCat
+                    ];
+
+                req.user.categories = [...listOfCategs]
+
+
+
                 req.user.save(er=>{
                     if(er) console.log(er)
                 })
                
-    
-                
-               
-
-
-
-
-
-
 
                 return res.json(req.user.categories)
             }

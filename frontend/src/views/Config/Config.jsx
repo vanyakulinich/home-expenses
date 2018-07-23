@@ -18,6 +18,9 @@ const styles = {
         alignItems: 'flex-start',
         justifyContent: 'space-around',
     },
+    subCats: {
+        display: 'block',
+    }
 }
 
 class Config extends Component {
@@ -32,10 +35,9 @@ class Config extends Component {
     }
 
 
-    // choseItem=(e)=>{
-    //     console.log(e.target)
-    //     // this.props.configCategories
-    // }
+    displayCategories = (list)=>{
+
+    }
 
     addSubCategory = (parent)=>{
         this.props.configCategories('POST', {name:'New Category', parent: parent})
@@ -44,14 +46,39 @@ class Config extends Component {
 
     render(){
         const {classes, userData} = this.props;
-        const categories = userData ? (
+        const categories = userData ? (  // displaying categories and subcategories
             <List>
-                {userData.map((item, key)=>{
-                    return <Category 
-                            categoryName={item.name} 
-                            key={key} 
-                            id={item._id}
-                            addSubCategory={this.addSubCategory}/>       
+                {userData.map((item)=>{
+                    if(item.children.length > 0) {
+                    
+                        return <ListItem className={classes.subCats}>
+                                     <Category 
+                                                categoryName={item.name} 
+                                                key={item._id} 
+                                                id={item._id}
+                                                addSubCategory={this.addSubCategory}/> 
+                                    <List>
+                                        {item.children.map((subitem)=>{
+                                            return <ListItem>
+                                                        <Category 
+                                                            categoryName={subitem.name} 
+                                                            key={subitem._id} 
+                                                            id={subitem._id}
+                                                            addSubCategory={this.addSubCategory}/>  
+                                                    </ListItem>
+                                        })}
+                                    </List>
+                                </ListItem>   
+                    } else {
+
+                    return <ListItem>
+                                <Category 
+                                    categoryName={item.name} 
+                                    key={item._id} 
+                                    id={item._id}
+                                    addSubCategory={this.addSubCategory}/>  
+                            </ListItem>
+                    }     
                 })}
             </List>) : null
 
