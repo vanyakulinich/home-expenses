@@ -2,14 +2,13 @@ import React, {Component} from "react";
 import {connect} from 'react-redux';
 import getUserData from '../../actions/getUserData.jsx'
 import withStyles from "@material-ui/core/styles/withStyles";
-import {TextField, List, ListItem, Divider} from "@material-ui/core";
+import {List} from "@material-ui/core";
 import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import Button from 'components/CustomButtons/Button.jsx'
-import Category from "components/Category/Category.jsx";
 import configCategories from '../../actions/configCategories.jsx'
-
+import CategoryList from '../../components/Category/CategoryList.jsx'
 
 const styles = {
     configBody: {
@@ -18,6 +17,9 @@ const styles = {
         alignItems: 'flex-start',
         justifyContent: 'space-around',
     },
+    subCats: {
+        display: 'block',
+    }
 }
 
 class Config extends Component {
@@ -31,23 +33,9 @@ class Config extends Component {
         this.props.configCategories('POST', {name:'New Category'})
     }
 
-
-    choseItem=(e)=>{
-        console.log(e.target)
-        // this.props.configCategories
-    }
-
- 
-
+   
     render(){
         const {classes, userData} = this.props;
-        const categories = userData ? (
-            <List>
-                {userData.map((item, key)=>{
-                    return <Category categoryName={item.name} key={key}/>       
-                })}
-            </List>) : null
-
         return (
             <Card>
             <CardHeader color="primary">
@@ -55,9 +43,12 @@ class Config extends Component {
                 <h5>Please config your categories</h5>
             </CardHeader>
             <CardBody className={classes.configBody}>
-                <List>
-                    {categories}
-                </List>
+               
+                    {userData ? 
+                        <CategoryList 
+                            userData = {userData}   
+                            style = {classes.subCats}/> : null}
+                
                 <Button color="primary"
                 onClick = {this.addCategory}>ADD CATEGORY</Button>
             </CardBody>

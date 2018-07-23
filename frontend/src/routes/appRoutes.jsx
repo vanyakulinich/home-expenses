@@ -54,7 +54,7 @@ const appRoutes = [
   },
   { 
     hidden: true,
-    path: "/verify",
+    path: "/:verify",
     sidebarName: "Verify Email",
     navbarName: "Verify Email",
     icon: Person,

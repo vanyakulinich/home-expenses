@@ -5,35 +5,66 @@ import Button from 'components/CustomButtons/Button.jsx'
 import {Clear, ArrowUpward, ArrowDownward, Loupe} from "@material-ui/icons";
 import configCategories from '../../actions/configCategories.jsx';
 
-const inputProps = {
-    disableUnderline: true
-}
+
 // reusable category component
 
 class Category extends Component{
 
     deleteCategory = ()=>{
-        this.props.configCategories('DELETE', {name: this.props.categoryName})
+        let params = {
+            id: this.props.id,
+            parent: this.props.parent || null
+        }
+        this.props.configCategories('DELETE', params)
     }
 
-    renameCategory=(e)=>{
-        console.log(e.target.value)
+    categoryUp = ()=>{
+        let params = {
+            id: this.props.id,
+            parent: this.props.parent || null,
+            direction: true,
+            position: this.props.position
+        }
+        this.props.configCategories('PUT', params)
     }
 
-    clearInput = (e)=>e.target.value == ''
+    categoryDown = ()=>{
+        let params = {
+            id: this.props.id,
+            parent: this.props.parent || null,
+            direction: false,
+            position: this.props.position
+        }
+        this.props.configCategories('PUT', params)
+    }
+
+
+    saveCategory = ()=>{
+        this.props.configCategories('PUT', {name: this.props.categoryName})
+    }
+
+    addSubCategory = ()=>{
+        this.props.configCategories('POST', {name:'New Category', parent: this.props.categoryName})
+    }
 
     render(){
-        const {categoryName} = this.props
-        console.log(categoryName)
+        const {categoryName} = this.props;
+        const inputProps = {
+            disableUnderline: true,
+            defaultValue: categoryName
+        }
+
         return(
             <Fragment>
-            <ListItem>
-                 <TextField value={categoryName} 
-                            InputProps = {inputProps}/>
-                 <Button color="info">
+            
+                <Fragment>
+                 <TextField InputProps = {inputProps}/>
+                 <Button onClick={this.renameCategory}>save</Button>
+                </Fragment>
+                 <Button color="info" onClick={this.categoryUp}>
                      <ArrowUpward/>
                  </Button>
-                 <Button color="info">
+                 <Button color="info" onClick={this.categoryDown}>
                      <ArrowDownward/>
                  </Button>
                  <Button color="warning"
@@ -41,11 +72,11 @@ class Category extends Component{
                          name ={categoryName}>
                      <Clear/>
                  </Button>
-                 <Button color="info">
+                 <Button color="info" onClick={this.addSubCategory}>
                      <Loupe/>
                  </Button>
-             </ListItem>
-             <Divider/>
+            
+             {/* <Divider/> */}
          </Fragment>
         )
     }

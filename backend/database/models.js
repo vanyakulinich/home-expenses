@@ -9,6 +9,7 @@ const CategorySchema = new Schema({
     value: Number,
     date: {type: Date, default: new Date().toLocaleDateString()}, // date format will be changed soon
     parentName: String,
+    children: Array,
 })
 
 // user schema, includes category schemas as children

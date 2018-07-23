@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const PORT = 3001;
 const passport = require("passport");
 const passportJWT = require("passport-jwt");
-const {UserModel} = require('../database/models')
+const {UserModel, CategoryModel} = require('../database/models')
 
 // psssport init
 const ExtractJwt = passportJWT.ExtractJwt;
