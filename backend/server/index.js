@@ -83,36 +83,29 @@ function Server(db) {
             res.json(req.user.categories)
             
         })
-        // .put(passport.authenticate('jwt', {session: false}), (req, res)=>{
+        .put(passport.authenticate('jwt', {session: false}), (req, res)=>{
+            let changedItemIndex = _.findIndex(req.user.categories, item=>{
+                return item.name ===req.body.oldname})
 
-        //     // console.log(req.body)
-            
-        //     // let changedCategory  = req.user.categories.find((item, i)=> {
-        //     //     if(!item.name) {
-        //     //         console.log(i)
-        //     //         return i
-        //     //     }
-        //     // })
-        //     // console.log(changedCategory)
-        //     // req.user.categories[changedCategory].name = 'name added'; 
-        //     // req.user.save(er=>{
-        //     //     if(er) console.log(er)
-        //     // })
-        //     res.json(req.user)
-        // })
-        .delete(passport.authenticate('jwt', {session: false}), (req, res)=>{
-            
-            console.log(req.body);
-            let newList = _.remove(req.user.categories, (el=>{
-                return el.name ==- req.body.name
-            }))
-            console.log(newList);
-            req.user.categories = newList
-            
+
+            req.user.categories[changedItemIndex].name = req.body.newname;
             req.user.save(er=>{
                 if(er) console.log(er)
             })
-            res.json(req.user.categories)
+            res.json(req.user)
+        })
+        .delete(passport.authenticate('jwt', {session: false}), (req, res)=>{
+            let newList = _.filter(req.user.categories, (el=>{
+                console.log(el._id == req.body.id)
+                return el._id != req.body.id
+            }))
+            req.user.categories = newList
+            req.user.save(er=>{
+                if(er) console.log(er)
+                 res.json(req.user.categories)
+               
+            })
+           
         })
 
 

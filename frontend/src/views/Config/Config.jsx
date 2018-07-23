@@ -44,7 +44,7 @@ class Config extends Component {
         const categories = userData ? (
             <List>
                 {userData.map((item, key)=>{
-                    return <Category categoryName={item.name} key={key}/>       
+                    return <Category categoryName={item.name} key={key} id={item._id}/>       
                 })}
             </List>) : null
 

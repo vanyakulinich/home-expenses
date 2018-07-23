@@ -5,31 +5,40 @@ import Button from 'components/CustomButtons/Button.jsx'
 import {Clear, ArrowUpward, ArrowDownward, Loupe} from "@material-ui/icons";
 import configCategories from '../../actions/configCategories.jsx';
 
-const inputProps = {
-    disableUnderline: true
-}
+
 // reusable category component
 
 class Category extends Component{
 
     deleteCategory = ()=>{
-        this.props.configCategories('DELETE', {name: this.props.categoryName})
+        console.log(this.props.id)
+        this.props.configCategories('DELETE', {id: this.props.id})
     }
 
     renameCategory=(e)=>{
         console.log(e.target.value)
+        console.log(e.target)
     }
 
-    clearInput = (e)=>e.target.value == ''
+    saveCategory = ()=>{
+        this.props.configCategories('PUT', {name: this.props.categoryName})
+    }
+
 
     render(){
-        const {categoryName} = this.props
-        console.log(categoryName)
+        const {categoryName} = this.props;
+        const inputProps = {
+            disableUnderline: true,
+            defaultValue: categoryName
+        }
+
         return(
             <Fragment>
             <ListItem>
-                 <TextField value={categoryName} 
-                            InputProps = {inputProps}/>
+                <Fragment>
+                 <TextField InputProps = {inputProps}/>
+                 <Button onClick={this.renameCategory}>save</Button>
+                </Fragment>
                  <Button color="info">
                      <ArrowUpward/>
                  </Button>
