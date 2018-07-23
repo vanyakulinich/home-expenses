@@ -70,11 +70,16 @@ function Server(db) {
     // secured route with passport auth for working with user data
     // now the route is tested
     server.route('/userdata')
+    // get user data
         .get(passport.authenticate('jwt', {session: false}), (req, res)=>{
             res.json(req.user)
         })
+
+        // adding new categories and subcategories
         .post(passport.authenticate('jwt', {session: false}), (req, res)=>{
             console.log(req.body)
+            
+            
             if(req.body.parent)  {
 
                 let newCat = new CategoryModel({name: req.body.name, parentName: req.body.parent})
@@ -108,6 +113,8 @@ function Server(db) {
             res.json(req.user.categories)
             
         })
+
+        // update user categories and subcategories
         .put(passport.authenticate('jwt', {session: false}), (req, res)=>{
             let changedItemIndex = _.findIndex(req.user.categories, item=>{
                 return item.name ===req.body.oldname})
@@ -119,6 +126,8 @@ function Server(db) {
             })
             res.json(req.user)
         })
+
+        // delete user categories and subcategories
         .delete(passport.authenticate('jwt', {session: false}), (req, res)=>{
             let newList = _.filter(req.user.categories, (el=>{
                 return el._id != req.body.id

@@ -9,7 +9,7 @@ import CardBody from "components/Card/CardBody.jsx";
 import Button from 'components/CustomButtons/Button.jsx'
 import Category from "components/Category/Category.jsx";
 import configCategories from '../../actions/configCategories.jsx'
-
+import CategoryList from '../../components/Category/CategoryList.jsx'
 
 const styles = {
     configBody: {
@@ -34,11 +34,6 @@ class Config extends Component {
         this.props.configCategories('POST', {name:'New Category'})
     }
 
-
-    displayCategories = (list)=>{
-
-    }
-
     addSubCategory = (parent)=>{
         this.props.configCategories('POST', {name:'New Category', parent: parent})
     }
@@ -46,42 +41,6 @@ class Config extends Component {
 
     render(){
         const {classes, userData} = this.props;
-        const categories = userData ? (  // displaying categories and subcategories
-            <List>
-                {userData.map((item)=>{
-                    if(item.children.length > 0) {
-                    
-                        return <ListItem className={classes.subCats}>
-                                     <Category 
-                                                categoryName={item.name} 
-                                                key={item._id} 
-                                                id={item._id}
-                                                addSubCategory={this.addSubCategory}/> 
-                                    <List>
-                                        {item.children.map((subitem)=>{
-                                            return <ListItem>
-                                                        <Category 
-                                                            categoryName={subitem.name} 
-                                                            key={subitem._id} 
-                                                            id={subitem._id}
-                                                            addSubCategory={this.addSubCategory}/>  
-                                                    </ListItem>
-                                        })}
-                                    </List>
-                                </ListItem>   
-                    } else {
-
-                    return <ListItem>
-                                <Category 
-                                    categoryName={item.name} 
-                                    key={item._id} 
-                                    id={item._id}
-                                    addSubCategory={this.addSubCategory}/>  
-                            </ListItem>
-                    }     
-                })}
-            </List>) : null
-
         return (
             <Card>
             <CardHeader color="primary">
@@ -90,7 +49,9 @@ class Config extends Component {
             </CardHeader>
             <CardBody className={classes.configBody}>
                 <List>
-                    {categories}
+                    {userData ? <CategoryList 
+                        userData = {userData}   
+                        style = {classes.subCats}/> : null}
                 </List>
                 <Button color="primary"
                 onClick = {this.addCategory}>ADD CATEGORY</Button>
