@@ -32,11 +32,14 @@ class Config extends Component {
     }
 
 
-    choseItem=(e)=>{
-        console.log(e.target)
-        // this.props.configCategories
-    }
+    // choseItem=(e)=>{
+    //     console.log(e.target)
+    //     // this.props.configCategories
+    // }
 
+    addSubCategory = (parent)=>{
+        this.props.configCategories('POST', {name:'New Category', parent: parent})
+    }
  
 
     render(){
@@ -44,7 +47,11 @@ class Config extends Component {
         const categories = userData ? (
             <List>
                 {userData.map((item, key)=>{
-                    return <Category categoryName={item.name} key={key} id={item._id}/>       
+                    return <Category 
+                            categoryName={item.name} 
+                            key={key} 
+                            id={item._id}
+                            addSubCategory={this.addSubCategory}/>       
                 })}
             </List>) : null
 

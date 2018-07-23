@@ -75,6 +75,29 @@ function Server(db) {
         })
         .post(passport.authenticate('jwt', {session: false}), (req, res)=>{
             console.log(req.body)
+            if(req.body.parent)  {
+
+                let newCat = new CategoryModel({name: req.body.name, parentName: req.body.parent})
+                req.user.categories = [...req.user.categories, newCat]
+                req.user.save(er=>{
+                    if(er) console.log(er)
+                })
+               
+    
+                
+               
+
+
+
+
+
+
+
+                return res.json(req.user.categories)
+            }
+
+
+            console.log(req.body)
             let newCat = new CategoryModel({name: req.body.name})
             req.user.categories = [...req.user.categories, newCat]
             req.user.save(er=>{
@@ -96,16 +119,13 @@ function Server(db) {
         })
         .delete(passport.authenticate('jwt', {session: false}), (req, res)=>{
             let newList = _.filter(req.user.categories, (el=>{
-                console.log(el._id == req.body.id)
                 return el._id != req.body.id
             }))
             req.user.categories = newList
             req.user.save(er=>{
                 if(er) console.log(er)
-                 res.json(req.user.categories)
-               
+                 res.json(req.user.categories)  
             })
-           
         })
 
 

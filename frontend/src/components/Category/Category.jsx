@@ -24,6 +24,9 @@ class Category extends Component{
         this.props.configCategories('PUT', {name: this.props.categoryName})
     }
 
+    addSubCategory = ()=>{
+        this.props.addSubCategory(this.props.categoryName)
+    }
 
     render(){
         const {categoryName} = this.props;
@@ -50,7 +53,7 @@ class Category extends Component{
                          name ={categoryName}>
                      <Clear/>
                  </Button>
-                 <Button color="info">
+                 <Button color="info" onClick={this.addSubCategory}>
                      <Loupe/>
                  </Button>
              </ListItem>
