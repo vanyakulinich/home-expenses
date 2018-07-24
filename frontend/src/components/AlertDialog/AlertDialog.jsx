@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component, Fragment} from 'react';
 import Button from 'components/CustomButtons/Button.jsx'
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -7,7 +7,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {Clear} from "@material-ui/icons";
 
-class AlertDialog extends React.Component {
+class AlertDialog extends Component {
   state = {
     open: false,
   };
@@ -29,7 +29,7 @@ class AlertDialog extends React.Component {
 
   render() {
     return (
-      <div>
+      <Fragment>
         <Button color="warning"
             onClick={this.handleClickOpen}>
             <Clear/>
@@ -40,7 +40,6 @@ class AlertDialog extends React.Component {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id="alert-dialog-title">{"Use Google's location service?"}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
               You want to delete a category. Are You Sure?
@@ -55,7 +54,7 @@ class AlertDialog extends React.Component {
             </Button>
           </DialogActions>
         </Dialog>
-      </div>
+      </Fragment>
     );
   }
 }

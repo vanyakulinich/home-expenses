@@ -55,12 +55,15 @@ class Category extends Component{
                  <AlertDialog 
                     delete = {this.deleteCategory}
                     name = {categoryName} />
-                 <Button color={buttonColor} 
-                         onClick={
-                            child ? null : this.addSubCategory  
-                        }>
-                     <Loupe/>
-                 </Button>
+
+                    {
+                        child ? null : (
+                            <Button color={buttonColor} 
+                                    onClick={this.addSubCategory}>
+                                <Loupe/>
+                            </Button>) 
+                    }
+                
                  
                  
          </Fragment>

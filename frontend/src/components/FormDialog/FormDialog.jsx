@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Fragment, Component} from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -11,7 +11,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 
 
-export default class FormDialog extends React.Component {
+export default class FormDialog extends Component {
   state = {
     open: false,
   };
@@ -41,7 +41,7 @@ export default class FormDialog extends React.Component {
 
     const propsForInput = this.inputProp()
     return (
-      <div>
+      <Fragment>
         <Button onClick={this.handleClickOpen}>{this.props.name}</Button>
         <Dialog
           open={this.state.open}
@@ -68,7 +68,7 @@ export default class FormDialog extends React.Component {
             </Button>
           </DialogActions>
         </Dialog>
-      </div>
+      </Fragment>
     );
   }
 }
