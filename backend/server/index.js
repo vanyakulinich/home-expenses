@@ -105,8 +105,10 @@ function Server(db) {
             res.json(req.user)
         })
         .delete(passport.authenticate('jwt', {session: false}), (req, res)=>{
-
-            req.user.categories = []
+            let itemForDelete = _.findIndex(req.user.categories, item=>{
+                return item._id == req.body.id
+            })
+            req.user.categories.splice(itemForDelete, 1)
 
             req.user.save(er=>{
                 if(er) console.log(er)
