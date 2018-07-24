@@ -21,7 +21,7 @@ class Category extends Component{
         position: this.props.position
     })
 
-    deleteCategory = (name)=>this.props.configCategories('DELETE', this.configParams(null, name))
+    deleteCategory = (name)=>this.props.configCategories('DELETE', 'amount', this.configParams(null, name))
 
     categoryUp = ()=>this.props.configCategories('PUT', this.configParams(true))
 
@@ -58,11 +58,11 @@ class Category extends Component{
                     delete = {this.deleteCategory}
                     name = {categoryName} />
                     
-                    {child ? 
+                    {/* {child ? 
                         null : 
                         <SimpleDialogDemo 
                             list = {this.props.userData.filter(item=>item.name!==categoryName)}
-                            color={buttonColor}/>}
+                            color={buttonColor}/>} */}
                 </div>
          </Fragment>
         )

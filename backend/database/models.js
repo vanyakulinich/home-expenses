@@ -3,20 +3,16 @@ const mongoose = require('./dbConnect');
 const Schema = mongoose.Schema;
 
 // schemas
-const SubCategorySchema = new Schema({ 
-    name: String,
-    value: Number,
-    date: {type: Date, default: new Date().toLocaleDateString()}, // date format will be changed soon
-    parentName: String,
-})
 
 // single category schema
 const CategorySchema = new Schema({ 
     name: String,
     value: Number,
     date: {type: Date, default: new Date().toLocaleDateString()}, // date format will be changed soon
-    parentName: String,
-    children: [SubCategorySchema],
+    parent: String,
+    isChild: Boolean,
+    prev: String,
+    next: String
 })
 
 const ExpensesSchema = new Schema({
@@ -26,7 +22,6 @@ const ExpensesSchema = new Schema({
 
 
 })
-
 
 // user schema, includes category schemas as children
 const UserSchema = new Schema({
@@ -40,7 +35,6 @@ const UserSchema = new Schema({
 
 // models
 const ExpensesModel = mongoose.model('Expenses', ExpensesSchema);
-const SubCategoryModel = mongoose.model('Subcategory', SubCategorySchema);
 const CategoryModel = mongoose.model('Categories', CategorySchema);
 const UserModel = mongoose.model('Users', UserSchema);
 
@@ -49,7 +43,6 @@ const UserModel = mongoose.model('Users', UserSchema);
 const models = {
     UserModel,
     CategoryModel,
-    SubCategoryModel,
     ExpensesModel
 }
 
