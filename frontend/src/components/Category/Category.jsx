@@ -5,7 +5,8 @@ import Button from 'components/CustomButtons/Button.jsx'
 import {Clear, ArrowUpward, ArrowDownward, Loupe} from "@material-ui/icons";
 import configCategories from '../../actions/configCategories';
 
-import FormDialog from 'components/FormDialog/FormDialog.jsx'
+import FormDialog from 'components/FormDialog/FormDialog.jsx';
+import ListDialog from 'components/ListDialog/ListDialog.jsx';
 
 // reusable category component
 
@@ -37,7 +38,7 @@ class Category extends Component{
         this.props.configCategories('PUT', this.configParams(null, name), '/rename')
     }
     render(){
-        const {categoryName,color} = this.props;
+        const {categoryName,color, child} = this.props;
         const buttonColor = color ? color : 'info'
         return(
             <Fragment>
@@ -56,9 +57,13 @@ class Category extends Component{
                          name ={categoryName}>
                      <Clear/>
                  </Button>
-                 <Button color={buttonColor} onClick={this.addSubCategory}>
+                 <Button color={buttonColor} 
+                         onClick={
+                            child ? null : this.addSubCategory  
+                        }>
                      <Loupe/>
                  </Button>
+                 
                  
          </Fragment>
         )
