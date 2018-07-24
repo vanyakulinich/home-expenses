@@ -86,18 +86,14 @@ function Server(db) {
      // rename category
      server.put('/userdata/config/rename', passport.authenticate('jwt', {session: false}), (req, res)=>{
 
-   
-
         if(req.body.parent) {
             
             let cats = [...req.user.categories]
 
             let parentIndex = _.findIndex(cats, item=>{
                 return item.name == req.body.parent})
-
             let subCats = [...cats[parentIndex].children]
-            console.log(subCats)
-
+           
             let renameIndex = _.findIndex(subCats, item=> item._id == req.body.id)
 
             subCats[renameIndex].name = req.body.name
@@ -108,45 +104,30 @@ function Server(db) {
             req.user.save(er =>{
                 if(er) console.log(er)
             })
-              res.json(req.user.categories)
-
-            
-
+              
         } else {
             let cats = [...req.user.categories]
             let renameIndex = _.findIndex(cats, item=> item._id == req.body.id)
 
-            console.log(req.body.name)
             let children = [...cats[renameIndex].children]
             children.forEach(item=>{
                 item.parentName = req.body.name
             })
-            console.log(children)
 
             cats[renameIndex].children = [...children]
 
             cats[renameIndex].name = req.body.name
 
-            // cats[renameIndex].save(item=>console.log(item))
-
             req.user.categories = [...cats]
-            console.log(req.user.categories)
-
-
 
             req.user.save(er =>{
                 if(er) console.log(er)
                 
-            })
-            res.json(req.user.categories)
-            
+            })  
         }
 
-        // res.json(req.user.categories)
+        res.json(req.user.categories)
     })
-
-
-
 
 
 
@@ -172,7 +153,6 @@ function Server(db) {
             }  else {
 
                 // adding new category
-
                 let cats = [...req.user.categories]
                 let newCat = new CategoryModel({name: req.body.name})
                 cats.push(newCat)
@@ -187,35 +167,35 @@ function Server(db) {
         // update user categories and subcategories position
         .put(passport.authenticate('jwt', {session: false}), (req, res)=>{
             
-            
             if(req.body.parent) {
 
                 let parentIndex = _.findIndex(req.user.categories, item=>{
                     return item.name == req.body.parent})
 
                     let categories = [...req.user.categories[parentIndex].children]
-
+                    console.log(categories)
                     if(req.body.direction) {
                         if(req.body.position == 0) return res.json(req.user.categories)
+                        let bufferAr = [...categories]
                         let pos = req.body.position
-                        let buffOne= {...categories[pos-1]}
-                        let buffTwo = {...categories[pos]}
-                        categories[pos-1] = {...buffTwo}
-                        categories[pos] = {...buffOne}
+                        let buff= bufferAr[pos-1]
+                        bufferAr[pos-1] = bufferAr[pos]
+                        bufferAr[pos] = buff
     
-                        req.user.categories[parentIndex].children = categories
+                        req.user.categories[parentIndex].children = bufferAr
                         req.user.save(er=>{
                             if(er) console.log(er)
                         })
                         
                     } else {
                         if(req.body.position == categories.length-1) return res.json(req.user.categories)
+                        let bufferAr = [...categories]
                         let pos = req.body.position
-                        let buffOne = {...categories[pos+1]}
-                        let buffTwo = {...categories[pos]}
-                        categories[pos+1] = {...buffTwo}
-                        categories[pos] = {...buffOne}
-                        req.user.categories[parentIndex].children = categories;
+                        let buff= bufferAr[pos+1]
+                        bufferAr[pos+1] = bufferAr[pos]
+                        bufferAr[pos] = buff
+    
+                        req.user.categories[parentIndex].children = bufferAr
                         req.user.save(er=>{
                             if(er) console.log(er)
                         })
