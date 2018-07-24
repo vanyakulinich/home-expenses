@@ -102,7 +102,7 @@ function Server(db) {
             req.user.save(er=>{
                 if(er) console.log(er)
             })
-            res.json(req.user)
+            res.json(req.user.categories)
         })
         .delete(passport.authenticate('jwt', {session: false}), (req, res)=>{
             let itemForDelete = _.findIndex(req.user.categories, item=>{
@@ -113,7 +113,7 @@ function Server(db) {
             req.user.save(er=>{
                 if(er) console.log(er)
             })
-            res.json(req.user)
+            res.json(req.user.categories)
         })
 
 

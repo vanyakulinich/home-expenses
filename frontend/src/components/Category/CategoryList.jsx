@@ -8,80 +8,54 @@ import {connect} from 'react-redux';
 
 class CategoryList extends Component {
 
-// example   
-        // for(let i in arr) {
-            
-            
-        //     if(arr[i].parent == parent) {
-               
-        //         var children = this.recusionList(arr, arr[i]._id)
-    
-        //         if(children.length) {
-        //             arr[i].children = children
-        //         }
-        //         out.push(arr[i])
-        //     } else {
-        //         out.push(arr[i])
-        //     }
-        // }
+// recursion for data array   
+organizeData =(arr, parent)=>{
+    let out =[]
+    for(let i in arr) {
+        
+        if(arr[i].parent == parent) {
+           
+            let children = this.organizeData(arr, arr[i]._id)
+
+            if(children.length) {
+                arr[i].children = children
+            }
+            out.push(arr[i])
+        } else {
+            out.push(arr[i])
+        }
+    }
+    console.log(out)
+    return out
+}
+        
 
     render(){
-        const {style, data} = this.props
-        // const list = this.recusionList(data, data[0]._id, style)
-
-        // const recusionList = (arr, parent, style)=>{
-
-        //     return <List className = {style.listWidth}>
-        //             {
-        //                 arr.map((item, key)=>{
-        //                     if(item._id == parent) {
-        //                         return this.recusionList(item, item._id, style)
-    
-        //                     } else {
-        //                         return <ListItem className = {style.subCats} key={key}>
-        //                                     <Category 
-        //                                     categoryName={item.name}
-        //                                     parent={null}
-        //                                     key={+item._id} 
-        //                                     id={item._id}
-        //                                     position={key}
-        //                                     parentPosition={key}
-        //                                     // child={item.isChild}
-        //                                     />  
-                                            
-        //                                 </ListItem>
-        //                     }
-    
-        //                 })
-        //             }
-    
-        //     </List>
-    
-        // }
-
-        // const listOfCategories = this.displayListOne(data, data[0]._id)
-        // console.log(listOfCategories)
-        // const child = this.props.child || data[0].isChild
-        const parent = this.props.parent || data[0]._id
+        const {style, key} = this.props
+        let flag = !!key ? true : false 
+        const data = flag ? 
+                        this.props.data : 
+                        this.organizeData(this.props.data, this.props.data[0]._id)
         return (
             <List className = {style.listWidth}>
             {
                 data.map((item, key)=>{
-                    if(item._id == parent) {
-                        <CategoryList data={item} key={key} 
-                            parent={item._id} 
-                            child={item.isChild}/>
+                    if(item.parent && item.children.length>0) {
+                      return <CategoryList data={[...item.children]} key={key} 
+                                parent={item._id} 
+                                child={item.isChild}
+                                style={style}/>
                     } else {
-                        return <ListItem className = {style.subCats} key={key}>
+                         return <ListItem className = {style.subCats} key={key}>
                                     <Category 
-                                    categoryName={item.name}
-                                    parent={null}
-                                    key={+item._id} 
-                                    id={item._id}
-                                    position={key}
-                                    parentPosition={key}
-                                    child={item.isChild}
-                                    />  
+                                        categoryName={item.name}
+                                        parent={null}
+                                        key={+item._id} 
+                                        id={item._id}
+                                        position={key}
+                                        parentPosition={key}
+                                        child={item.isChild}
+                                        />  
                                     
                                 </ListItem>
                     }
