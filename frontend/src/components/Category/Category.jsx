@@ -23,7 +23,7 @@ class Category extends Component{
 
     categoryUp = ()=>this.props.configCategories('PUT', this.configParams(true))
 
-    categoryDown = ()=>this.props.configCategories('PUT', this.configParams( false))
+    categoryDown = ()=>this.props.configCategories('PUT', this.configParams(false))
     
     saveCategory = ()=>this.props.configCategories( 'PUT', this.configParams())
 

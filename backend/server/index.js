@@ -5,7 +5,7 @@ var _ = require('lodash');
 // server function
 function Server(db) {
 
-    let {UserModel, CategoryModel} = db;
+    let {UserModel, CategoryModel, SubCategoryModel} = db;
     // routes
     // sign in route
     server.post('/signin', (req, res)=>{
@@ -86,27 +86,29 @@ function Server(db) {
      // rename category
      server.put('/userdata/config/rename', passport.authenticate('jwt', {session: false}), (req, res)=>{
 
-        console.log(req.body)
+   
 
         if(req.body.parent) {
+            
             let cats = [...req.user.categories]
-
 
             let parentIndex = _.findIndex(cats, item=>{
                 return item.name == req.body.parent})
 
             let subCats = [...cats[parentIndex].children]
+            console.log(subCats)
 
             let renameIndex = _.findIndex(subCats, item=> item._id == req.body.id)
 
             subCats[renameIndex].name = req.body.name
 
-            cats[parentIndex].children = subCats
-            req.user.categories = cats
+            cats[parentIndex].children = [...subCats]
+            req.user.categories = [...cats]
 
             req.user.save(er =>{
                 if(er) console.log(er)
             })
+              res.json(req.user.categories)
 
             
 
@@ -114,25 +116,33 @@ function Server(db) {
             let cats = [...req.user.categories]
             let renameIndex = _.findIndex(cats, item=> item._id == req.body.id)
 
+            console.log(req.body.name)
+            let children = [...cats[renameIndex].children]
+            children.forEach(item=>{
+                item.parentName = req.body.name
+            })
+            console.log(children)
+
+            cats[renameIndex].children = [...children]
+
             cats[renameIndex].name = req.body.name
 
-            let children = [...cats[renameIndex].children]
-            children = children.map(item=>{
-                item.parent = req.body.name
-                return item
-            })
+            // cats[renameIndex].save(item=>console.log(item))
 
-            cats[renameIndex].children = children
+            req.user.categories = [...cats]
+            console.log(req.user.categories)
 
-            req.user.categories = cats
+
 
             req.user.save(er =>{
                 if(er) console.log(er)
+                
             })
-
+            res.json(req.user.categories)
+            
         }
 
-        res.json(req.user.categories)
+        // res.json(req.user.categories)
     })
 
 
@@ -146,7 +156,7 @@ function Server(db) {
             // adding subcategories
             if(req.body.parent)  {
                 console.log(req.body)
-                let newCat = new CategoryModel({name: req.body.name, parentName: req.body.parent})
+                let newCat = new SubCategoryModel({name: req.body.name, parentName: req.body.parent})
                 let parentItem = _.findIndex(req.user.categories, item=>{
                     return item.name ===req.body.parent})
                     
