@@ -5,7 +5,7 @@ import getUserData from '../../actions/getUserData.jsx';
 // @material-ui/core
 import withStyles from "@material-ui/core/styles/withStyles";
 
-import {TextField, MenuItem} from "@material-ui/core";
+import {TextField, MenuItem, List, ListItem} from "@material-ui/core";
 
 // core components
 import Table from "components/Table/Table.jsx";
@@ -32,8 +32,14 @@ class Dashboard extends Component {
   handleChangeIndex = index => {
     this.setState({ value: index });
   };
+
+  categoriesList = ()=>{
+    return 
+  }
+
   render() {
     const { classes, userData} = this.props;
+    console.log(userData)
     return (
       <div>
         <Card>
@@ -46,7 +52,7 @@ class Dashboard extends Component {
             <TextField
               id="select-currency"
               select
-              label="Category"
+              // label="Select Category"
               className={classes.textField}
               value={this.state.currency}
               // onChange={this.handleChange('currency')}
@@ -55,13 +61,16 @@ class Dashboard extends Component {
                   className: classes.menu,
                 },
               }}
-              helperText="Please select your currency"
+              helperText="Select Category"
               margin="normal"
             >
-              <MenuItem> Categories </MenuItem>
-              {/* {currencies.map(option => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
+              <List>
+                {this.categoriesList}
+              </List>
+              {/* <MenuItem> Select Category </MenuItem> */}
+              {/* {userData.map(option => (
+                <MenuItem key={option.name} value={option.name}>
+                  {option.name}
                 </MenuItem>
               ))} */}
             </TextField>
