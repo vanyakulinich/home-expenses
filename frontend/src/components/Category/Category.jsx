@@ -6,7 +6,7 @@ import {Clear, ArrowUpward, ArrowDownward, Loupe} from "@material-ui/icons";
 import configCategories from '../../actions/configCategories';
 
 import FormDialog from 'components/FormDialog/FormDialog.jsx';
-import ListDialog from 'components/ListDialog/ListDialog.jsx';
+import AlertDialog from 'components/AlertDialog/AlertDialog.jsx';
 
 // reusable category component
 
@@ -20,7 +20,7 @@ class Category extends Component{
         position: this.props.position
     })
 
-    deleteCategory = ()=>this.props.configCategories('DELETE', this.configParams())
+    deleteCategory = (name)=>this.props.configCategories('DELETE', this.configParams(null, name))
 
     categoryUp = ()=>this.props.configCategories('PUT', this.configParams(true))
 
@@ -52,11 +52,9 @@ class Category extends Component{
                  <Button color={buttonColor} onClick={this.categoryDown}>
                      <ArrowDownward/>
                  </Button>
-                 <Button color="warning"
-                         onClick={this.deleteCategory}
-                         name ={categoryName}>
-                     <Clear/>
-                 </Button>
+                 <AlertDialog 
+                    delete = {this.deleteCategory}
+                    name = {categoryName} />
                  <Button color={buttonColor} 
                          onClick={
                             child ? null : this.addSubCategory  

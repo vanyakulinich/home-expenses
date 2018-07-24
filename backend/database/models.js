@@ -10,8 +10,6 @@ const SubCategorySchema = new Schema({
     parentName: String,
 })
 
-
-
 // single category schema
 const CategorySchema = new Schema({ 
     name: String,
@@ -21,6 +19,13 @@ const CategorySchema = new Schema({
     children: [SubCategorySchema],
 })
 
+const ExpensesSchema = new Schema({
+    category: String,
+    name: String,
+    value: Number,
+
+
+})
 
 
 // user schema, includes category schemas as children
@@ -34,7 +39,8 @@ const UserSchema = new Schema({
 });
 
 // models
-const SubCategoryModel = mongoose.model('Subcategory', SubCategorySchema)
+const ExpensesModel = mongoose.model('Expenses', ExpensesSchema);
+const SubCategoryModel = mongoose.model('Subcategory', SubCategorySchema);
 const CategoryModel = mongoose.model('Categories', CategorySchema);
 const UserModel = mongoose.model('Users', UserSchema);
 
@@ -43,7 +49,8 @@ const UserModel = mongoose.model('Users', UserSchema);
 const models = {
     UserModel,
     CategoryModel,
-    SubCategoryModel
+    SubCategoryModel,
+    ExpensesModel
 }
 
 module.exports = models;

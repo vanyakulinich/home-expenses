@@ -5,7 +5,7 @@ var _ = require('lodash');
 // server function
 function Server(db) {
 
-    let {UserModel, CategoryModel, SubCategoryModel} = db;
+    let {UserModel, CategoryModel, SubCategoryModel, ExpensesModel} = db;
     // routes
     // sign in route
     server.post('/signin', (req, res)=>{

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {connect} from 'react-redux';
 import getUserData from '../../actions/getUserData.jsx';
@@ -16,7 +16,7 @@ import Button from "components/CustomButtons/Button.jsx";
 
 import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
 
-class Dashboard extends React.Component {
+class Dashboard extends Component {
   state = {
     value: 0
   };
