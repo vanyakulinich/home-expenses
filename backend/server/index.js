@@ -118,6 +118,7 @@ function Server(db) {
 
         // delete category
         .delete(passport.authenticate('jwt', {session: false}), (req, res)=>{
+            
             let itemForDelete = _.findIndex(req.user.categories, item=>{
                 return item._id == req.body.id
             })
@@ -128,7 +129,18 @@ function Server(db) {
             })
             res.json(req.user.categories)
         })
+    
+        // add subcategory
+    server.post('/userdata/config/sub', passport.authenticate('jwt', {session: false}), (req, res)=>{
+            console.log(req.body)
+        
 
+        // req.user.save(er=>{
+        //     if(er) console.log(er)
+        // })
+        res.json(req.user.categories)
+    })
+    
    
         
 

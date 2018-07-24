@@ -33,8 +33,12 @@ class SimpleDialog extends Component {
     this.props.onClose(this.props.selectedValue);
   };
 
-  handleListItemClick = value => {
-    this.configCategories('POST', 'category', )
+  clickListitem = ()=>{
+    this.handleListItemClick()
+    // this.props.config('POST', 'sub', configParams(value, id, this.props.parentitem._id))
+  }
+
+  handleListItemClick = (value) => {
     this.props.onClose(value);
   };
 
@@ -47,7 +51,7 @@ class SimpleDialog extends Component {
         <div>
           <List>
             {list.map(item => (
-              <ListItem button onClick={this.handleListItemClick} key={item._id}>
+              <ListItem button onClick={()=>this.clickListitem()} key={item._id}>
                 <ListItemText primary={item.name} />
               </ListItem>
             ))}
@@ -63,6 +67,7 @@ SimpleDialog.propTypes = {
   onClose: PropTypes.func,
   selectedValue: PropTypes.string,
 };
+
 
 const SimpleDialogWrapped = withStyles(styles)(SimpleDialog);
 
@@ -94,14 +99,13 @@ class SimpleDialogDemo extends Component {
           open={this.state.open}
           onClose={this.handleClose}
           list={this.props.list}
+          parentitem = {this.props.parentitem}
         />
       </Fragment>
     );
   }
 }
 
-const mapActionsToProps = {
-  configCategories
-}
 
-export default connect()(SimpleDialogDemo);
+
+export default (SimpleDialogDemo);
