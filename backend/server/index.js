@@ -85,7 +85,7 @@ function Server(db) {
     // config categories routes
 
 
-    server.route('/userdata/config/amount')
+    server.route('/userdata/config/category')
         // add new category
         .post(passport.authenticate('jwt', {session: false}), (req, res)=>{
             let cats = req.user.categories
@@ -93,17 +93,30 @@ function Server(db) {
                 name: 'New Category',
                 parent: null,
                 isChild: false,
-                value: 0,
-                // prev: (cats.length > 0) ? 
+                value: 0
             })
 
             cats.push(newCat)
+            req.user.save(er=>{
+                if(er) console.log(er)
+            })
+            res.json(req.user.categories)
+        })
+
+        // rename category
+        .put( passport.authenticate('jwt', {session: false}), (req, res)=>{
+            let itemForRename = _.findIndex(req.user.categories, item=>{
+                return item._id == req.body.id
+            })
+            req.user.categories[itemForRename].name = req.body.name
 
             req.user.save(er=>{
                 if(er) console.log(er)
             })
             res.json(req.user.categories)
         })
+
+        // delete category
         .delete(passport.authenticate('jwt', {session: false}), (req, res)=>{
             let itemForDelete = _.findIndex(req.user.categories, item=>{
                 return item._id == req.body.id
@@ -115,6 +128,9 @@ function Server(db) {
             })
             res.json(req.user.categories)
         })
+
+   
+        
 
 
 

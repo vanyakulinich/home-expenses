@@ -9,34 +9,27 @@ import FormDialog from 'components/FormDialog/FormDialog.jsx';
 import AlertDialog from 'components/AlertDialog/AlertDialog.jsx';
 import SimpleDialogDemo from 'components/SimpleDialog/SimpleDialog.jsx'
 
+import configParams from '../../functions/configFetch.jsx'
+
 // reusable category component
 
 class Category extends Component{
 
-    configParams=(dir, name, parent)=>({
-        name: name || this.props.categoryName,
-        id: this.props.id,
-        parent: parent || this.props.parent,
-        direction: dir || null,
-        position: this.props.position
-    })
+    deleteCategory = (name)=>(
+        this.props.configCategories('DELETE', 'category', configParams(this.props.id, name)))
 
-    deleteCategory = (name)=>this.props.configCategories('DELETE', 'amount', this.configParams(null, name))
+    categoryUp = ()=>this.props.configCategories('PUT', configParams(true))
 
-    categoryUp = ()=>this.props.configCategories('PUT', this.configParams(true))
+    categoryDown = ()=>this.props.configCategories('PUT', configParams(false))
 
-    categoryDown = ()=>this.props.configCategories('PUT', this.configParams(false))
-    
-    saveCategory = ()=>this.props.configCategories( 'PUT', this.configParams())
-
-    addSubCategory = ()=>{
-        let parent = this.props.categoryName
-        this.props.configCategories('POST', this.configParams(null, 'New Category', parent))
+    // addSubCategory = ()=>{
+    //     let parent = this.props.categoryName
+    //     this.props.configCategories('POST', this.configParams(null, 'New Category', parent))
         
-    }
+    // }
 
-    changeCatName = (name)=>{
-        this.props.configCategories('PUT', '/rename', this.configParams(null, name))
+    renameCategory = (name)=>{
+        this.props.configCategories('PUT', 'category', configParams(this.props.id, name))
     }
     render(){
         const {categoryName, child, userData} = this.props;
@@ -45,7 +38,7 @@ class Category extends Component{
             <Fragment>
                 <FormDialog 
                     name = {categoryName}
-                    save = {this.changeCatName}
+                    save = {this.renameCategory}
                 />
                 <div>
                  <Button color={buttonColor} onClick={this.categoryUp}>

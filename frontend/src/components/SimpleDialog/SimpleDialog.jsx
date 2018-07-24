@@ -1,4 +1,5 @@
 import React, {Component, Fragment} from 'react';
+import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 // import Button from '@material-ui/core/Button';
@@ -16,6 +17,9 @@ import Typography from '@material-ui/core/Typography';
 import blue from '@material-ui/core/colors/blue';
 import {Loupe} from "@material-ui/icons";
 
+import configCategories from '../../actions/configCategories.jsx'
+import configParams from '../../functions/configFetch.jsx'
+
 const emails = ['username@gmail.com', 'user02@gmail.com'];
 const styles = {
   avatar: {
@@ -30,6 +34,7 @@ class SimpleDialog extends Component {
   };
 
   handleListItemClick = value => {
+    this.configCategories('POST', 'category', )
     this.props.onClose(value);
   };
 
@@ -42,7 +47,7 @@ class SimpleDialog extends Component {
         <div>
           <List>
             {list.map(item => (
-              <ListItem button onClick={() => this.handleListItemClick()} key={item._id}>
+              <ListItem button onClick={this.handleListItemClick} key={item._id}>
                 <ListItemText primary={item.name} />
               </ListItem>
             ))}
@@ -95,4 +100,8 @@ class SimpleDialogDemo extends Component {
   }
 }
 
-export default SimpleDialogDemo;
+const mapActionsToProps = {
+  configCategories
+}
+
+export default connect()(SimpleDialogDemo);

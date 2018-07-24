@@ -33,9 +33,8 @@ class Config extends Component {
         if(!this.props.userData) this.props.getUserData()
       }
 
-
     addCategory =()=>{
-        this.props.configCategories('POST', 'amount')
+        this.props.configCategories('POST', 'category')
     }
 
    
