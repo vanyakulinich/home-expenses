@@ -7,6 +7,7 @@ import configCategories from '../../actions/configCategories';
 
 import FormDialog from 'components/FormDialog/FormDialog.jsx';
 import AlertDialog from 'components/AlertDialog/AlertDialog.jsx';
+import SimpleDialogDemo from 'components/SimpleDialog/SimpleDialog.jsx'
 
 // reusable category component
 
@@ -29,8 +30,8 @@ class Category extends Component{
     saveCategory = ()=>this.props.configCategories( 'PUT', this.configParams())
 
     addSubCategory = ()=>{
-        let parent = this.props.categoryName
-        this.props.configCategories('POST', this.configParams(null, 'New Category', parent))
+        // let parent = this.props.categoryName
+        // this.props.configCategories('POST', this.configParams(null, 'New Category', parent))
         
     }
 
@@ -55,26 +56,22 @@ class Category extends Component{
                  <AlertDialog 
                     delete = {this.deleteCategory}
                     name = {categoryName} />
-
-                    {
-                        child ? null : (
-                            <Button color={buttonColor} 
-                                    onClick={this.addSubCategory}>
-                                <Loupe/>
-                            </Button>) 
-                    }
+                    
+                    {child ? null : <SimpleDialogDemo 
+                    list = {this.props.userData}
+                    color={buttonColor}/>}
                 
-                 
-                 
          </Fragment>
         )
     }
 }
-
+const mapStateToProps = state=>({
+    userData: state.userData
+})
 
 const mapActionsToProps = ({
     configCategories
 })
 
 
-export default connect(null, mapActionsToProps)(Category);
+export default connect(mapStateToProps, mapActionsToProps)(Category);

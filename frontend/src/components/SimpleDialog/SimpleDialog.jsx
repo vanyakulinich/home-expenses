@@ -1,7 +1,8 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
+// import Button from '@material-ui/core/Button';
+import Button from 'components/CustomButtons/Button.jsx'
 import Avatar from '@material-ui/core/Avatar';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -13,6 +14,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import AddIcon from '@material-ui/icons/Add';
 import Typography from '@material-ui/core/Typography';
 import blue from '@material-ui/core/colors/blue';
+import {Loupe} from "@material-ui/icons";
 
 const emails = ['username@gmail.com', 'user02@gmail.com'];
 const styles = {
@@ -22,7 +24,7 @@ const styles = {
   },
 };
 
-class ListDialog extends Component {
+class SimpleDialog extends Component {
   handleClose = () => {
     this.props.onClose(this.props.selectedValue);
   };
@@ -33,22 +35,17 @@ class ListDialog extends Component {
 
   render() {
     const { classes, onClose, selectedValue, ...other } = this.props;
-
+    const {list} = this.props
     return (
       <Dialog onClose={this.handleClose} aria-labelledby="simple-dialog-title" {...other}>
-        <DialogTitle id="simple-dialog-title">Set backup account</DialogTitle>
+        <DialogTitle id="simple-dialog-title">Chose a category for subcategory</DialogTitle>
         <div>
           <List>
-            {emails.map(email => (
-              <ListItem button onClick={() => this.handleListItemClick(email)} key={email}>
-               
-                <ListItemText primary={email} />
+            {list.map(item => (
+              <ListItem button onClick={() => this.handleListItemClick()} key={item._id}>
+                <ListItemText primary={item.name} />
               </ListItem>
             ))}
-            <ListItem button onClick={() => this.handleListItemClick('addAccount')}>
-              
-              <ListItemText primary="add account" />
-            </ListItem>
           </List>
         </div>
       </Dialog>
@@ -56,10 +53,46 @@ class ListDialog extends Component {
   }
 }
 
-ListDialog.propTypes = {
+SimpleDialog.propTypes = {
   classes: PropTypes.object.isRequired,
   onClose: PropTypes.func,
   selectedValue: PropTypes.string,
 };
 
-export default ListDialog;
+const SimpleDialogWrapped = withStyles(styles)(SimpleDialog);
+
+class SimpleDialogDemo extends Component {
+  state = {
+    open: false,
+    selectedValue: emails[1],
+  };
+
+  handleClickOpen = () => {
+    this.setState({
+      open: true,
+    });
+  };
+
+  handleClose = value => {
+    this.setState({ selectedValue: value, open: false });
+  };
+
+  render() {
+    return (
+      <Fragment>
+        <Button color='info' 
+                onClick={this.handleClickOpen}>
+            <Loupe/>
+        </Button>
+        <SimpleDialogWrapped
+          selectedValue={this.state.selectedValue}
+          open={this.state.open}
+          onClose={this.handleClose}
+          list={this.props.list}
+        />
+      </Fragment>
+    );
+  }
+}
+
+export default SimpleDialogDemo;

@@ -173,9 +173,26 @@ function Server(db) {
                     return item.name == req.body.parent})
 
                     let categories = [...req.user.categories[parentIndex].children]
-                    console.log(categories)
+                    // console.log(categories)
                     if(req.body.direction) {
-                        if(req.body.position == 0) return res.json(req.user.categories)
+                        if(req.body.position == 0) {
+                            console.log(req.body)
+                            let splicedItem = categories.splice(0, 1)
+                            
+                            console.log(splicedItem)
+                            
+                            req.user.categories[parentIndex].children = [...categories]
+
+                            // let uppercategories
+
+
+
+                            req.user.save()
+                            
+                            
+                            
+                            return res.json(req.user.categories)
+                        }
                         let bufferAr = [...categories]
                         let pos = req.body.position
                         let buff= bufferAr[pos-1]
