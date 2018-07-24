@@ -30,8 +30,8 @@ class Category extends Component{
     saveCategory = ()=>this.props.configCategories( 'PUT', this.configParams())
 
     addSubCategory = ()=>{
-        // let parent = this.props.categoryName
-        // this.props.configCategories('POST', this.configParams(null, 'New Category', parent))
+        let parent = this.props.categoryName
+        this.props.configCategories('POST', this.configParams(null, 'New Category', parent))
         
     }
 
@@ -47,6 +47,7 @@ class Category extends Component{
                     name = {categoryName}
                     save = {this.changeCatName}
                 />
+                <div>
                  <Button color={buttonColor} onClick={this.categoryUp}>
                      <ArrowUpward/>
                  </Button>
@@ -62,7 +63,7 @@ class Category extends Component{
                         <SimpleDialogDemo 
                             list = {this.props.userData.filter(item=>item.name!==categoryName)}
                             color={buttonColor}/>}
-                
+                </div>
          </Fragment>
         )
     }

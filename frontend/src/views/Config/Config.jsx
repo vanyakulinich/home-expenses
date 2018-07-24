@@ -18,7 +18,12 @@ const styles = {
         justifyContent: 'space-around',
     },
     subCats: {
-        display: 'block',
+        display: 'flex',
+        width: '100%',
+        justifyContent: 'space-between'
+    },
+    listWidth: {
+        width: '100%'
     }
 }
 
@@ -44,7 +49,7 @@ class Config extends Component {
             </CardHeader>
             <CardBody className={classes.configBody}>
                
-                    {userData ? <CategoryList style = {classes.subCats}/> : null}
+                    {userData ? <CategoryList style = {classes}/> : null}
                 
                 <Button color="primary"
                 onClick = {this.addCategory}>ADD CATEGORY</Button>
