@@ -39,8 +39,8 @@ class Category extends Component{
         this.props.configCategories('PUT', this.configParams(null, name), '/rename')
     }
     render(){
-        const {categoryName,color, child} = this.props;
-        const buttonColor = color ? color : 'info'
+        const {categoryName, child} = this.props;
+        const buttonColor = child ? 'primary' : 'info'
         return(
             <Fragment>
                 <FormDialog 
@@ -57,9 +57,11 @@ class Category extends Component{
                     delete = {this.deleteCategory}
                     name = {categoryName} />
                     
-                    {child ? null : <SimpleDialogDemo 
-                    list = {this.props.userData}
-                    color={buttonColor}/>}
+                    {child ? 
+                        null : 
+                        <SimpleDialogDemo 
+                            list = {this.props.userData.filter(item=>item.name!==categoryName)}
+                            color={buttonColor}/>}
                 
          </Fragment>
         )

@@ -34,7 +34,9 @@ class Dashboard extends Component {
   };
 
   categoriesList = ()=>{
-    return 
+    return (<List>
+
+          </List>)
   }
 
   render() {
@@ -64,9 +66,9 @@ class Dashboard extends Component {
               helperText="Select Category"
               margin="normal"
             >
-              <List>
+              
                 {this.categoriesList}
-              </List>
+             
               {/* <MenuItem> Select Category </MenuItem> */}
               {/* {userData.map(option => (
                 <MenuItem key={option.name} value={option.name}>
