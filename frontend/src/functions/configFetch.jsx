@@ -1,9 +1,8 @@
-const configParams=(id, name, parent, dir)=>({
-    name: name,
+const configParams=(id, name, parent, direction)=>({
     id,
+    name,
     parent: parent || null,
-    direction: dir || null,
-    // position: this.props.position
+    direction,
 })
 
-export default configParams
+export default configParams;

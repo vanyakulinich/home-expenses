@@ -11,6 +11,7 @@ const CategorySchema = new Schema({
     date: {type: Date, default: new Date().toLocaleDateString()}, // date format will be changed soon
     parent: String,
     isChild: Boolean,
+    children: Boolean,
     prev: String,
     next: String
 })
