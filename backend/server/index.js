@@ -135,24 +135,27 @@ function Server(db) {
             console.log(req.body)
             let itemForSub = _.findIndex(req.user.categories, item=>item._id == req.body.id)
 
-            req.user.categories[itemForSub].parent = req.body.parent
-            req.user.categories[itemForSub].isChild = true
-
-            // let newCat = new CategoryModel({
-            //     name: req.user.categories[itemForSub].name,
-            //     parent: req.body.parent,
-            //     isChild: true,
-            //     value: 0
-            // })
-
-            // req.user.categories.push(newCat)
-
+            req.user.categories[itemForSub].parent = req.body.parent;
+            req.user.categories[itemForSub].isChild = true;
 
         req.user.save(er=>{
             if(er) console.log(er)
         })
         res.json(req.user.categories)
     })
+
+    server.put('/userdata/config/move', passport.authenticate('jwt', {session: false}), (req, res)=>{
+        console.log(req.body)
+    //     let itemForSub = _.findIndex(req.user.categories, item=>item._id == req.body.id)
+
+    //     req.user.categories[itemForSub].parent = req.body.parent;
+    //     req.user.categories[itemForSub].isChild = true;
+
+    // req.user.save(er=>{
+    //     if(er) console.log(er)
+    // })
+    // res.json(req.user.categories)
+})
     
    
         
