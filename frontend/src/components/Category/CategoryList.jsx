@@ -21,25 +21,22 @@ class CategoryList extends Component {
                         if(item.children) {
                              
                             return  <ListItem>
-                                        <div>
-                                            <List>
-                                                <ListItem>
-                                                    <Category 
-                                                    categoryName={item.name}
-                                                    parent={null}
-                                                    key={+item._id} 
-                                                    id={item._id}
-                                                    position={key}
-                                                    parentPosition={key}
-                                                    child={item.isChild}
-                                                    /> 
-                                                </ListItem>
-                                                <ListItem>
-                                                    <CategoryList data={item.children} style={style} key={key+item._id}/>
-                                                </ListItem>
-                                            </List>
-                                        </div>
-                                    
+                                        <List>
+                                            <ListItem>
+                                                <Category 
+                                                categoryName={item.name}
+                                                parent={null}
+                                                key={+item._id} 
+                                                id={item._id}
+                                                position={key}
+                                                parentPosition={key}
+                                                child={item.isChild}
+                                                /> 
+                                            </ListItem>
+                                            <ListItem>
+                                                <CategoryList data={item.children} style={style} key={key+item._id}/>
+                                            </ListItem>
+                                        </List>
                                     </ListItem>   
                         } else {
                             return  <ListItem className = {style.subCats} key={key+item._id}>

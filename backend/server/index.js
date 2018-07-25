@@ -93,7 +93,8 @@ function Server(db) {
                 name: 'New Category',
                 parent: null,
                 isChild: false,
-                value: 0
+                prev: (cats.length) ? cats[cats.length-1]._id : null,
+                next: null,
             })
 
             cats.push(newCat)
@@ -123,6 +124,7 @@ function Server(db) {
                 return item._id == req.body.id
             })
             req.user.categories.splice(itemForDelete, 1)
+            req.user.categories = [...req.user.categories]. filter(el=>el.parent!==req.body.id)
 
             req.user.save(er=>{
                 if(er) console.log(er)
