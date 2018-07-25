@@ -163,6 +163,21 @@ function Server(db) {
         console.log(cats[itemToMove])
         if(req.body.direction) {
             // moving up
+            if(!cats[itemToMove].isChild && !cats[itemToMove].children) {
+                let itemToChangePlace = _.findIndex(cats, item=>{
+                    return (item._id !== cats[itemToMove] &&
+                            !item.isChild && !item.children)
+                })
+                console.log(itemToChangePlace)
+                
+                console.log(cats)
+                let bufferItem = cats[itemToChangePlace]
+                cats[itemToChangePlace] = cats[itemToMove]
+                cats[itemToMove] = bufferItem
+                console.log(cats)
+            }
+
+
 
         } else {
             // moving down
@@ -178,10 +193,10 @@ function Server(db) {
     //     req.user.categories[itemForSub].parent = req.body.parent;
     //     req.user.categories[itemForSub].isChild = true;
 
-    // req.user.save(er=>{
-    //     if(er) console.log(er)
-    // })
-    // res.json(req.user.categories)
+    req.user.save(er=>{
+        if(er) console.log(er)
+    })
+    res.json(req.user.categories)
 })
     
    
