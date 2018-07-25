@@ -25,6 +25,10 @@ const styles = {
 
 class VerifyEmail extends Component {
 
+    componentDidMount() {
+        // let url = location.href
+    }
+
     verifyUser = ()=>{
 
         let [email, verifyKey] = document.querySelectorAll('[type="text"]');

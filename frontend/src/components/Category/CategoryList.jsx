@@ -19,8 +19,28 @@ class CategoryList extends Component {
                     data.map((item, key)=>{
                         
                         if(item.children) {
-                            return  <CategoryList data={item.children} style={style} key={key+item._id}/>
+                             
+                            return  <ListItem>
+                                        <div>
+                                            <List>
+                                                <ListItem>
+                                                    <Category 
+                                                    categoryName={item.name}
+                                                    parent={null}
+                                                    key={+item._id} 
+                                                    id={item._id}
+                                                    position={key}
+                                                    parentPosition={key}
+                                                    child={item.isChild}
+                                                    /> 
+                                                </ListItem>
+                                                <ListItem>
+                                                    <CategoryList data={item.children} style={style} key={key+item._id}/>
+                                                </ListItem>
+                                            </List>
+                                        </div>
                                     
+                                    </ListItem>   
                         } else {
                             return  <ListItem className = {style.subCats} key={key+item._id}>
                                      <Category 
