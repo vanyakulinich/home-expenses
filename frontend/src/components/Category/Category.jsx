@@ -54,7 +54,8 @@ class Category extends Component{
                     {child ? 
                         null : 
                         <SimpleDialogDemo 
-                            list = {userData.filter(item=>(item.name!==categoryName) && (item.parent == null))}
+                            list = {userData.filter(item=>(item.name!==categoryName) && 
+                                                    (item.parent == null))}
                             parentitem = {userData.find(item=>item.name==categoryName)}
                             color={buttonColor}/>}
                 </div>

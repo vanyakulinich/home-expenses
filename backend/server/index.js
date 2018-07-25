@@ -133,11 +133,24 @@ function Server(db) {
         // add subcategory
     server.post('/userdata/config/sub', passport.authenticate('jwt', {session: false}), (req, res)=>{
             console.log(req.body)
-        
+            let itemForSub = _.findIndex(req.user.categories, item=>item._id == req.body.id)
 
-        // req.user.save(er=>{
-        //     if(er) console.log(er)
-        // })
+            req.user.categories[itemForSub].parent = req.body.parent
+            req.user.categories[itemForSub].isChild = true
+
+            // let newCat = new CategoryModel({
+            //     name: req.user.categories[itemForSub].name,
+            //     parent: req.body.parent,
+            //     isChild: true,
+            //     value: 0
+            // })
+
+            // req.user.categories.push(newCat)
+
+
+        req.user.save(er=>{
+            if(er) console.log(er)
+        })
         res.json(req.user.categories)
     })
     
@@ -374,12 +387,12 @@ function Server(db) {
             res.sendStatus(200)
         })
 
-        server.route('/cats')
-        .delete((req, res)=>{
-            CategoryModel.deleteMany({name: /./}, (er, result)=>{
-                res.sendStatus(200)
-            })
+    server.route('/cats')
+    .delete((req, res)=>{
+        CategoryModel.deleteMany({name: /./}, (er, result)=>{
+            res.sendStatus(200)
         })
+    })
 }
 
 
