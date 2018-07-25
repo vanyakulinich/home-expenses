@@ -80,6 +80,9 @@ class App extends React.Component {
                       return <Redirect to={userToken ?'/dashboard':'/signin'} key={key}/>
                     } 
                     if(prop.token === !!userToken) {
+                      if(prop.path =='/verify') {
+                        return <Route path='/:verify' component={prop.component} key={key} />
+                      }
                       return <Route path={prop.path} component={prop.component} key={key} />;
                     }
                   })}

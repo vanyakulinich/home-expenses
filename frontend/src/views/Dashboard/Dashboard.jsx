@@ -1,11 +1,11 @@
-import React from "react";
+import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {connect} from 'react-redux';
 import getUserData from '../../actions/getUserData.jsx';
 // @material-ui/core
 import withStyles from "@material-ui/core/styles/withStyles";
 
-import {TextField, MenuItem} from "@material-ui/core";
+import {TextField, MenuItem, List, ListItem} from "@material-ui/core";
 
 // core components
 import Table from "components/Table/Table.jsx";
@@ -16,7 +16,7 @@ import Button from "components/CustomButtons/Button.jsx";
 
 import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
 
-class Dashboard extends React.Component {
+class Dashboard extends Component {
   state = {
     value: 0
   };
@@ -32,8 +32,16 @@ class Dashboard extends React.Component {
   handleChangeIndex = index => {
     this.setState({ value: index });
   };
+
+  categoriesList = ()=>{
+    return (<List>
+
+          </List>)
+  }
+
   render() {
     const { classes, userData} = this.props;
+    console.log(userData)
     return (
       <div>
         <Card>
@@ -46,7 +54,7 @@ class Dashboard extends React.Component {
             <TextField
               id="select-currency"
               select
-              label="Category"
+              // label="Select Category"
               className={classes.textField}
               value={this.state.currency}
               // onChange={this.handleChange('currency')}
@@ -55,13 +63,16 @@ class Dashboard extends React.Component {
                   className: classes.menu,
                 },
               }}
-              helperText="Please select your currency"
+              helperText="Select Category"
               margin="normal"
             >
-              <MenuItem> Categories </MenuItem>
-              {/* {currencies.map(option => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
+              
+                {this.categoriesList}
+             
+              {/* <MenuItem> Select Category </MenuItem> */}
+              {/* {userData.map(option => (
+                <MenuItem key={option.name} value={option.name}>
+                  {option.name}
                 </MenuItem>
               ))} */}
             </TextField>

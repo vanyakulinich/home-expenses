@@ -1,7 +1,8 @@
-import USER_DATA from '../actionTypes/userDataType.jsx';
+import USER_DATA from '../actionTypes/userDataType';
 
-export default function configCategories(method, body) {
+export default function configCategories(method, path, body) {
     return (dispatch)=>{
+        let route = path ? path : ''
         let fetchOptions = {
             method,
             body: JSON.stringify(body),
@@ -12,7 +13,7 @@ export default function configCategories(method, body) {
             }
         }
         console.log(fetchOptions)
-        fetch(`http://localhost:3001/userdata`, fetchOptions)
+        fetch(`http://localhost:3001/userdata/config/`+route, fetchOptions)
             .then(res => res.json())
             .then((data) => {
                 console.log('DATA UPDATED ON SERVER')

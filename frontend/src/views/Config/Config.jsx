@@ -1,14 +1,14 @@
 import React, {Component} from "react";
 import {connect} from 'react-redux';
-import getUserData from '../../actions/getUserData.jsx'
+import getUserData from '../../actions/getUserData'
 import withStyles from "@material-ui/core/styles/withStyles";
 import {List} from "@material-ui/core";
 import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import Button from 'components/CustomButtons/Button.jsx'
-import configCategories from '../../actions/configCategories.jsx'
-import CategoryList from '../../components/Category/CategoryList.jsx'
+import configCategories from '../../actions/configCategories'
+import CategoryList from '../../components/Category/CategoryList'
 
 const styles = {
     configBody: {
@@ -18,7 +18,12 @@ const styles = {
         justifyContent: 'space-around',
     },
     subCats: {
-        display: 'block',
+        display: 'flex',
+        width: '100%',
+        justifyContent: 'space-between'
+    },
+    listWidth: {
+        width: '100%'
     }
 }
 
@@ -28,9 +33,8 @@ class Config extends Component {
         if(!this.props.userData) this.props.getUserData()
       }
 
-
     addCategory =()=>{
-        this.props.configCategories('POST', {name:'New Category'})
+        this.props.configCategories('POST', 'category')
     }
 
    
@@ -44,10 +48,7 @@ class Config extends Component {
             </CardHeader>
             <CardBody className={classes.configBody}>
                
-                    {userData ? 
-                        <CategoryList 
-                            userData = {userData}   
-                            style = {classes.subCats}/> : null}
+                    {userData ? <CategoryList style = {classes}/> : null}
                 
                 <Button color="primary"
                 onClick = {this.addCategory}>ADD CATEGORY</Button>
