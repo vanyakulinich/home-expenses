@@ -125,10 +125,11 @@ function Server(db) {
                 return item._id == req.body.id
             })
 
-
-
             req.user.categories.splice(itemForDelete, 1)
-            req.user.categories = [...req.user.categories]. filter(el=>el.parent!==req.body.id)
+            if(req.body.parent) {
+                req.user.categories = [...req.user.categories]. filter(el=>el.parent!==req.body.id)
+            }
+            
 
             req.user.save(er=>{
                 if(er) console.log(er)
@@ -145,7 +146,8 @@ function Server(db) {
             req.user.categories[itemForSub].parent = req.body.parent;
             req.user.categories[itemForSub].isChild = true;
 
-            let itemChildren = req.user.categories.some(el=>el.parent == req.user.categories[itemForSub]._id)
+            let itemChildren = req.user.categories.some(el=>{
+                return el.parent == req.user.categories[itemForSub]._id})
             if(itemChildren) req.user.categories[itemForSub].children = true
 
 
@@ -159,28 +161,48 @@ function Server(db) {
     server.put('/userdata/config/move', passport.authenticate('jwt', {session: false}), (req, res)=>{
         console.log(req.body)
         let itemToMove = _.findIndex(req.user.categories, item=>item._id == req.body.id)
-        let cats= req.user.categories
-        console.log(cats[itemToMove])
+        
         if(req.body.direction) {
             // moving up
-            if(!cats[itemToMove].isChild && !cats[itemToMove].children) {
-                let itemToChangePlace = _.findIndex(cats, item=>{
-                    return (item._id !== cats[itemToMove] &&
+            if(!req.user.categories[itemToMove].isChild && 
+                !req.user.categories[itemToMove].children) {
+                let itemToChangePlace = _.findIndex(req.user.categories, item=>{
+                    return (item._id !== req.user.categories[itemToMove] &&
                             !item.isChild && !item.children)
                 })
-                console.log(itemToChangePlace)
+               
                 
-                console.log(cats)
-                let bufferItem = cats[itemToChangePlace]
-                cats[itemToChangePlace] = cats[itemToMove]
-                cats[itemToMove] = bufferItem
-                console.log(cats)
+                
+                let bufferItem = req.user.categories[itemToChangePlace]
+                req.user.categories[itemToChangePlace] = req.user.categories[itemToMove]
+                req.user.categories[itemToMove] = bufferItem
+            
             }
 
 
 
         } else {
             // moving down
+            if(!req.user.categories[itemToMove].isChild && 
+                !req.user.categories[itemToMove].children) {
+                let itemToChangePlace = _.findIndex(req.user.categories, (item, i)=>{
+                    return (i > itemToMove &&
+                            item._id !== req.user.categories[itemToMove] &&
+                            !item.isChild && 
+                            !item.children)
+                })
+                // console.log(itemToChangePlace)
+                
+                // console.log(cats)
+                let bufferItem = req.user.categories[itemToChangePlace]
+                req.user.categories[itemToChangePlace] = req.user.categories[itemToMove]
+                req.user.categories[itemToMove] = bufferItem
+                
+
+
+            }
+
+
         }
 
 
@@ -192,7 +214,7 @@ function Server(db) {
 
     //     req.user.categories[itemForSub].parent = req.body.parent;
     //     req.user.categories[itemForSub].isChild = true;
-
+    
     req.user.save(er=>{
         if(er) console.log(er)
     })
