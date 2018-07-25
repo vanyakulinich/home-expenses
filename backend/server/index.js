@@ -43,8 +43,7 @@ function Server(db) {
                 })
                 newUser.save(er=>{
                     if(er) console.log(er)
-                    console.log(`http://localhost:3000/verify`)
-                    console.log(verifyKey)
+                    console.log(`http://localhost:3000/verify/${email}/${Date.now()}/${verifyKey}`)
                     res.send('verify')
                 })
             }
@@ -93,10 +92,13 @@ function Server(db) {
                 name: 'New Category',
                 parent: null,
                 isChild: false,
-                value: 0
+                children: false,
+                prev: (cats.length) ? cats[cats.length-1]._id : null,
+                next: null,
             })
-
             cats.push(newCat)
+            if(cats[cats.length-2]) cats[cats.length-2].next = newCat._id
+            
             req.user.save(er=>{
                 if(er) console.log(er)
             })
@@ -122,7 +124,11 @@ function Server(db) {
             let itemForDelete = _.findIndex(req.user.categories, item=>{
                 return item._id == req.body.id
             })
+
+
+
             req.user.categories.splice(itemForDelete, 1)
+            req.user.categories = [...req.user.categories]. filter(el=>el.parent!==req.body.id)
 
             req.user.save(er=>{
                 if(er) console.log(er)
@@ -130,22 +136,17 @@ function Server(db) {
             res.json(req.user.categories)
         })
     
-        // add subcategory
+        // add subcategory or move subcategory to categories
     server.post('/userdata/config/sub', passport.authenticate('jwt', {session: false}), (req, res)=>{
             console.log(req.body)
+            let cats = req.user.categories
             let itemForSub = _.findIndex(req.user.categories, item=>item._id == req.body.id)
 
-            req.user.categories[itemForSub].parent = req.body.parent
-            req.user.categories[itemForSub].isChild = true
+            req.user.categories[itemForSub].parent = req.body.parent;
+            req.user.categories[itemForSub].isChild = true;
 
-            // let newCat = new CategoryModel({
-            //     name: req.user.categories[itemForSub].name,
-            //     parent: req.body.parent,
-            //     isChild: true,
-            //     value: 0
-            // })
-
-            // req.user.categories.push(newCat)
+            let itemChildren = req.user.categories.some(el=>el.parent == req.user.categories[itemForSub]._id)
+            if(itemChildren) req.user.categories[itemForSub].children = true
 
 
         req.user.save(er=>{
@@ -153,6 +154,35 @@ function Server(db) {
         })
         res.json(req.user.categories)
     })
+
+    // moving categories
+    server.put('/userdata/config/move', passport.authenticate('jwt', {session: false}), (req, res)=>{
+        console.log(req.body)
+        let itemToMove = _.findIndex(req.user.categories, item=>item._id == req.body.id)
+        let cats= req.user.categories
+        console.log(cats[itemToMove])
+        if(req.body.direction) {
+            // moving up
+
+        } else {
+            // moving down
+        }
+
+
+
+
+
+
+    //     let itemForSub = _.findIndex(req.user.categories, item=>item._id == req.body.id)
+
+    //     req.user.categories[itemForSub].parent = req.body.parent;
+    //     req.user.categories[itemForSub].isChild = true;
+
+    // req.user.save(er=>{
+    //     if(er) console.log(er)
+    // })
+    // res.json(req.user.categories)
+})
     
    
         

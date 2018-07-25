@@ -12,28 +12,31 @@ import SimpleDialogDemo from 'components/SimpleDialog/SimpleDialog.jsx'
 import configParams from '../../functions/configFetch.jsx'
 
 // reusable category component
-
 class Category extends Component{
 
-    deleteCategory = (name)=>(
-        this.props.configCategories('DELETE', 'category', configParams(this.props.id, name)))
-
-    categoryUp = ()=>this.props.configCategories('PUT', configParams(true))
-
-    categoryDown = ()=>this.props.configCategories('PUT', configParams(false))
-
-    // addSubCategory = ()=>{
-    //     let parent = this.props.categoryName
-    //     this.props.configCategories('POST', this.configParams(null, 'New Category', parent))
+    deleteCategory = (name)=>{
+        this.props.configCategories('DELETE', 'category', configParams(this.props.id, name))
+    }
         
-    // }
+
+    moveCategoryUp = ()=>{
+      
+        let config = configParams(this.props.id, this.props.categoryName, null, true)
+        console.log(config)
+        this.props.configCategories('PUT', 'move', config)
+    }
+
+    moveCategoryDown = ()=>{
+        let config = configParams(this.props.id, this.props.categoryName, null, false)
+        this.props.configCategories('PUT', 'move', config)
+    }
 
     renameCategory = (name)=>{
         this.props.configCategories('PUT', 'category', configParams(this.props.id, name))
     }
     render(){
-        const {categoryName, child, userData} = this.props;
-        const buttonColor = child ? 'primary' : 'info'
+        const {categoryName, children, isChild, userData} = this.props;
+        const buttonColor = isChild ? (children ? 'primary ' : 'warning') : 'info'
         return(
             <Fragment>
                 <FormDialog 
@@ -41,17 +44,17 @@ class Category extends Component{
                     save = {this.renameCategory}
                 />
                 <div>
-                 <Button color={buttonColor} onClick={this.categoryUp}>
+                 <Button color={buttonColor} onClick={this.moveCategoryUp}>
                      <ArrowUpward/>
                  </Button>
-                 <Button color={buttonColor} onClick={this.categoryDown}>
+                 <Button color={buttonColor} onClick={this.moveCategoryDown}>
                      <ArrowDownward/>
                  </Button>
                  <AlertDialog 
                     delete = {this.deleteCategory}
                     name = {categoryName} />
                     
-                    {child ? 
+                    {(children && isChild) ? 
                         null : 
                         <SimpleDialogDemo 
                             list = {userData.filter(item=>(item.name!==categoryName) && 

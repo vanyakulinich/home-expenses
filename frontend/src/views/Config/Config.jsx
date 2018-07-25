@@ -23,7 +23,11 @@ const styles = {
         justifyContent: 'space-between'
     },
     listWidth: {
-        width: '100%'
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-end',
+        justifyContent: 'center',
     }
 }
 
