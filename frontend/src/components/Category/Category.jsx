@@ -61,7 +61,8 @@ class Category extends Component{
                                                             (item.parent == null) &&
                                                             (!item.children))}
                             parentitem = {userData.find(item=>item.name==categoryName)}
-                            color={buttonColor}/>}
+                            color={buttonColor}
+                            id={this.props.id}/>}
                 </div>
          </Fragment>
         )

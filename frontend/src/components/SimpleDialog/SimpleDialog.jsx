@@ -43,7 +43,7 @@ class SimpleDialog extends Component {
     console.log(id)
     console.log(value)
     console.log(this.props.parentitem)
-    this.props.conf(configParams(value, id, this.props.parentitem._id))
+    this.props.conf(configParams(value, id, this.props.parentId))
   };
 
   render() {
@@ -109,6 +109,7 @@ class SimpleDialogDemo extends Component {
           list={this.props.list}
           parentitem = {this.props.parentitem}
           conf={this.addSubCategory}
+          parentId = {this.props.id}
         />
       </Fragment>
     );
