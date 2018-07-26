@@ -24,7 +24,7 @@ class Dashboard extends Component {
   };
 
   componentDidMount() {
-    if(!this.props.data) this.props.getUserData()
+    if(!this.props.expenses) this.props.getUserData()
   }
 
   handleChange = (event, value) => {
@@ -121,9 +121,8 @@ Dashboard.propTypes = {
 };
 
 const mapStateToProps = state=>({
-  expenses: state.expenses,
+  expenses: state.data.userExpenses,
   categList: state.data.categList,
-  data: state.data
 })
 
 const mapActionsToProps = {

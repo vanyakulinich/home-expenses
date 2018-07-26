@@ -265,9 +265,7 @@ function Server(db) {
             if(er) console.log(er)
             res.json({
                 categories: req.user.categories, 
-                categoriesList: req.user.categoriesList,
-                expenses: req.user.expenses
-
+                expenses: req.user.expenses,
             })
         })
        

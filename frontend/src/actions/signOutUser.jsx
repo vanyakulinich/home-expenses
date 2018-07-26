@@ -1,17 +1,17 @@
 import SIGN_USER from '../actionTypes/signUser.jsx';
-import USER_DATA from '../actionTypes/userDataType.jsx'
+import USER_CATEGS from '../actionTypes/userCategsType.jsx';
 
 export default function signOutUser() {
     return (dispatch)=>{
         localStorage.clear()
-        dispatch({
+        dispatch([{
             type: SIGN_USER,
             user: null
-        })
-        dispatch({
-            type: USER_DATA,
-            data: null
-        })
+        },
+        {
+            // type: USER_DATA,
+            // data: null
+        }])
         
     }
 }

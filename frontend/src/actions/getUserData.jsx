@@ -1,4 +1,4 @@
-import USER_DATA from '../actionTypes/userDataType';
+import USER_CATEGS from '../actionTypes/userCategsType.jsx';
 import SIGN_USER from '../actionTypes/signUser';
 import USER_EXPENSE from '../actionTypes/expenseActionType.jsx';
 import CATEG_LIST from '../actionTypes/categListType.jsx';
@@ -22,7 +22,7 @@ export default function getUserData() {
                     user: data.email
                 },
                 {  
-                    type: USER_DATA, 
+                    type: USER_CATEGS, 
                     userCategories: data.categories
                 },
                 {  
