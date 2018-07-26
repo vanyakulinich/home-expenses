@@ -36,6 +36,18 @@ function CustomTable({ ...props }) {
         <TableBody>
           { reports ?
             tableData.map((prop, key) => {
+              if(prop.children) {
+                return (
+                  <TableRow key={key}>
+                    <TableCell className={classes.tableCell} key={1+key*2}>
+                        {prop.name}
+                      </TableCell>
+                      <TableCell className={classes.tableCell} key={1+key*3}>
+                        {prop.value}
+                      </TableCell>
+                  </TableRow>
+                )
+              }
               return (
                 <TableRow key={key}>
                       <TableCell className={classes.tableCell} key={1+key*2}>
