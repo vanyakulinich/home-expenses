@@ -43,14 +43,14 @@ class SimpleDialog extends Component {
     console.log(id)
     console.log(value)
     console.log(this.props.parentitem)
-    this.props.conf(configParams(value, id, this.props.parentitem._id))
+    this.props.conf(configParams(value, id, this.props.parentid))
   };
 
   render() {
-    const { classes, onClose, selectedValue, ...other } = this.props;
+    const { classes, onClose, selectedValue, conf, open, ...other } = this.props;
     const {list} = this.props
     return (
-      <Dialog onClose={this.handleClose} aria-labelledby="simple-dialog-title" {...other}>
+      <Dialog onClose={this.handleClose} aria-labelledby="simple-dialog-title" open={open}>
         <DialogTitle id="simple-dialog-title">Chose a category for subcategory</DialogTitle>
         <div>
           <List>
@@ -109,6 +109,7 @@ class SimpleDialogDemo extends Component {
           list={this.props.list}
           parentitem = {this.props.parentitem}
           conf={this.addSubCategory}
+          parentid = {this.props.id}
         />
       </Fragment>
     );

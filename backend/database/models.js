@@ -8,7 +8,7 @@ const Schema = mongoose.Schema;
 const CategorySchema = new Schema({ 
     name: String,
     value: Number,
-    date: {type: Date, default: new Date().toLocaleDateString()}, // date format will be changed soon
+    date: Date, // date format will be changed soon
     parent: String,
     isChild: Boolean,
     children: Boolean,
@@ -18,25 +18,37 @@ const CategorySchema = new Schema({
 
 const ExpensesSchema = new Schema({
     category: String,
-    name: String,
     value: Number,
+    description: String,
+    date: String,
+    creationDate: Number
 
 
 })
 
+const CategoriesListSchema = new Schema({
+    name: String,
+    id: String
+})
+
+
+
 // user schema, includes category schemas as children
 const UserSchema = new Schema({
-    userId: Number, // this can be usefull if the app will expand and admin user appears
     email: String,
     pass: String,
     verified: Boolean,
     verifyKey: Number,
-    categories: [CategorySchema]
+    categories: [CategorySchema],
+    expenses: [ExpensesSchema],
+    descriptionBase: [],
+    categoriesList: [CategoriesListSchema],
 });
 
 // models
 const ExpensesModel = mongoose.model('Expenses', ExpensesSchema);
 const CategoryModel = mongoose.model('Categories', CategorySchema);
+const ListOfCatsModel = mongoose.model('ListofCats', CategoriesListSchema);
 const UserModel = mongoose.model('Users', UserSchema);
 
 
@@ -44,7 +56,8 @@ const UserModel = mongoose.model('Users', UserSchema);
 const models = {
     UserModel,
     CategoryModel,
-    ExpensesModel
+    ExpensesModel,
+    ListOfCatsModel
 }
 
 module.exports = models;

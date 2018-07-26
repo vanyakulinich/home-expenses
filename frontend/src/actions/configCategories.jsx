@@ -1,4 +1,7 @@
-import USER_DATA from '../actionTypes/userDataType';
+import USER_CATEGS from '../actionTypes/userCategsType.jsx';
+import CATEG_LIST from '../actionTypes/categListType.jsx';
+import USER_EXPENSE from '../actionTypes/expenseActionType.jsx';
+
 
 export default function configCategories(method, path, body) {
     return (dispatch)=>{
@@ -17,11 +20,29 @@ export default function configCategories(method, path, body) {
             .then(res => res.json())
             .then((data) => {
                 console.log('DATA UPDATED ON SERVER')
-                dispatch({
-                    type: USER_DATA,
-                    data,
-                })
+                if(data.categoriesList) {
+                    dispatch([{
+                        type: USER_CATEGS,
+                        userCategories: data.categories,
+                    },
+                    {
+                        type: CATEG_LIST,
+                        categList: data.categoriesList,
+                    },
+                    {   
+                        type: USER_EXPENSE,
+                        userExpenses: data.expenses,
+                    },
+                ]) 
+                } else {
+                    dispatch({
+                        type: USER_CATEGS,
+                        userCategories: data.categories,
+                    })
+                }
+                  
             })
+        
             .catch(e => console.log(e))
     }
 }

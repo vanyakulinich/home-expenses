@@ -1,5 +1,8 @@
-import USER_DATA from '../actionTypes/userDataType'
-import SIGN_USER from '../actionTypes/signUser'
+import USER_CATEGS from '../actionTypes/userCategsType.jsx';
+import SIGN_USER from '../actionTypes/signUser';
+import USER_EXPENSE from '../actionTypes/expenseActionType.jsx';
+import CATEG_LIST from '../actionTypes/categListType.jsx';
+import DESC_BASE from '../actionTypes/descriptionBaseType.jsx';
 
 export default function getUserData() {
     return (dispatch)=>{
@@ -13,16 +16,30 @@ export default function getUserData() {
             .then(res => res.json())
             .then((data) => {
                 console.log('DATA REQUSET TO SERVER')
-                dispatch({  
+                console.log(data)
+                dispatch([
+                {  
                     type: SIGN_USER, 
                     user: data.email
-                });
-                return data
+                },
+                {  
+                    type: USER_CATEGS, 
+                    userCategories: data.categories
+                },
+                {  
+                    type: USER_EXPENSE, 
+                    userExpenses: data.expenses
+                },
+                {  
+                    type: CATEG_LIST, 
+                    categList: data.categoriesList
+                },
+                {  
+                    type: DESC_BASE, 
+                    descBase: data.descriptionBase
+                }
+            ])
             })
-            .then(data=> dispatch({
-                type: USER_DATA,
-                data: data.categories
-            }))
             .catch(e => console.log(e))
     }
 }
