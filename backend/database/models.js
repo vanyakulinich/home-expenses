@@ -18,20 +18,21 @@ const CategorySchema = new Schema({
 
 const ExpensesSchema = new Schema({
     category: String,
-    name: String,
     value: Number,
+    description: String,
 
 
 })
 
 // user schema, includes category schemas as children
 const UserSchema = new Schema({
-    userId: Number, // this can be usefull if the app will expand and admin user appears
     email: String,
     pass: String,
     verified: Boolean,
     verifyKey: Number,
-    categories: [CategorySchema]
+    categories: [CategorySchema],
+    expenses: [ExpensesSchema],
+    descriptionBase: Array,
 });
 
 // models

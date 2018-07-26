@@ -50,7 +50,7 @@ function Server(db) {
         })
     })
     // email verification route 
-    server.post(`/\/verify`, (req, res)=>{
+    server.post(/\/verify/, (req, res)=>{
         let{ email, verifyKey } = req.body;
         UserModel.findOne({email, verifyKey}, (er, user)=>{
             if(er) console.log(er)
@@ -158,6 +158,7 @@ function Server(db) {
     })
 
     // moving categories
+    // not finished
     server.put('/userdata/config/move', passport.authenticate('jwt', {session: false}), (req, res)=>{
         console.log(req.body)
         let itemToMove = _.findIndex(req.user.categories, item=>item._id == req.body.id)
@@ -170,23 +171,17 @@ function Server(db) {
                     return (item._id !== req.user.categories[itemToMove] &&
                             !item.isChild && !item.children)
                 })
-               
-                
-                
                 let bufferItem = req.user.categories[itemToChangePlace]
                 req.user.categories[itemToChangePlace] = req.user.categories[itemToMove]
                 req.user.categories[itemToMove] = bufferItem
-            
             }
-
-
-
         } else {
             // moving down
             if(!req.user.categories[itemToMove].isChild && 
                 !req.user.categories[itemToMove].children) {
                 let itemToChangePlace = _.findIndex(req.user.categories, (item, i)=>{
-                    return (i > itemToMove &&
+                    return (
+                            i>itemToMove && 
                             item._id !== req.user.categories[itemToMove] &&
                             !item.isChild && 
                             !item.children)
@@ -199,27 +194,32 @@ function Server(db) {
                 req.user.categories[itemToMove] = bufferItem
                 
 
-
+                console.log(req.user.categories)
             }
-
-
         }
-
-
-
-
-
-
-    //     let itemForSub = _.findIndex(req.user.categories, item=>item._id == req.body.id)
-
-    //     req.user.categories[itemForSub].parent = req.body.parent;
-    //     req.user.categories[itemForSub].isChild = true;
-    
-    req.user.save(er=>{
-        if(er) console.log(er)
+        req.user.save(er=>{
+            if(er) console.log(er)
+        })
+        res.json(req.user.categories)
     })
-    res.json(req.user.categories)
-})
+
+    server.put('/userdata/expenses', passport.authenticate('jwt', {session: false}), (req, res)=>{
+       
+        let newExpense = new ExpensesModel({
+            category: req.body.category,
+            description: req.body. description,
+            value: req.body.value,
+        })
+
+        req.user.expenses.push(newExpense)
+
+
+
+        req.user.save(er=>{
+            if(er) console.log(er)
+        })
+        res.json(req.user.expenses)
+    })
     
    
         
