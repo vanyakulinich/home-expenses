@@ -20,7 +20,8 @@ const ExpensesSchema = new Schema({
     category: String,
     value: Number,
     description: String,
-    date: {type: Date, default: new Date()}
+    date: String,
+    creationDate: Number
 
 
 })

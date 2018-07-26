@@ -35,36 +35,43 @@ class Dashboard extends Component {
     this.setState({ value: index });
   };
 
-  categoriesList = ()=>{
-    return (<List>
-
-          </List>)
-  }
-
   addExpense=()=>{
    let inputs = document.querySelectorAll('input')
-   
-   console.log(inputs[0].value)
    let value = +inputs[2].value
-   console.log(value)
    let body = {
      id: inputs[0].value,
      description: inputs[1].value,
      value: +value.toFixed(2)
    }
     this.props.addNewExpense('PUT', body)
+    inputs.forEach(el=>el.value='')
+
+    this.expensesList()
   }
 
   clearInput = (e)=>{
     e.target.value = ''
   }
 
+  expensesList=(expenses)=>{
+    if(!expenses) return []
+    let table = expenses.map(item=>{
+      return [
+          item.date,
+          item.category,
+          item.description,
+          item.value
+      ]
+    })
+    return table
+  }
 
   
 
   render() {
-    const { classes, userData, categList} = this.props;
    
+    const { classes, expenses, categList} = this.props;
+    const table = this.expensesList(expenses)
     return (
       <div>
         <Card>
@@ -74,7 +81,7 @@ class Dashboard extends Component {
           </CardHeader>
           <CardBody className = {classes.expensesPerformanse}>
           <SimpleSelect categList= {categList}/>
-        
+          
 
              
 
@@ -104,10 +111,15 @@ class Dashboard extends Component {
             <Table
                 tableHeaderColor="primary"
                 tableHead={["Date", "Category", "Expenses", "Value, UAH"]}
-                tableData={[
-                  ["16.07.2018", "Food", "bought milk", "30"],
-                  ["15.07.2018", "Transport", "", "20"],
-                ]}
+                tableData={table
+                  
+                  // table ? table : []
+
+                //   [
+                //   ["16.07.2018", "Food", "bought milk", "30"],
+                //   ["15.07.2018", "Transport", "", "20"],
+                // ]
+              }
               />
           </CardBody>
         </Card>

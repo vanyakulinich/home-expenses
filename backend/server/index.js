@@ -237,11 +237,15 @@ function Server(db) {
 
         let index = _.findIndex(req.user.categories, el=>el._id==req.body.id)
 
+        let date = `${new Date()}`.split(' ')
+
 
         let newExpense = new ExpensesModel({
             category: req.user.categories[index].name,
             description: req.body. description,
             value: req.body.value,
+            date : `${date[0]} ${date[1]} ${date[2]} ${date[3]}`,
+            creationDate: Date.now() 
         })
 
         req.user.categories[index].value = req.body.value;

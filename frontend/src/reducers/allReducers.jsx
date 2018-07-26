@@ -16,7 +16,7 @@ const data = combineReducers({
 const allReducers = combineReducers({
     mobile: mobileOpenReducer,
     user: signUserReducer,
-    data,
+    data : data,
     router: routerReducer,
 })
 export default allReducers;
