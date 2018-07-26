@@ -2,6 +2,8 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {connect} from 'react-redux';
 import getUserData from '../../actions/getUserData.jsx';
+
+
 // @material-ui/core
 import withStyles from "@material-ui/core/styles/withStyles";
 
@@ -15,6 +17,8 @@ import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import Button from "components/CustomButtons/Button.jsx";
 import addNewExpense from '../../actions/addNewExpense.jsx'
+
+import IntegrationAutosuggest from 'components/Autocomplete/Autocomplete.jsx'
 
 import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
 
@@ -78,10 +82,14 @@ class Dashboard extends Component {
           </CardHeader>
           <CardBody className = {classes.expensesPerformanse}>
           <SimpleSelect categList= {categList}/>
-          
-            <TextField
+         
+            {/* <TextField
             InputProps={{defaultValue:'Description'}}
-            onClick={this.clearInput}/>
+            onClick={this.clearInput}>
+             
+            </TextField> */}
+
+            <IntegrationAutosuggest/>
            
             <TextField label='Value'
               InputProps={{defaultValue:'UAH'}}
@@ -91,6 +99,7 @@ class Dashboard extends Component {
             <Button color="primary"
             onClick={this.addExpense}>ADD EXPENSES</Button>
           </CardBody>
+          {/* <IntegrationDownshift/> */}
         </Card>
         <Card>
           <CardHeader color='info'>
