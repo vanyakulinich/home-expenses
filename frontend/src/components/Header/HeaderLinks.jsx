@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Component} from "react";
 import classNames from "classnames";
 import { Manager, Target, Popper } from "react-popper";
 import {Link} from 'react-router-dom';
@@ -20,7 +20,7 @@ import Button from "components/CustomButtons/Button.jsx";
 
 import headerLinksStyle from "assets/jss/material-dashboard-react/components/headerLinksStyle";
 
-class HeaderLinks extends React.Component {
+class HeaderLinks extends Component {
   state = {
     open: false,
   };

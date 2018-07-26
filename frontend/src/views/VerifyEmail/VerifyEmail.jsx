@@ -22,11 +22,16 @@ const styles = {
     }
 }
 
+const inputDisabled = {
+    disabled: true,
+  }
+
 
 class VerifyEmail extends Component {
 
     componentDidMount() {
-        // let url = location.href
+        console.log(this.props)
+        console.log(this.props.match.params)
     }
 
     verifyUser = ()=>{
@@ -52,8 +57,12 @@ class VerifyEmail extends Component {
                         <h5>Please confirm email address</h5>
                     </CardHeader>
                     <CardBody className={classes.cardBody}>
-                        <TextField label='Email address'/>
-                        <TextField label='Verification code'/>
+                        <TextField label='Email address' 
+                        defaultValue = {this.props.match.params.email}
+                        InputProps={inputDisabled}/>
+                        <TextField label='Verification code'
+                        defaultValue = {this.props.match.params.key}
+                        InputProps={inputDisabled}/>
                         <Button 
                             variant='outlined' 
                             color='primary'

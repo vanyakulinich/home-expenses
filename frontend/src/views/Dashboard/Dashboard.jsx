@@ -6,6 +6,7 @@ import getUserData from '../../actions/getUserData.jsx';
 import withStyles from "@material-ui/core/styles/withStyles";
 
 import {TextField, MenuItem, List, ListItem} from "@material-ui/core";
+import SimpleSelect from '../../components/Select/SimpleSelect.jsx'
 
 // core components
 import Table from "components/Table/Table.jsx";
@@ -13,6 +14,7 @@ import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import Button from "components/CustomButtons/Button.jsx";
+import addNewExpense from '../../actions/addNewExpense.jsx'
 
 import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
 
@@ -22,7 +24,7 @@ class Dashboard extends Component {
   };
 
   componentDidMount() {
-    if(!this.props.userData) this.props.getUserData()
+    if(!this.props.expenses) this.props.getUserData()
   }
 
   handleChange = (event, value) => {
@@ -33,15 +35,43 @@ class Dashboard extends Component {
     this.setState({ value: index });
   };
 
-  categoriesList = ()=>{
-    return (<List>
+  addExpense=()=>{
+   let inputs = document.querySelectorAll('input')
+   let value = +inputs[2].value
+   let body = {
+     id: inputs[0].value,
+     description: inputs[1].value,
+     value: +value.toFixed(2)
+   }
+    this.props.addNewExpense('PUT', body)
+    inputs.forEach(el=>el.value='')
 
-          </List>)
+    this.expensesList()
   }
 
+  clearInput = (e)=>{
+    e.target.value = ''
+  }
+
+  expensesList=(expenses)=>{
+    if(!expenses) return []
+    let table = expenses.map(item=>{
+      return [
+          item.date,
+          item.category,
+          item.description,
+          item.value+''
+      ]
+    })
+    return table
+  }
+
+  
+
   render() {
-    const { classes, userData} = this.props;
-    console.log(userData)
+   
+    const { classes, expenses, categList} = this.props;
+    const table = this.expensesList(expenses)
     return (
       <div>
         <Card>
@@ -49,36 +79,27 @@ class Dashboard extends Component {
             <h3>New expenses </h3>   
             <h5>Please enter new expenses here</h5>         
           </CardHeader>
-          <CardBody>
-            {userData ? null : <span>no data</span>}
-            <TextField
-              id="select-currency"
-              select
-              // label="Select Category"
-              className={classes.textField}
-              value={this.state.currency}
-              // onChange={this.handleChange('currency')}
-              SelectProps={{
-                MenuProps: {
-                  className: classes.menu,
-                },
-              }}
-              helperText="Select Category"
-              margin="normal"
-            >
-              
-                {this.categoriesList}
+          <CardBody className = {classes.expensesPerformanse}>
+          <SimpleSelect categList= {categList}/>
+          
+
              
-              {/* <MenuItem> Select Category </MenuItem> */}
-              {/* {userData.map(option => (
-                <MenuItem key={option.name} value={option.name}>
-                  {option.name}
-                </MenuItem>
-              ))} */}
-            </TextField>
-            <TextField label='Description'/>
-            <TextField label='Value' value='UAH'/>
-            <Button color="primary">ADD EXPENSES</Button>
+
+
+            <TextField
+            InputProps={{defaultValue:'Description'}}
+            onClick={this.clearInput}/>
+            
+            
+            <TextField label='Value'
+              InputProps={{defaultValue:'UAH'}}
+              onClick={this.clearInput}
+            />
+
+
+
+            <Button color="primary"
+            onClick={this.addExpense}>ADD EXPENSES</Button>
           </CardBody>
         </Card>
         <Card>
@@ -90,10 +111,15 @@ class Dashboard extends Component {
             <Table
                 tableHeaderColor="primary"
                 tableHead={["Date", "Category", "Expenses", "Value, UAH"]}
-                tableData={[
-                  ["16.07.2018", "Food", "bought milk", "30"],
-                  ["15.07.2018", "Transport", "", "20"],
-                ]}
+                tableData={table
+                  
+                  // table ? table : []
+
+                //   [
+                //   ["16.07.2018", "Food", "bought milk", "30"],
+                //   ["15.07.2018", "Transport", "", "20"],
+                // ]
+              }
               />
           </CardBody>
         </Card>
@@ -107,11 +133,13 @@ Dashboard.propTypes = {
 };
 
 const mapStateToProps = state=>({
-  userData: state.userData
+  expenses: state.data.userExpenses,
+  categList: state.data.categList,
 })
 
 const mapActionsToProps = {
-  getUserData
+  getUserData,
+  addNewExpense
 }
 
 
