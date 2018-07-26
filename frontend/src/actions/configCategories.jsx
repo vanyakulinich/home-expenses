@@ -1,4 +1,5 @@
 import USER_DATA from '../actionTypes/userDataType';
+import CATEG_LIST from '../actionTypes/categListType.jsx';
 
 export default function configCategories(method, path, body) {
     return (dispatch)=>{
@@ -19,7 +20,15 @@ export default function configCategories(method, path, body) {
                 console.log('DATA UPDATED ON SERVER')
                 dispatch({
                     type: USER_DATA,
-                    data,
+                    data: data.categories,
+                })
+                return data
+            })
+            .then((data) => {
+                console.log('DATA UPDATED ON SERVER')
+                dispatch({
+                    type: CATEG_LIST,
+                    categList: data.categoriesList,
                 })
             })
             .catch(e => console.log(e))

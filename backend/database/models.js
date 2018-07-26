@@ -20,9 +20,17 @@ const ExpensesSchema = new Schema({
     category: String,
     value: Number,
     description: String,
+    date: {type: Date, default: new Date()}
 
 
 })
+
+const CategoriesListSchema = new Schema({
+    name: String,
+    id: String
+})
+
+
 
 // user schema, includes category schemas as children
 const UserSchema = new Schema({
@@ -32,12 +40,14 @@ const UserSchema = new Schema({
     verifyKey: Number,
     categories: [CategorySchema],
     expenses: [ExpensesSchema],
-    descriptionBase: Array,
+    descriptionBase: [],
+    categoriesList: [CategoriesListSchema],
 });
 
 // models
 const ExpensesModel = mongoose.model('Expenses', ExpensesSchema);
 const CategoryModel = mongoose.model('Categories', CategorySchema);
+const ListOfCatsModel = mongoose.model('ListofCats', CategoriesListSchema);
 const UserModel = mongoose.model('Users', UserSchema);
 
 
@@ -45,7 +55,8 @@ const UserModel = mongoose.model('Users', UserSchema);
 const models = {
     UserModel,
     CategoryModel,
-    ExpensesModel
+    ExpensesModel,
+    ListOfCatsModel
 }
 
 module.exports = models;

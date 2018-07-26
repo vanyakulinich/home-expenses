@@ -6,6 +6,7 @@ import getUserData from '../../actions/getUserData.jsx';
 import withStyles from "@material-ui/core/styles/withStyles";
 
 import {TextField, MenuItem, List, ListItem} from "@material-ui/core";
+import SimpleSelect from '../../components/Select/SimpleSelect.jsx'
 
 // core components
 import Table from "components/Table/Table.jsx";
@@ -40,8 +41,8 @@ class Dashboard extends Component {
   }
 
   render() {
-    const { classes, userData} = this.props;
-    console.log(userData)
+    const { classes, userData, categList} = this.props;
+   
     return (
       <div>
         <Card>
@@ -49,35 +50,23 @@ class Dashboard extends Component {
             <h3>New expenses </h3>   
             <h5>Please enter new expenses here</h5>         
           </CardHeader>
-          <CardBody>
-            {userData ? null : <span>no data</span>}
-            <TextField
-              id="select-currency"
-              select
-              // label="Select Category"
-              className={classes.textField}
-              value={this.state.currency}
-              // onChange={this.handleChange('currency')}
-              SelectProps={{
-                MenuProps: {
-                  className: classes.menu,
-                },
-              }}
-              helperText="Select Category"
-              margin="normal"
-            >
-              
-                {this.categoriesList}
+          <CardBody className = {classes.expensesPerformanse}>
+          <SimpleSelect categList= {categList}/>
+        
+
              
-              {/* <MenuItem> Select Category </MenuItem> */}
-              {/* {userData.map(option => (
-                <MenuItem key={option.name} value={option.name}>
-                  {option.name}
-                </MenuItem>
-              ))} */}
-            </TextField>
-            <TextField label='Description'/>
-            <TextField label='Value' value='UAH'/>
+
+
+            <TextField
+            InputProps={{defaultValue:'Description'}}/>
+            
+            
+            <TextField label='Value'
+              InputProps={{defaultValue:'UAH'}}
+            />
+
+
+
             <Button color="primary">ADD EXPENSES</Button>
           </CardBody>
         </Card>
@@ -107,7 +96,8 @@ Dashboard.propTypes = {
 };
 
 const mapStateToProps = state=>({
-  userData: state.userData
+  expenses: state.expenses,
+  categList: state.data.categList
 })
 
 const mapActionsToProps = {

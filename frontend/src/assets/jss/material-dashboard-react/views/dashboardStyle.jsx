@@ -65,6 +65,11 @@ const dashboardStyle = {
       fontWeight: "400",
       lineHeight: "1"
     }
+  },
+  expensesPerformanse: {
+    display:'flex',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between'
   }
 };
 

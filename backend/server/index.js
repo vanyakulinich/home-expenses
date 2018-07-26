@@ -5,7 +5,7 @@ var _ = require('lodash');
 // server function
 function Server(db) {
 
-    let {UserModel, CategoryModel, SubCategoryModel, ExpensesModel} = db;
+    let {UserModel, CategoryModel, ListOfCatsModel, ExpensesModel} = db;
 
 // registration routes
     // sign in route
@@ -98,11 +98,18 @@ function Server(db) {
             })
             cats.push(newCat)
             if(cats[cats.length-2]) cats[cats.length-2].next = newCat._id
+
+            let newCatInList = new ListOfCatsModel({
+                name: newCat.name,
+                id: newCat._id
+            })
             
+            req.user.categoriesList.push(newCatInList)
+
             req.user.save(er=>{
                 if(er) console.log(er)
             })
-            res.json(req.user.categories)
+            res.json({categories: req.user.categories, categoriesList: req.user.categoriesList})
         })
 
         // rename category
@@ -110,12 +117,22 @@ function Server(db) {
             let itemForRename = _.findIndex(req.user.categories, item=>{
                 return item._id == req.body.id
             })
+
+            let itemForRenameInCategoriesList = _.findIndex(req.user.categoriesList, item=>{
+                return item.id == req.body.id
+            })
+
+            console.log(itemForRenameInCategoriesList)
+
             req.user.categories[itemForRename].name = req.body.name
+            req.user.categoriesList[itemForRenameInCategoriesList].name = req.body.name
+
+            
 
             req.user.save(er=>{
                 if(er) console.log(er)
             })
-            res.json(req.user.categories)
+            res.json({categories: req.user.categories, categoriesList: req.user.categoriesList})
         })
 
         // delete category
@@ -129,12 +146,19 @@ function Server(db) {
             if(req.body.parent) {
                 req.user.categories = [...req.user.categories]. filter(el=>el.parent!==req.body.id)
             }
+
+            let itemForDeleteInCategoriesList = _.findIndex(req.user.categoriesList, item=>{
+                return item.id == req.body.id
+            })
+
+
+            req.user.categoriesList.splice(itemForDeleteInCategoriesList, 1)
             
 
             req.user.save(er=>{
                 if(er) console.log(er)
             })
-            res.json(req.user.categories)
+            res.json({categories: req.user.categories, categoriesList: req.user.categoriesList})
         })
     
         // add subcategory or move subcategory to categories
@@ -203,6 +227,8 @@ function Server(db) {
         res.json(req.user.categories)
     })
 
+
+
     server.put('/userdata/expenses', passport.authenticate('jwt', {session: false}), (req, res)=>{
        
         let newExpense = new ExpensesModel({
@@ -212,6 +238,10 @@ function Server(db) {
         })
 
         req.user.expenses.push(newExpense)
+
+        let index = _.findIndex(req.user.categories, el=>el._id==req.body.id)
+
+        req.user.categories[index].value = req.body.value
 
 
 
