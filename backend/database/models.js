@@ -8,7 +8,7 @@ const Schema = mongoose.Schema;
 const CategorySchema = new Schema({ 
     name: String,
     value: Number,
-    date: {type: Date, default: new Date().toLocaleDateString()}, // date format will be changed soon
+    date: Date, // date format will be changed soon
     parent: String,
     isChild: Boolean,
     children: Boolean,

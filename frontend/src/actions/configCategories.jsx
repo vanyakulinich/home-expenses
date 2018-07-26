@@ -18,14 +18,22 @@ export default function configCategories(method, path, body) {
             .then(res => res.json())
             .then((data) => {
                 console.log('DATA UPDATED ON SERVER')
-                dispatch([{
-                    type: USER_CATEGS,
-                    userCategories: data.categories,
-                },
-                {
-                    type: CATEG_LIST,
-                    categList: data.categoriesList,
-                }])   
+                if(data.categoriesList) {
+                    dispatch([{
+                        type: USER_CATEGS,
+                        userCategories: data.categories,
+                    },
+                    {
+                        type: CATEG_LIST,
+                        categList: data.categoriesList,
+                    }]) 
+                } else {
+                    dispatch({
+                        type: CATEG_LIST,
+                        categList: data.categoriesList,
+                    })
+                }
+                  
             })
         
             .catch(e => console.log(e))

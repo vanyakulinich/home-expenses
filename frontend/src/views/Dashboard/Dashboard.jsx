@@ -85,15 +85,8 @@ class Dashboard extends Component {
           </CardHeader>
           <CardBody className = {classes.expensesPerformanse}>
           <SimpleSelect categList= {categList}/>
-         
-            {/* <TextField
-            InputProps={{defaultValue:'Description'}}
-            onClick={this.clearInput}>
-             
-            </TextField> */}
-
-            <IntegrationAutosuggest
-            />
+        
+            <IntegrationAutosuggest/>
            
             <TextField label='Value'
               InputProps={{defaultValue:'UAH'}}
