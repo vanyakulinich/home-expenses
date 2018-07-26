@@ -181,7 +181,7 @@ function Server(db) {
         req.user.save(er=>{
             if(er) console.log(er)
         })
-        res.json(req.user.categories)
+        res.json({categories: req.user.categories})
     })
 
     // moving categories

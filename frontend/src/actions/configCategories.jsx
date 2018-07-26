@@ -29,8 +29,8 @@ export default function configCategories(method, path, body) {
                     }]) 
                 } else {
                     dispatch({
-                        type: CATEG_LIST,
-                        categList: data.categoriesList,
+                        type: USER_CATEGS,
+                        userCategories: data.categories,
                     })
                 }
                   
