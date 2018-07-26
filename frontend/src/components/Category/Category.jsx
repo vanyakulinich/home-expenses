@@ -69,7 +69,7 @@ class Category extends Component{
     }
 }
 const mapStateToProps = state=>({
-    userData: state.data.userData
+    userData: state.data.userCategories
 })
 
 const mapActionsToProps = ({

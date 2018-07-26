@@ -26,14 +26,17 @@ class SimpleSelect extends React.Component {
   state = {
     age: '',
     name: 'hai',
+    id: ''
 
   };
 
   handleChange = event => {
 
-    this.setState({ [event.target.name]: event.target.value });
-    
-    console.log(this.state)
+    this.setState({ 
+      [event.target.name]: event.target.value,
+      [event.target.id]: event.target.id  
+    });
+    console.log(this)
   };
 
   render() {
@@ -41,8 +44,7 @@ class SimpleSelect extends React.Component {
     const items = categList ? 
                   categList.map((item, key)=>{
                         return <MenuItem 
-                                 value={item.name} 
-                                 id={item.id}
+                                 value={item.id} 
                                  key={key}>{item.name}</MenuItem>
     }) : null
 

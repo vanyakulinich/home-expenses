@@ -15,11 +15,13 @@ export default function addNewExpense(method, body) {
         fetch(`http://localhost:3001/userdata/expenses`, fetchOptions)
             .then(res => res.json())
             .then((data) => {
-
-                dispatch({
+                dispatch(
+                {
                     type: USER_EXPENSE,
                     userExpenses: data,
-                })
+                },
+                
+            )
             })
             .catch(e => console.log(e))
     }

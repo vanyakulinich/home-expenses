@@ -55,7 +55,7 @@ class CategoryList extends Component {
 
 
 const mapStateToProps = state=>({
-    data: state.data.userData
+    data: state.data.userCategories
 })
 
 export default connect(mapStateToProps)(CategoryList);

@@ -7,7 +7,7 @@ import expensesReducer from './expensesReducer.jsx';
 import categoriesListReducer from './catListReducer.jsx';
 
 const data = combineReducers({
-    userData: userDataReducer,
+    userCategories: userDataReducer,
     userExpenses: expensesReducer,
     categList: categoriesListReducer,
 })

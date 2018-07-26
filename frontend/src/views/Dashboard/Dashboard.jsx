@@ -14,6 +14,7 @@ import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import Button from "components/CustomButtons/Button.jsx";
+import addNewExpense from '../../actions/addNewExpense.jsx'
 
 import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
 
@@ -23,7 +24,7 @@ class Dashboard extends Component {
   };
 
   componentDidMount() {
-    if(!this.props.userData) this.props.getUserData()
+    if(!this.props.data) this.props.getUserData()
   }
 
   handleChange = (event, value) => {
@@ -39,6 +40,27 @@ class Dashboard extends Component {
 
           </List>)
   }
+
+  addExpense=()=>{
+   let inputs = document.querySelectorAll('input')
+   
+   console.log(inputs[0].value)
+   let value = +inputs[2].value
+   console.log(value)
+   let body = {
+     id: inputs[0].value,
+     description: inputs[1].value,
+     value: +value.toFixed(2)
+   }
+    this.props.addNewExpense('PUT', body)
+  }
+
+  clearInput = (e)=>{
+    e.target.value = ''
+  }
+
+
+  
 
   render() {
     const { classes, userData, categList} = this.props;
@@ -58,16 +80,19 @@ class Dashboard extends Component {
 
 
             <TextField
-            InputProps={{defaultValue:'Description'}}/>
+            InputProps={{defaultValue:'Description'}}
+            onClick={this.clearInput}/>
             
             
             <TextField label='Value'
               InputProps={{defaultValue:'UAH'}}
+              onClick={this.clearInput}
             />
 
 
 
-            <Button color="primary">ADD EXPENSES</Button>
+            <Button color="primary"
+            onClick={this.addExpense}>ADD EXPENSES</Button>
           </CardBody>
         </Card>
         <Card>
@@ -97,11 +122,13 @@ Dashboard.propTypes = {
 
 const mapStateToProps = state=>({
   expenses: state.expenses,
-  categList: state.data.categList
+  categList: state.data.categList,
+  data: state.data
 })
 
 const mapActionsToProps = {
-  getUserData
+  getUserData,
+  addNewExpense
 }
 
 

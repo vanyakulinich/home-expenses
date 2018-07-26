@@ -16,31 +16,23 @@ export default function getUserData() {
             .then((data) => {
                 console.log('DATA REQUSET TO SERVER')
                 console.log(data)
-                dispatch({  
+                dispatch([
+                {  
                     type: SIGN_USER, 
                     user: data.email
-                });
-                return data
-            })
-            .then(data=> {
-                dispatch({
-                    type: USER_DATA,
-                    data: data.categories
-                })
-                return data
-            })
-            .then(data=> {
-                dispatch({
-                    type: USER_EXPENSE,
+                },
+                {  
+                    type: USER_DATA, 
+                    userCategories: data.categories
+                },
+                {  
+                    type: USER_EXPENSE, 
                     userExpenses: data.expenses
-                })
-                return data
-            })
-            .then(data=> {
-                dispatch({
-                    type: CATEG_LIST,
+                },
+                {  
+                    type: CATEG_LIST, 
                     categList: data.categoriesList
-                })
+                }])
             })
             .catch(e => console.log(e))
     }

@@ -108,8 +108,9 @@ function Server(db) {
 
             req.user.save(er=>{
                 if(er) console.log(er)
+                res.json({categories: req.user.categories, categoriesList: req.user.categoriesList})
             })
-            res.json({categories: req.user.categories, categoriesList: req.user.categoriesList})
+            
         })
 
         // rename category
@@ -131,8 +132,9 @@ function Server(db) {
 
             req.user.save(er=>{
                 if(er) console.log(er)
+                res.json({categories: req.user.categories, categoriesList: req.user.categoriesList})
             })
-            res.json({categories: req.user.categories, categoriesList: req.user.categoriesList})
+            
         })
 
         // delete category
@@ -157,8 +159,9 @@ function Server(db) {
 
             req.user.save(er=>{
                 if(er) console.log(er)
+                res.json({categories: req.user.categories, categoriesList: req.user.categoriesList})
             })
-            res.json({categories: req.user.categories, categoriesList: req.user.categoriesList})
+            
         })
     
         // add subcategory or move subcategory to categories
@@ -230,25 +233,44 @@ function Server(db) {
 
 
     server.put('/userdata/expenses', passport.authenticate('jwt', {session: false}), (req, res)=>{
-       
+       console.log(req.body)
+
+        let index = _.findIndex(req.user.categories, el=>el._id==req.body.id)
+
+
         let newExpense = new ExpensesModel({
-            category: req.body.category,
+            category: req.user.categories[index].name,
             description: req.body. description,
             value: req.body.value,
         })
 
+        req.user.categories[index].value = req.body.value;
+
+        if(req.user.categories[index].parent) { // if category has parent
+            let parentIndex = _.findIndex(req.user.categories, el=>el._id==req.user.categories[index].parent)
+            req.user.categories[parentIndex].value = req.user.categories[parentIndex].value + req.body.value
+        }
+
+        req.user.descriptionBase.push(req.body.description)
+
         req.user.expenses.push(newExpense)
 
-        let index = _.findIndex(req.user.categories, el=>el._id==req.body.id)
+        // let index = _.findIndex(req.user.categories, el=>el._id==req.body.id)
 
-        req.user.categories[index].value = req.body.value
+        // req.user.categories[index].value = req.body.value
 
 
 
         req.user.save(er=>{
             if(er) console.log(er)
+            res.json({
+                categories: req.user.categories, 
+                categoriesList: req.user.categoriesList,
+                expenses: req.user.expenses
+
+            })
         })
-        res.json(req.user.expenses)
+       
     })
     
    

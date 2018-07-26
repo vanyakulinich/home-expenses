@@ -19,7 +19,7 @@ const styles = {
 class Reports extends Component {
 
     componentDidMount() {
-        if(!this.props.userData) getUserData()
+        if(!this.props.data) getUserData()
       }
 
     render(){
@@ -62,7 +62,7 @@ class Reports extends Component {
 }
 
 const mapStateToProps = state=>({
-    userData: state.userData
+    data: state.userData
 })
 
 const mapActionsToProps = {
