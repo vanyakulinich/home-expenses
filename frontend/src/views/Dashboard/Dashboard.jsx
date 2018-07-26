@@ -29,6 +29,7 @@ class Dashboard extends Component {
 
   componentDidMount() {
     if(!this.props.expenses) this.props.getUserData()
+
   }
 
   handleChange = (event, value) => {
@@ -70,6 +71,8 @@ class Dashboard extends Component {
     return table
   }
 
+ 
+
   render() {
     const { classes, expenses, categList} = this.props;
     const table = this.expensesList(expenses)
@@ -89,7 +92,8 @@ class Dashboard extends Component {
              
             </TextField> */}
 
-            <IntegrationAutosuggest/>
+            <IntegrationAutosuggest
+            />
            
             <TextField label='Value'
               InputProps={{defaultValue:'UAH'}}
@@ -102,9 +106,9 @@ class Dashboard extends Component {
           {/* <IntegrationDownshift/> */}
         </Card>
         <Card>
-          <CardHeader color='info'>
-            <h3>Latest expenses</h3>  
-            <h5>Here are 20 latest expenses</h5>         
+          <CardHeader color='info' className={classes.zindex}>
+            <h3 className={classes.zindex}>Latest expenses</h3>  
+            <h5 className={classes.zindex}>Here are 20 latest expenses</h5>         
           </CardHeader>
           <CardBody>
             <Table

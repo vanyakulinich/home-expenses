@@ -1,4 +1,5 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import Autosuggest from 'react-autosuggest';
 import match from 'autosuggest-highlight/match';
@@ -44,10 +45,18 @@ const suggestions = [
   { label: 'British Indian Ocean Territory' },
   { label: 'Brunei Darussalam' },
 ];
+function autocompleteList(descriptions){
+  if(!descriptions) return []
+  let list = descriptions.map(el=>{
+    return {label: el}
+  })
+  console.log(list)
+  return list
+}
+
 
 function renderInput(inputProps) {
   const { classes, ref, ...other } = inputProps;
-
   return (
     <TextField
       fullWidth
@@ -65,7 +74,6 @@ function renderInput(inputProps) {
 function renderSuggestion(suggestion, { query, isHighlighted }) {
   const matches = match(suggestion.label, query);
   const parts = parse(suggestion.label, matches);
-
   return (
     <MenuItem selected={isHighlighted} component="div">
       <div>
@@ -119,35 +127,45 @@ function getSuggestions(value) {
 }
 
 const styles = theme => ({
-//   container: {
-//     flexGrow: 1,
-//     position: 'relative',
-//     height: 250,
-//   },
-//   suggestionsContainerOpen: {
-//     position: 'absolute',
-//     zIndex: 1,
-//     marginTop: theme.spacing.unit,
-//     left: 0,
-//     right: 0,
-//   },
-//   suggestion: {
-//     display: 'block',
-//   },
-//   suggestionsList: {
-//     margin: 0,
-//     padding: 0,
-//     listStyleType: 'none',
-//   },
+  container: {
+    // flexGrow: 1,
+    // position: 'relative',
+    // height: 250,
+  },
+  suggestionsContainerOpen: {
+    position: 'absolute',
+    zIndex: 1,
+    marginTop: theme.spacing.unit,
+    left: 0,
+    right: 0,
+  },
+  suggestion: {
+    display: 'block',
+  },
+  suggestionsList: {
+    margin: 0,
+    padding: 0,
+    listStyleType: 'none',
+  },
 });
 
 class IntegrationAutosuggest extends React.Component {
   state = {
     value: '',
     suggestions: [],
+    list: []
   };
 
+  componentDidMount() {
+    this.setState({
+      list: this.props.suggestions
+    })
+  }
+
+
+
   handleSuggestionsFetchRequested = ({ value }) => {
+
     this.setState({
       suggestions: getSuggestions(value),
     });
@@ -166,8 +184,8 @@ class IntegrationAutosuggest extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
-
+    const { classes} = this.props;
+    console.log(this.props.suggestions)
     return (
       <Autosuggest
         theme={{
@@ -185,7 +203,7 @@ class IntegrationAutosuggest extends React.Component {
         renderSuggestion={renderSuggestion}
         inputProps={{
           classes,
-          placeholder: 'Search a country (start with a)',
+          placeholder: 'Description',
           value: this.state.value,
           onChange: this.handleChange,
         }}
@@ -198,4 +216,8 @@ IntegrationAutosuggest.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(IntegrationAutosuggest);
+const mapStateToProps = state=>({
+  suggestions: state.data.descBase
+})
+
+export default connect(mapStateToProps)(withStyles(styles)(IntegrationAutosuggest));
