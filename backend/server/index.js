@@ -95,6 +95,7 @@ function Server(db) {
                 children: false,
                 prev: (cats.length) ? cats[cats.length-1]._id : null,
                 next: null,
+                date: Date.now()
             })
             cats.push(newCat)
             if(cats[cats.length-2]) cats[cats.length-2].next = newCat._id
@@ -154,7 +155,7 @@ function Server(db) {
 
             req.user.categories.splice(itemForDelete, 1)
             if(req.body.parent) {
-                req.user.categories = [...req.user.categories]. filter(el=>el.parent!==req.body.id)
+                req.user.categories = [...req.user.categories].filter(el=>el.parent!==req.body.id)
             }
             // delete in categories list
             let itemForDeleteInCategoriesList = _.findIndex(req.user.categoriesList, item=>{
@@ -165,12 +166,14 @@ function Server(db) {
             
             // delete expenses of deleted category
             if(req.user.expenses.length>0) {
-                req.user.expenses = [...req.user.expenses].filter(el=>el!==req.body.id)
+                req.user.expenses = [...req.user.expenses].filter(el=>el.category!==req.body.name)
             }
             
             req.user.save(er=>{
                 if(er) console.log(er)
-                res.json({categories: req.user.categories, categoriesList: req.user.categoriesList})
+                res.json({categories: req.user.categories, 
+                    categoriesList: req.user.categoriesList,
+                    expenses: req.user.expenses})
             })
             
         })

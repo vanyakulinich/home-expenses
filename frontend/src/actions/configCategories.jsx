@@ -1,5 +1,7 @@
 import USER_CATEGS from '../actionTypes/userCategsType.jsx';
 import CATEG_LIST from '../actionTypes/categListType.jsx';
+import USER_EXPENSE from '../actionTypes/expenseActionType.jsx';
+
 
 export default function configCategories(method, path, body) {
     return (dispatch)=>{
@@ -26,7 +28,12 @@ export default function configCategories(method, path, body) {
                     {
                         type: CATEG_LIST,
                         categList: data.categoriesList,
-                    }]) 
+                    },
+                    {   
+                        type: USER_EXPENSE,
+                        userExpenses: data.expenses,
+                    },
+                ]) 
                 } else {
                     dispatch({
                         type: USER_CATEGS,
