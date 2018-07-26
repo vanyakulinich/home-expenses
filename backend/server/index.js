@@ -144,19 +144,30 @@ function Server(db) {
                 return item._id == req.body.id
             })
 
+            if(req.user.categories[itemForDelete].parent) { // delete values of expenses from parent if it exists
+                let parentIndex = _.findIndex(req.user.categories, el=>{
+                    return el._id == req.user.categories[itemForDelete].parent
+                })
+                
+                req.user.categories[parentIndex].value -= req.user.categories[itemForDelete].value
+            }
+
             req.user.categories.splice(itemForDelete, 1)
             if(req.body.parent) {
                 req.user.categories = [...req.user.categories]. filter(el=>el.parent!==req.body.id)
             }
-
+            // delete in categories list
             let itemForDeleteInCategoriesList = _.findIndex(req.user.categoriesList, item=>{
                 return item.id == req.body.id
             })
-
-
             req.user.categoriesList.splice(itemForDeleteInCategoriesList, 1)
+            req.user.categoriesList = [...req.user.categoriesList].filter(el=>el!==req.body.name)
             
-
+            // delete expenses of deleted category
+            if(req.user.expenses.length>0) {
+                req.user.expenses = [...req.user.expenses].filter(el=>el!==req.body.id)
+            }
+            
             req.user.save(er=>{
                 if(er) console.log(er)
                 res.json({categories: req.user.categories, categoriesList: req.user.categoriesList})
@@ -231,7 +242,7 @@ function Server(db) {
     })
 
 
-
+    // user puts expenses on dashboard page
     server.put('/userdata/expenses', passport.authenticate('jwt', {session: false}), (req, res)=>{
        console.log(req.body)
 
@@ -251,7 +262,7 @@ function Server(db) {
 
         if(req.user.categories[index].parent) { // if category has parent
             let parentIndex = _.findIndex(req.user.categories, el=>el._id==req.user.categories[index].parent)
-            req.user.categories[parentIndex].value = req.user.categories[parentIndex].value + req.body.value
+            req.user.categories[parentIndex].value += req.body.value
         }
 
         req.user.descriptionBase.push(req.body.description)
