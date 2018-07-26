@@ -66,10 +66,7 @@ class Dashboard extends Component {
     return table
   }
 
-  
-
   render() {
-   
     const { classes, expenses, categList} = this.props;
     const table = this.expensesList(expenses)
     return (
@@ -82,21 +79,14 @@ class Dashboard extends Component {
           <CardBody className = {classes.expensesPerformanse}>
           <SimpleSelect categList= {categList}/>
           
-
-             
-
-
             <TextField
             InputProps={{defaultValue:'Description'}}
             onClick={this.clearInput}/>
-            
-            
+           
             <TextField label='Value'
               InputProps={{defaultValue:'UAH'}}
               onClick={this.clearInput}
             />
-
-
 
             <Button color="primary"
             onClick={this.addExpense}>ADD EXPENSES</Button>
@@ -111,15 +101,7 @@ class Dashboard extends Component {
             <Table
                 tableHeaderColor="primary"
                 tableHead={["Date", "Category", "Expenses", "Value, UAH"]}
-                tableData={table
-                  
-                  // table ? table : []
-
-                //   [
-                //   ["16.07.2018", "Food", "bought milk", "30"],
-                //   ["15.07.2018", "Transport", "", "20"],
-                // ]
-              }
+                tableData={table}
               />
           </CardBody>
         </Card>
