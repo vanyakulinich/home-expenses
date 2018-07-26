@@ -42,17 +42,19 @@ class Reports extends Component {
 
     componentDidMount() {
         if(!this.props.categories) this.props.getUserData()
-      }
+    }
 
-      defaultDate=()=>{
+    defaultDate=()=>{
         let date = `${new Date()}`.split(' ')
         return `${date[0]} ${date[1]} ${date[2]} ${date[3]} / ${date[0]} ${date[1]} ${date[2]} ${date[3]}`
-      }
-
+    }
+    
 
     render(){
         let date = new Date()+''
         const {classes, categories} = this.props
+        const table = categories ? categories : []
+        console.log(table)
         return(
             <Card>
             <CardHeader color='info'>
@@ -81,7 +83,7 @@ class Reports extends Component {
                 <Table
                     tableHeaderColor="primary"
                     tableHead={["Category", "Expenses value, UAH"]}
-                    tableData={categories}
+                    tableData={table}
                     reports={true}
                 />
             </CardBody>
@@ -91,7 +93,7 @@ class Reports extends Component {
 }
 
 const mapStateToProps = state=>({
-    categories: state.data.categories
+    categories: state.data.userCategories
 })
 
 const mapActionsToProps = {

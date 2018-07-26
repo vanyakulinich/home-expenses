@@ -50,8 +50,6 @@ class Dashboard extends Component {
    }
     this.props.addNewExpense('PUT', body)
     inputs.forEach(el=>el.value='')
-
-    this.expensesList()
   }
 
   clearInput = (e)=>{
