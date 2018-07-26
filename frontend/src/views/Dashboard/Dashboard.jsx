@@ -60,7 +60,7 @@ class Dashboard extends Component {
           item.date,
           item.category,
           item.description,
-          item.value
+          item.value+''
       ]
     })
     return table

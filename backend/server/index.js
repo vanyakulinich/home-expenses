@@ -239,7 +239,6 @@ function Server(db) {
 
         let date = `${new Date()}`.split(' ')
 
-
         let newExpense = new ExpensesModel({
             category: req.user.categories[index].name,
             description: req.body. description,
@@ -259,17 +258,12 @@ function Server(db) {
 
         req.user.expenses.push(newExpense)
 
-        // let index = _.findIndex(req.user.categories, el=>el._id==req.body.id)
-
-        // req.user.categories[index].value = req.body.value
-
-
-
         req.user.save(er=>{
             if(er) console.log(er)
+            let expenses = [...req.user.expenses].reverse().slice(0, 20)
             res.json({
                 categories: req.user.categories, 
-                expenses: req.user.expenses,
+                expenses,
             })
         })
        
