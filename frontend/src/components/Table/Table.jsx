@@ -43,7 +43,13 @@ function CustomTable({ ...props }) {
                         {prop.name}
                       </TableCell>
                       <TableCell className={classes.tableCell} key={1+key*3}>
-                        {prop.value}
+                        <CustomTable
+                        tableHeaderColor="primary"
+                        // tableHead={["Category", "Expenses value, UAH"]}
+                        tableData={prop.children}
+                        reports={true}
+                        
+                        />
                       </TableCell>
                   </TableRow>
                 )

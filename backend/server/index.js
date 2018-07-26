@@ -278,6 +278,7 @@ function Server(db) {
             res.json({
                 categories: req.user.categories, 
                 expenses,
+
             })
         })
        
