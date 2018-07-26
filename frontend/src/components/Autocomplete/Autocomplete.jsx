@@ -107,14 +107,14 @@ function getSuggestionValue(suggestion) {
   return suggestion.label;
 }
 
-function getSuggestions(value) {
+function getSuggestions(value, list) {
   const inputValue = value.trim().toLowerCase();
   const inputLength = inputValue.length;
   let count = 0;
 
   return inputLength === 0
     ? []
-    : suggestions.filter(suggestion => {
+    : list.filter(suggestion => {
         const keep =
           count < 5 && suggestion.label.toLowerCase().slice(0, inputLength) === inputValue;
 
@@ -128,16 +128,13 @@ function getSuggestions(value) {
 
 const styles = theme => ({
   container: {
-    // flexGrow: 1,
-    // position: 'relative',
-    // height: 250,
+
   },
   suggestionsContainerOpen: {
     position: 'absolute',
     zIndex: 1,
     marginTop: theme.spacing.unit,
-    left: 0,
-    right: 0,
+    width: '300px'
   },
   suggestion: {
     display: 'block',
@@ -167,7 +164,7 @@ class IntegrationAutosuggest extends React.Component {
   handleSuggestionsFetchRequested = ({ value }) => {
 
     this.setState({
-      suggestions: getSuggestions(value),
+      suggestions: getSuggestions(value, this.state.list),
     });
   };
 
@@ -183,9 +180,15 @@ class IntegrationAutosuggest extends React.Component {
     });
   };
 
+  list=()=>{
+    let suggestions = this.props.suggestions.map(el=>({label: el}))
+    this.setState({
+      list: suggestions
+    })
+  }
+
   render() {
     const { classes} = this.props;
-    console.log(this.props.suggestions)
     return (
       <Autosuggest
         theme={{
@@ -206,6 +209,7 @@ class IntegrationAutosuggest extends React.Component {
           placeholder: 'Description',
           value: this.state.value,
           onChange: this.handleChange,
+          onClick: this.list
         }}
       />
     );
