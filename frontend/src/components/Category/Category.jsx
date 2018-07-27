@@ -1,6 +1,7 @@
 import React, {Fragment, Component} from 'react';
+import withStyles from "@material-ui/core/styles/withStyles";
 import {connect} from 'react-redux';
-import {TextField, ListItem, Divider, Dialog} from "@material-ui/core";
+import {TextField, ListItem, Divider, Dialog, Paper} from "@material-ui/core";
 import Button from 'components/CustomButtons/Button.jsx'
 import {Clear, ArrowUpward, ArrowDownward, Loupe} from "@material-ui/icons";
 import configCategories from '../../actions/configCategories';
@@ -9,7 +10,18 @@ import FormDialog from 'components/FormDialog/FormDialog.jsx';
 import AlertDialog from 'components/AlertDialog/AlertDialog.jsx';
 import SimpleDialogDemo from 'components/SimpleDialog/SimpleDialog.jsx'
 
+
 import configParams from '../../functions/configFetch.jsx'
+
+
+const styles = {
+    configContainer: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center', 
+        width: '100%'
+    }
+}
 
 // reusable category component
 class Category extends Component{
@@ -37,10 +49,11 @@ class Category extends Component{
         this.props.configCategories('PUT', 'category', configParams(this.props.id, name))
     }
     render(){
-        const {categoryName, children, child, userData} = this.props;
+        const {categoryName, children, child, userData, classes} = this.props;
         const buttonColor = (!children && child) ?  'primary'  : 'info'
         return(
-            <Fragment>
+            <Paper className={classes.configContainer}>
+            
                 <FormDialog 
                     name = {categoryName}
                     save = {this.renameCategory}
@@ -55,19 +68,19 @@ class Category extends Component{
                  <AlertDialog 
                     delete = {this.deleteCategory}
                     name = {categoryName}
-                    isChild={child} />
-                    
-                    {(children && child) ? 
-                        null : 
-                        <SimpleDialogDemo 
-                            list = {userData.filter(item=>(item.name!==categoryName) && 
-                                                            (item.parent == null) &&
-                                                            (!item.children))}
-                            parentitem = {userData.find(item=>item.name==categoryName)}
-                            color={buttonColor}
-                            id={this.props.id}/>}
+                    isChild={child} 
+                 />
+                <SimpleDialogDemo 
+                    list = {userData.filter(item=>(item.name!==categoryName) && 
+                                                    (item.parent == null) &&
+                                                    (!item.children))}
+                    parentitem = {userData.find(item=>item.name==categoryName)}
+                    color={buttonColor}
+                    id={this.props.id}
+                />
                 </div>
-         </Fragment>
+         
+         </Paper>
         )
     }
 }
@@ -80,4 +93,4 @@ const mapActionsToProps = ({
 })
 
 
-export default connect(mapStateToProps, mapActionsToProps)(Category);
+export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(Category));
