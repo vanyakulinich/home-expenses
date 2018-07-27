@@ -156,11 +156,15 @@ function Server(db) {
                     req.user.categories[parentIndex].value -= req.user.categories[itemForDelete].value
                 }
                 req.user.categories[parentIndex].children -=1; 
-            }
-
+                req.user.categories[itemForDelete].parent = null
+            } else {
             // deletion of category
             req.user.categories.splice(itemForDelete, 1)
-            
+            req.user.categories = req.user.categories.filter(el=>{
+                return (el.parent !== req.body.id)
+                })
+            }
+
             // delete in categories list
             let itemForDeleteInCategoriesList = _.findIndex(req.user.categoriesList, item=>{
                 return item.id == req.body.id
@@ -217,7 +221,8 @@ function Server(db) {
                !req.user.categories[itemToMove].children) {
                 let itemToChangePlace = _.findLastIndex(req.user.categories, (item, i)=>{
                     return (!item.isChild && !item.children)
-                }, itemToMove-1)
+                }, 
+                itemToMove-1)
 
                 let bufferAr = [...req.user.categories]
                 let bufferItem = bufferAr[itemToChangePlace]

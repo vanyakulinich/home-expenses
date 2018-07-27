@@ -52,7 +52,8 @@ class Category extends Component{
                  </Button>
                  <AlertDialog 
                     delete = {this.deleteCategory}
-                    name = {categoryName} />
+                    name = {categoryName}
+                    isChild={child} />
                     
                     {(children && child) ? 
                         null : 
