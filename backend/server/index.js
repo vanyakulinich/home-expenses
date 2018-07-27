@@ -142,7 +142,7 @@ function Server(db) {
 
         // delete category
         .delete(passport.authenticate('jwt', {session: false}), (req, res)=>{
-            console.log(req.body)
+            
             let itemForDelete = _.findIndex(req.user.categories, item=>{
                 return item._id == req.body.id
             })
@@ -183,8 +183,7 @@ function Server(db) {
     
     // add subcategory
     server.post('/userdata/config/sub', passport.authenticate('jwt', {session: false}), (req, res)=>{
-            console.log(req.body)
-            let cats = req.user.categories
+
             let itemForSub = _.findIndex(req.user.categories, item=>item._id == req.body.id)
 
             req.user.categories[itemForSub].parent = req.body.parent;
@@ -200,21 +199,25 @@ function Server(db) {
         res.json({categories: req.user.categories})
     })
 
-    // moving categories
-    // not finished
+    // =-----------------
+
+    // moving categories and subcategories
     server.put('/userdata/config/move', passport.authenticate('jwt', {session: false}), (req, res)=>{
-        // console.log(req.body)
+        console.log(req.body)
         let itemToMove = _.findIndex(req.user.categories, item=>item._id == req.body.id)
-        
+
+         // moving up
         if(req.body.direction) {
-            // moving up
+            // check if the element is first in array
+            if(itemToMove ==0) return  res.json({categories: req.user.categories})
+
+
+            // if category is in head - it has no children and it is not a child
             if(!req.user.categories[itemToMove].isChild && 
-                !req.user.categories[itemToMove].children) {
+               !req.user.categories[itemToMove].children) {
                 let itemToChangePlace = _.findLastIndex(req.user.categories, (item, i)=>{
                     return (!item.isChild && !item.children)
                 }, itemToMove-1)
-                // console.log(itemToChangePlace)
-                // console.log(req.user.categories[itemToChangePlace])
 
                 let bufferAr = [...req.user.categories]
                 let bufferItem = bufferAr[itemToChangePlace]
@@ -222,20 +225,24 @@ function Server(db) {
                 bufferAr[itemToMove] = bufferItem
 
                 req.user.categories = [...bufferAr]
-                // let bufferItem = req.user.categories[itemToChangePlace]
-                // req.user.categories[itemToChangePlace] = req.user.categories[itemToMove]
-                // req.user.categories[itemToMove] =bufferItem
             }
+            // -
+
         } else {
             // moving down
+
+            // check for the end of array
+            if(itemToMove == req.user.categories.length-1) return res.json({categories: req.user.categories})
+
+             // if category is in head - it has no children and it is not a child
             if(!req.user.categories[itemToMove].isChild && 
                 !req.user.categories[itemToMove].children) {
                 let itemToChangePlace = _.findIndex(req.user.categories, (item, i)=>{
                     return (!item.isChild && !item.children)
                 }, itemToMove+1)
-                // console.log(itemToChangePlace)
-                // console.log(req.user.categories[itemToChangePlace])
 
+
+            
                 let bufferAr = [...req.user.categories]
                 let bufferItem = bufferAr[itemToChangePlace]
                 bufferAr[itemToChangePlace] = bufferAr[itemToMove]
@@ -243,14 +250,6 @@ function Server(db) {
 
                 req.user.categories = [...bufferAr]
 
-                
-                // console.log(cats)
-                // let bufferItem = req.user.categories[itemToChangePlace]
-                // req.user.categories[itemToChangePlace] = req.user.categories[itemToMove]
-                // req.user.categories[itemToMove] = bufferItem
-                
-
-                // console.log(req.user.categories)
             }
         }
         req.user.save(er=>{
