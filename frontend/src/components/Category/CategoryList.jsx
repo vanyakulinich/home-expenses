@@ -21,7 +21,7 @@ class CategoryList extends Component {
                                             key={+item._id} 
                                             id={item._id}
                                             position={key}
-                                            parentPosition={key}
+                                            parentLength={data.length-1}
                                             child={item.isChild}
                                             children = {item.children}
                                             /> 
@@ -42,7 +42,7 @@ class CategoryList extends Component {
                                     key={+item._id} 
                                     id={item._id}
                                     position={key}
-                                    parentPosition={key}
+                                    parentLength={data.length-1}
                                     child={item.isChild}
                                     />  
                                     

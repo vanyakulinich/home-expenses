@@ -15,19 +15,21 @@ import configParams from '../../functions/configFetch.jsx'
 class Category extends Component{
 
     deleteCategory = (name)=>{
-        this.props.configCategories('DELETE', 'category', configParams(this.props.id, name))
+        this.props.configCategories('DELETE', 'category', configParams(this.props.id))
     }
         
 
-    moveCategoryUp = ()=>{
-      
-        let config = configParams(this.props.id, this.props.categoryName, null, true)
-        console.log(config)
+    moveCategoryUp = (e)=>{
+        console.log(this.props)
+      if(this.props.position == 0) return null
+        let config = configParams(this.props.id, null, null, true)
         this.props.configCategories('PUT', 'move', config)
     }
 
     moveCategoryDown = ()=>{
-        let config = configParams(this.props.id, this.props.categoryName, null, false)
+        console.log(this.props)
+        if (this.props.position == this.props.parentLength) return null
+        let config = configParams(this.props.id, null, null, false)
         this.props.configCategories('PUT', 'move', config)
     }
 
