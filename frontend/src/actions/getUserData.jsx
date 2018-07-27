@@ -32,7 +32,7 @@ export default function getUserData() {
                 },
                 {  
                     type: CATEG_LIST, 
-                    categList: data.categoriesList
+                    categList:  data.categories.map(el=>({name: el.name, id: el._id}))
                 },
                 {  
                     type: DESC_BASE, 

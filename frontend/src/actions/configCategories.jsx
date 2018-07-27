@@ -21,17 +21,15 @@ export default function configCategories(method, path, body) {
             .then((data) => {
                 console.log('DATA UPDATED ON SERVER')
                 if(data.categories) {
-                    dispatch({
+                    dispatch([{
                         type: USER_CATEGS,
                         userCategories: data.categories,
-                     })
-                }
-
-                if(data.categoriesList) {
-                    dispatch({
+                     },
+                     {
                         type: CATEG_LIST,
-                        categList: data.categoriesList,
-                    })
+                        categList: data.categories.map(el=>({name: el.name, id: el.id})),
+                     }
+                    ])
                 }
 
                 if(data.expenses) {

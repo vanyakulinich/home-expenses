@@ -95,26 +95,18 @@ function Server(db) {
                 children: 0,
                 prev: (cats.length) ? cats[cats.length-1]._id : null,
                 next: null,
-                date: Date.now()
+                date: Date.now(),
+                value: 0,
             })
             cats.push(newCat)
             if(cats[cats.length-2]) cats[cats.length-2].next = newCat._id
-            // add category to category list
-            let newCatInList = new ListOfCatsModel({
-                name: newCat.name,
-                id: newCat._id,
-                isDeleted: false
-            })
-            req.user.categoriesList.push(newCatInList)
 
             req.user.save(er=>{
                 if(er) console.log(er)
                 res.json({
                     categories: req.user.categories, 
-                    categoriesList: req.user.categoriesList
                 })
-            })
-            
+            }) 
         })
 
         // rename category
@@ -123,21 +115,14 @@ function Server(db) {
                 return item._id == req.body.id
             })
 
-            let itemForRenameInCategoriesList = _.findIndex(req.user.categoriesList, item=>{
-                return item.id == req.body.id
-            })
-
             req.user.categories[itemForRename].name = req.body.name
-            req.user.categoriesList[itemForRenameInCategoriesList].name = req.body.name
 
             req.user.save(er=>{
                 if(er) console.log(er)
                 res.json({
                     categories: req.user.categories, 
-                    categoriesList: req.user.categoriesList
                 })
-            })
-            
+            })  
         })
 
         // delete category
@@ -152,34 +137,32 @@ function Server(db) {
                 let parentIndex = _.findIndex(req.user.categories, el=>{
                     return el._id == req.user.categories[itemForDelete].parent
                 })
-                if(req.user.categories[parentIndex].value){ // delete values from parent category
-                    req.user.categories[parentIndex].value -= req.user.categories[itemForDelete].value
+                // delete values from parent category
+                if(req.user.categories[parentIndex].value) {
+                    req.user.categories[parentIndex].value -=req.user.categories[itemForDelete].value
                 }
-                req.user.categories[parentIndex].children -=1; 
-                req.user.categories[itemForDelete].parent = null
+
+                if(req.user.categories[parentIndex].children>0) req.user.categories[parentIndex].children -=1
+                
+                if(req.user.categories[parentIndex].isChild) { // if we are in the middle of the tree
+                    req.user.categories[itemForDelete].parent = req.user.categories[parentIndex].parent
+                } else {
+                    req.user.categories[itemForDelete].parent = null
+                    req.user.categories[itemForDelete].isChild = false 
+                }
+                
             } else {
-            // deletion of category
+            // deletion of upper level category
             req.user.categories.splice(itemForDelete, 1)
             req.user.categories = req.user.categories.filter(el=>{
                 return (el.parent !== req.body.id)
                 })
             }
 
-            // delete in categories list
-            let itemForDeleteInCategoriesList = _.findIndex(req.user.categoriesList, item=>{
-                return item.id == req.body.id
-            })
-            req.user.categoriesList.splice(itemForDeleteInCategoriesList, 1)
-          
-
             req.user.save(er=>{
                 if(er) console.log(er)
                 res.json({  
                     categories: req.user.categories, 
-                    categoriesList: req.user.categoriesList,
-                    // if we delete category's expenses
-                    // then we send to front new expenses:
-                        // expenses: req.user.expenses
                 })
             })
             
@@ -294,7 +277,7 @@ function Server(db) {
 
         req.user.save(er=>{
             if(er) console.log(er)
-            let expenses = [...req.user.expenses].reverse().slice(0, 20)
+            let expenses = req.user.expenses ? [...req.user.expenses].reverse().slice(0, 20) : []
             res.json({
                 categories: req.user.categories, 
                 expenses,
