@@ -197,59 +197,94 @@ function Server(db) {
     server.put('/userdata/config/move', passport.authenticate('jwt', {session: false}), (req, res)=>{
         console.log(req.body)
         let itemToMove = _.findIndex(req.user.categories, item=>item._id == req.body.id)
+        let itemToChangePlace;
+        // let direction = (req.body.direction ? itemToMove-1 : itemToMove+1)
+        console.log(itemToMove)
+        // if category is in head
+        if(!req.user.categories[itemToMove].isChild && 
+            req.user.categories[itemToMove].children) {
+                itemToChangePlace = req.body.direction ? 
+                                    (_.findLastIndex(req.user.categories, (item)=>!item.isChild, itemToMove-1)) : 
+                                        (_.findIndex(req.user.categories, (item)=>!item.isChild, itemToMove+1))
+        }
 
-         // moving up
-        if(req.body.direction) {
-            // check if the element is first in array
-            // if(itemToMove ==0) return  res.json({categories: req.user.categories})
+        // if category is in middle of tree
+        if(req.user.categories[itemToMove].isChild && 
+           req.user.categories[itemToMove].children) {
+                itemToChangePlace = req.body.direction ? 
+                                    (_.findLastIndex(req.user.categories, (item)=>{
+                                        return item.isChild && item.children}, itemToMove-1)) : 
+                                        (_.findIndex(req.user.categories, (item)=>{
+                                            return item.isChild && item.children}, itemToMove+1))
+        }
 
 
-            // if category is in head - it has no children and it is not a child
-            // if(!req.user.categories[itemToMove].isChild && 
-            //    !req.user.categories[itemToMove].children) {
-                // let itemToChangePlace = _.findLastIndex(req.user.categories, (item, i)=>{
-                //     return (!item.isChild && !item.children)
-                // }, 
-                // itemToMove-1)
+        // if category is at bottom or at top but with no children
+        if((req.user.categories[itemToMove].isChild && !req.user.categories[itemToMove].children) ||
+            (!req.user.categories[itemToMove].isChild && !req.user.categories[itemToMove].children)) {
+            itemToChangePlace = req.body.direction ? itemToMove-1 : itemToMove+1
+        }
 
-                let bufferAr = [...req.user.categories]
-                let bufferItem = bufferAr[itemToMove-1]
-                bufferAr[itemToMove-1] = bufferAr[itemToMove]
-                bufferAr[itemToMove] = bufferItem
 
-                // let bufferAr = [...req.user.categories]
-                // let bufferItem = bufferAr[itemToChangePlace]
-                // bufferAr[itemToChangePlace] = bufferAr[itemToMove]
-                // bufferAr[itemToMove] = bufferItem
+        let bufferAr = [...req.user.categories]
+        let bufferItem = bufferAr[itemToChangePlace]
+        bufferAr[itemToChangePlace] = bufferAr[itemToMove]
+        bufferAr[itemToMove] = bufferItem
 
-                req.user.categories = [...bufferAr]
-            // }
-            // -
+        req.user.categories = [...bufferAr]
 
-        } else {
-            // moving down
 
-            // check for the end of array
-            // if(itemToMove == req.user.categories.length-1) return res.json({categories: req.user.categories})
 
-            //  // if category is in head - it has no children and it is not a child
-            // if(!req.user.categories[itemToMove].isChild && 
-            //     !req.user.categories[itemToMove].children) {
-                let itemToChangePlace = _.findIndex(req.user.categories, (item, i)=>{
-                    return (!item.isChild && !item.children)
-                }, itemToMove+1)
+
+        //  // moving up
+        // if(req.body.direction) {
+            
+
+
+        //     c
+        //     // if(!req.user.categories[itemToMove].isChild && 
+        //     //    !req.user.categories[itemToMove].children) {
+        //         // let itemToChangePlace = _.findLastIndex(req.user.categories, (item, i)=>{
+        //         //     return (!item.isChild && !item.children)
+        //         // }, 
+        //         // itemToMove-1)
+
+        //         let bufferAr = [...req.user.categories]
+        //         let bufferItem = bufferAr[itemToMove-1]
+        //         bufferAr[itemToMove-1] = bufferAr[itemToMove]
+        //         bufferAr[itemToMove] = bufferItem
+
+        //         // let bufferAr = [...req.user.categories]
+        //         // let bufferItem = bufferAr[itemToChangePlace]
+        //         // bufferAr[itemToChangePlace] = bufferAr[itemToMove]
+        //         // bufferAr[itemToMove] = bufferItem
+
+        //         req.user.categories = [...bufferAr]
+        //     // }
+        //     // -
+
+        // } else {
+        //     // moving down
+
+
+        //     //  // if category is in head - it has no children and it is not a child
+        //     // if(!req.user.categories[itemToMove].isChild && 
+        //     //     !req.user.categories[itemToMove].children) {
+        //         let itemToChangePlace = _.findIndex(req.user.categories, (item, i)=>{
+        //             return (!item.isChild && !item.children)
+        //         }, itemToMove+1)
 
 
             
-                let bufferAr = [...req.user.categories]
-                let bufferItem = bufferAr[itemToMove+1]
-                bufferAr[itemToMove+1] = bufferAr[itemToMove]
-                bufferAr[itemToMove] = bufferItem
+        //         let bufferAr = [...req.user.categories]
+        //         let bufferItem = bufferAr[itemToMove+1]
+        //         bufferAr[itemToMove+1] = bufferAr[itemToMove]
+        //         bufferAr[itemToMove] = bufferItem
 
-                req.user.categories = [...bufferAr]
+        //         req.user.categories = [...bufferAr]
 
-            // }
-        }
+        //     // }
+        // }
         req.user.save(er=>{
             if(er) console.log(er)
             res.json({categories: req.user.categories})
