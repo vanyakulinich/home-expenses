@@ -25,12 +25,12 @@ const styles = {
 class SignUp extends Component {
 
     userInput = ()=>{
-        let [email, pass, rePass]  = document.querySelectorAll('[type="text"]')
-        let regex = /^[a-zA-z0-9_\.]{1,30}@{1,}[a-z]{3,10}\.{1}[a-z]{2,9}(\.[a-z]{2,3}|)$/gm
-        let validEmail = regex.test(email.value)
+        let [email, pass, rePass]  = document.querySelectorAll('[type="text"]');
+        let regex = /^[a-zA-z0-9_\.]{1,30}@{1,}[a-z]{3,10}\.{1}[a-z]{2,9}(\.[a-z]{2,3}|)$/gm;
+        let validEmail = regex.test(email.value);
         if(!validEmail) {
-            email.value = 'Incorrect Email. Try again'
-            return null
+            email.value = 'Incorrect Email. Try again';
+            return null;
         }
        
         if(pass.value === rePass.value) {
@@ -46,14 +46,14 @@ class SignUp extends Component {
     clearInput=(e)=>{
         if(!e.target.value) return null
         if(e.target.value.indexOf('Incorrect Email. Try again')>=0){
-            e.target.value = ''
+            e.target.value = '';
         }
     }
 
     render(){
         const {classes, user} = this.props;
-        const isUser = (user==='isuser') ? <span>YOU ARE ALREADY REGISTERED.PLEASE SIGN IN</span> : null
-        const toVerify = (user === 'notverified') ? <span>CHECK YOUR EMAIL FOR VERIFICATION</span> : null 
+        const isUser = (user==='isuser') ? 'YOU ARE ALREADY REGISTERED.PLEASE SIGN IN' : null
+        const toVerify = (user === 'notverified') ? 'CHECK YOUR EMAIL FOR VERIFICATION' : null 
 
         return(
     

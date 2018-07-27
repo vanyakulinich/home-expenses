@@ -15,8 +15,6 @@ export default function getUserData() {
         fetch(`http://localhost:3001/userdata`, fetchOptions)
             .then(res => res.json())
             .then((data) => {
-                console.log('DATA REQUSET TO SERVER')
-                console.log(data)
                 dispatch([
                 {  
                     type: SIGN_USER, 

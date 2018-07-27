@@ -35,7 +35,7 @@ function Header({ ...props }) {
     <AppBar className={classes.appBar + appBarClasses}>
       <Toolbar className={classes.container}>
         <div className={classes.flex}>
-          <Button color="transparent" className={classes.title}>
+          <Button color="transparent" href='#' className={classes.title}>
             {makeBrand()}
           </Button>
         </div>

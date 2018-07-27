@@ -14,6 +14,8 @@ function Server(db) {
         UserModel.findOne({email, pass}, (er, user)=>{
             if(er) console.log(er)
             if(user) {
+                if(user.verifyKey) res.json({verify:'verify'})
+
                 jwt.sign({ email, pass }, 'secretKey', (er, token) => {
                     user.save((er)=>{
                     if(er) console.log(er)

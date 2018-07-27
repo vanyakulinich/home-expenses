@@ -19,7 +19,7 @@ export default function signUser(user, signType) {
                 } else {
                     dispatch({
                         type: SIGN_USER,
-                        user: 'nouser'
+                        user: data.verify ? 'notverified' : 'nouser'
                     })
                 }
             })

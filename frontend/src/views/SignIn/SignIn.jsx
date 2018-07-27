@@ -49,7 +49,8 @@ class SignIn extends Component {
 
     render() {
         const {classes, user} = this.props;
-
+        const toVerify = (user === 'notverified') ? 
+                        ' YOU HAVE ALREADY REGISTERED. CHECK YOUR EMAIL FOR VERIFICATION' : null
         const tip = (user==='nouser') ? 'YOU ARE NOT REGISTERED. PEASE SIGN UP' : null
 
         return(
@@ -68,7 +69,7 @@ class SignIn extends Component {
                                 onClick={this.signInClick}>Sign In</Button>
                         <Link to='/signup'>first-time user? Sign up</Link>
                         <Paper>
-                            {tip}
+                            {tip || toVerify}
                         </Paper>
                     </CardBody>
                 </Card>
