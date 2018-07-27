@@ -43,7 +43,7 @@ function Server(db) {
                 })
                 newUser.save(er=>{
                     if(er) console.log(er)
-                    console.log(`http://localhost:3000/verify/${email}/${Date.now()}/${verifyKey}`)
+                    console.log(`http://localhost:3000/verify&${email}&${Date.now()}&${verifyKey}`)
                     res.send('verify')
                 })
             }
@@ -83,33 +83,36 @@ function Server(db) {
 
     // config categories routes
 
-
     server.route('/userdata/config/category')
         // add new category
         .post(passport.authenticate('jwt', {session: false}), (req, res)=>{
             let cats = req.user.categories
+            // add new category
             let newCat = new CategoryModel({
                 name: 'New Category',
                 parent: null,
                 isChild: false,
-                children: false,
+                children: 0,
                 prev: (cats.length) ? cats[cats.length-1]._id : null,
                 next: null,
                 date: Date.now()
             })
             cats.push(newCat)
             if(cats[cats.length-2]) cats[cats.length-2].next = newCat._id
-
+            // add category to category list
             let newCatInList = new ListOfCatsModel({
                 name: newCat.name,
-                id: newCat._id
+                id: newCat._id,
+                isDeleted: false
             })
-            
             req.user.categoriesList.push(newCatInList)
 
             req.user.save(er=>{
                 if(er) console.log(er)
-                res.json({categories: req.user.categories, categoriesList: req.user.categoriesList})
+                res.json({
+                    categories: req.user.categories, 
+                    categoriesList: req.user.categoriesList
+                })
             })
             
         })
@@ -124,61 +127,61 @@ function Server(db) {
                 return item.id == req.body.id
             })
 
-            console.log(itemForRenameInCategoriesList)
-
             req.user.categories[itemForRename].name = req.body.name
             req.user.categoriesList[itemForRenameInCategoriesList].name = req.body.name
 
-            
-
             req.user.save(er=>{
                 if(er) console.log(er)
-                res.json({categories: req.user.categories, categoriesList: req.user.categoriesList})
+                res.json({
+                    categories: req.user.categories, 
+                    categoriesList: req.user.categoriesList
+                })
             })
             
         })
 
         // delete category
         .delete(passport.authenticate('jwt', {session: false}), (req, res)=>{
-            
+            console.log(req.body)
             let itemForDelete = _.findIndex(req.user.categories, item=>{
                 return item._id == req.body.id
             })
 
-            if(req.user.categories[itemForDelete].parent) { // delete values of expenses from parent if it exists
+             //synchonizing with parent category 
+              if(req.user.categories[itemForDelete].isChild) { 
                 let parentIndex = _.findIndex(req.user.categories, el=>{
                     return el._id == req.user.categories[itemForDelete].parent
                 })
-                
-                req.user.categories[parentIndex].value -= req.user.categories[itemForDelete].value
+                if(req.user.categories[parentIndex].value){ // delete values from parent category
+                    req.user.categories[parentIndex].value -= req.user.categories[itemForDelete].value
+                }
+                req.user.categories[parentIndex].children -=1; 
             }
 
+            // deletion of category
             req.user.categories.splice(itemForDelete, 1)
-            if(req.body.parent) {
-                req.user.categories = [...req.user.categories].filter(el=>el.parent!==req.body.id)
-            }
+            
             // delete in categories list
             let itemForDeleteInCategoriesList = _.findIndex(req.user.categoriesList, item=>{
                 return item.id == req.body.id
             })
             req.user.categoriesList.splice(itemForDeleteInCategoriesList, 1)
-            req.user.categoriesList = [...req.user.categoriesList].filter(el=>el!==req.body.name)
-            
-            // delete expenses of deleted category
-            if(req.user.expenses.length>0) {
-                req.user.expenses = [...req.user.expenses].filter(el=>el.category!==req.body.name)
-            }
-            
+          
+
             req.user.save(er=>{
                 if(er) console.log(er)
-                res.json({categories: req.user.categories, 
+                res.json({  
+                    categories: req.user.categories, 
                     categoriesList: req.user.categoriesList,
-                    expenses: req.user.expenses})
+                    // if we delete category's expenses
+                    // then we send to front new expenses:
+                        // expenses: req.user.expenses
+                })
             })
             
         })
     
-        // add subcategory or move subcategory to categories
+    // add subcategory
     server.post('/userdata/config/sub', passport.authenticate('jwt', {session: false}), (req, res)=>{
             console.log(req.body)
             let cats = req.user.categories
@@ -187,10 +190,9 @@ function Server(db) {
             req.user.categories[itemForSub].parent = req.body.parent;
             req.user.categories[itemForSub].isChild = true;
 
-            let itemChildren = req.user.categories.some(el=>{
-                return el.parent == req.user.categories[itemForSub]._id})
-            if(itemChildren) req.user.categories[itemForSub].children = true
+            let parentItem = _.findIndex(req.user.categories, el=>el._id==req.body.parent)
 
+            req.user.categories[parentItem].children +=1;
 
         req.user.save(er=>{
             if(er) console.log(er)
@@ -201,47 +203,61 @@ function Server(db) {
     // moving categories
     // not finished
     server.put('/userdata/config/move', passport.authenticate('jwt', {session: false}), (req, res)=>{
-        console.log(req.body)
+        // console.log(req.body)
         let itemToMove = _.findIndex(req.user.categories, item=>item._id == req.body.id)
         
         if(req.body.direction) {
             // moving up
             if(!req.user.categories[itemToMove].isChild && 
                 !req.user.categories[itemToMove].children) {
-                let itemToChangePlace = _.findIndex(req.user.categories, item=>{
-                    return (item._id !== req.user.categories[itemToMove] &&
-                            !item.isChild && !item.children)
-                })
-                let bufferItem = req.user.categories[itemToChangePlace]
-                req.user.categories[itemToChangePlace] = req.user.categories[itemToMove]
-                req.user.categories[itemToMove] = bufferItem
+                let itemToChangePlace = _.findLastIndex(req.user.categories, (item, i)=>{
+                    return (!item.isChild && !item.children)
+                }, itemToMove-1)
+                // console.log(itemToChangePlace)
+                // console.log(req.user.categories[itemToChangePlace])
+
+                let bufferAr = [...req.user.categories]
+                let bufferItem = bufferAr[itemToChangePlace]
+                bufferAr[itemToChangePlace] = bufferAr[itemToMove]
+                bufferAr[itemToMove] = bufferItem
+
+                req.user.categories = [...bufferAr]
+                // let bufferItem = req.user.categories[itemToChangePlace]
+                // req.user.categories[itemToChangePlace] = req.user.categories[itemToMove]
+                // req.user.categories[itemToMove] =bufferItem
             }
         } else {
             // moving down
             if(!req.user.categories[itemToMove].isChild && 
                 !req.user.categories[itemToMove].children) {
                 let itemToChangePlace = _.findIndex(req.user.categories, (item, i)=>{
-                    return (
-                            i>itemToMove && 
-                            item._id !== req.user.categories[itemToMove] &&
-                            !item.isChild && 
-                            !item.children)
-                })
+                    return (!item.isChild && !item.children)
+                }, itemToMove+1)
                 // console.log(itemToChangePlace)
+                // console.log(req.user.categories[itemToChangePlace])
+
+                let bufferAr = [...req.user.categories]
+                let bufferItem = bufferAr[itemToChangePlace]
+                bufferAr[itemToChangePlace] = bufferAr[itemToMove]
+                bufferAr[itemToMove] = bufferItem
+
+                req.user.categories = [...bufferAr]
+
                 
                 // console.log(cats)
-                let bufferItem = req.user.categories[itemToChangePlace]
-                req.user.categories[itemToChangePlace] = req.user.categories[itemToMove]
-                req.user.categories[itemToMove] = bufferItem
+                // let bufferItem = req.user.categories[itemToChangePlace]
+                // req.user.categories[itemToChangePlace] = req.user.categories[itemToMove]
+                // req.user.categories[itemToMove] = bufferItem
                 
 
-                console.log(req.user.categories)
+                // console.log(req.user.categories)
             }
         }
         req.user.save(er=>{
             if(er) console.log(er)
+            res.json({categories: req.user.categories})
         })
-        res.json(req.user.categories)
+        
     })
 
 

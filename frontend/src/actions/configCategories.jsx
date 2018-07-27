@@ -20,27 +20,26 @@ export default function configCategories(method, path, body) {
             .then(res => res.json())
             .then((data) => {
                 console.log('DATA UPDATED ON SERVER')
-                if(data.categoriesList) {
-                    dispatch([{
-                        type: USER_CATEGS,
-                        userCategories: data.categories,
-                    },
-                    {
-                        type: CATEG_LIST,
-                        categList: data.categoriesList,
-                    },
-                    {   
-                        type: USER_EXPENSE,
-                        userExpenses: data.expenses,
-                    },
-                ]) 
-                } else {
+                if(data.categories) {
                     dispatch({
                         type: USER_CATEGS,
                         userCategories: data.categories,
+                     })
+                }
+
+                if(data.categoriesList) {
+                    dispatch({
+                        type: CATEG_LIST,
+                        categList: data.categoriesList,
                     })
                 }
-                  
+
+                if(data.expenses) {
+                    dispatch({
+                        type: USER_EXPENSE,
+                        userExpenses: data.expenses,
+                    })
+                }        
             })
         
             .catch(e => console.log(e))

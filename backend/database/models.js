@@ -11,7 +11,7 @@ const CategorySchema = new Schema({
     date: Date, // date format will be changed soon
     parent: String,
     isChild: Boolean,
-    children: Boolean,
+    children: Number,
     prev: String,
     next: String
 })
@@ -28,7 +28,7 @@ const ExpensesSchema = new Schema({
 
 const CategoriesListSchema = new Schema({
     name: String,
-    id: String
+    id: String,
 })
 
 
