@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Fragment} from "react";
 import PropTypes from "prop-types";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -10,6 +10,15 @@ import TableCell from "@material-ui/core/TableCell";
 // core components
 import tableStyle from "assets/jss/material-dashboard-react/components/tableStyle";
 import { Object } from "parse";
+
+const additionalCells=(number)=>{
+  let emptyAr = [];
+  emptyAr.length = number;
+
+  return emptyAr.map((el,key)=>{
+     return <TableCell key={3+key+5}/>
+  })
+}
 
 function CustomTable({ ...props }) {
  
@@ -38,26 +47,27 @@ function CustomTable({ ...props }) {
             tableData.map((prop, key) => { // for dashboard
               if(prop.children) {
                 return (
-                  <TableRow key={1+key+prop._id}>
-                    <TableCell className={classes.tableCell} key={prop._id}>
-                        {prop.name}
-                    </TableCell>
-                      <TableCell className={classes.tableCell} key={prop._id+key+1}>
-                        <TableRow>
-                          <TableCell className={classes.tableCell} key={prop._id}>
-                            {prop.value}
-                          </TableCell>
-                        </TableRow>
-                        <TableRow>
+                  <Fragment key={prop.name+prop.value}>
+                    <TableRow key={1+key+prop._id}>
+                    {additionalCells(key)}
+                      <TableCell className={classes.tableCell} key={prop._id+key}>
+                          {prop.name}
+                      </TableCell>
+                      <TableCell className={classes.tableCell} key={key+prop._id}>
+                              {prop.value}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow key={prop._id+prop._id}>
+                      <TableCell key={key+prop._id+key+prop._id}>
                           <CustomTable
                           tableHeaderColor="primary"
                           tableHead={undefined}
                           tableData={prop.children}
                           classes={classes}
                           />
-                        </TableRow>
-                  </TableCell>
-                  </TableRow>
+                      </TableCell>
+                    </TableRow>
+                  </Fragment>
                 )
               }
               return (

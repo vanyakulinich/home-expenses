@@ -158,16 +158,32 @@ function Server(db) {
                     req.user.categories[itemForDelete].isChild = false 
                 }
                 
-            } 
-            // deletion of category
-            req.user.categories.splice(itemForDelete, 1)
-            // this function is in the bottom of code
-            let multiDeletion = recursiveDeletion([...req.user.categories], req.body.id) 
-            // req.user.categories = req.user.categories.filter(el=>{
-            //     return (el.parent !== req.body.id)
-            //     })
-            req.user.categories = [...multiDeletion]
-            
+            } else {
+                 // deletion of category
+                req.user.categories.splice(itemForDelete, 1)
+                req.user.categories = recursiveDeletion([...req.user.categories], req.body.id) 
+                
+                // this function is in the bottom of code
+               
+                // req.user.categories = req.user.categories.filter(el=>{
+                //     return (el.parent !== req.body.id)
+                //     })
+                // req.user.categories = [...multiDeletion]
+            }
+               // recursive deletion of all sub categories of parent category    
+            function recursiveDeletion(arr, startId){
+                for(var i in arr) {
+                        if(arr[i].parent === startId) {
+                            if(arr[i].children) {
+                                recursiveDeletion(arr, arr[i].id)
+                            } else {
+                                arr.splice(i, 1)
+                                // i++
+                            }
+                        }
+                }
+                return arr
+            }
 
             req.user.save(er=>{
                 if(er) console.log(er)
@@ -301,21 +317,6 @@ function Server(db) {
         })
 }
 
-function recursiveDeletion(arr, startId){
-       
-        for(var i in arr) {
-                if(arr[i].parent === startId) {
-                    if(arr[i].children) {
-                        recursiveDeletion(arr, arr[i].id)
-                    } else {
-                        arr.splice(i, 1)
-                        i++
-                    }
-                }
-        }
-
-    return arr
-}
 
 
 module.exports = Server
