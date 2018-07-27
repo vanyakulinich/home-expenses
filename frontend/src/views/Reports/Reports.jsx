@@ -8,7 +8,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
-import Table from "components/Table/Table.jsx";
+import Table from "components/Table/TableReports.jsx";
 import Button from 'components/CustomButtons/Button.jsx';
 import {ChevronLeft, ChevronRight} from "@material-ui/icons";
 
@@ -59,7 +59,7 @@ class Reports extends Component {
             <Card>
             <CardHeader color='info'>
                 <h3>Expenses reports</h3>   
-                <h5>Here is some expenses reports</h5>         
+                <h5>Here below are some expenses reports</h5>         
             </CardHeader>
             <CardBody>
                 <div className={classes.dateNav}>
@@ -84,7 +84,7 @@ class Reports extends Component {
                     tableHeaderColor="primary"
                     tableHead={["Category", "Expenses value, UAH"]}
                     tableData={table}
-                    reports={true}
+                    dashboard={false}
                 />
             </CardBody>
         </Card>

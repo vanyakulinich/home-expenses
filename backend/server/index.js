@@ -301,20 +301,20 @@ function Server(db) {
         })
 }
 
-function recursiveDeletion(ar, startId){
+function recursiveDeletion(arr, startId){
        
         for(var i in arr) {
                 if(arr[i].parent === startId) {
-                    if(ar[i].children) {
-                        recursiveDeletion(ar, ar[i].id)
+                    if(arr[i].children) {
+                        recursiveDeletion(arr, arr[i].id)
                     } else {
-                        ar.splice(i, 1)
+                        arr.splice(i, 1)
                         i++
                     }
                 }
         }
 
-    return ar
+    return arr
 }
 
 
