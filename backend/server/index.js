@@ -43,7 +43,7 @@ function Server(db) {
                 })
                 newUser.save(er=>{
                     if(er) console.log(er)
-                    console.log(`http://localhost:3000/verify&${email}&${Date.now()}&${verifyKey}`)
+                    console.log(`http://localhost:3000/verify/${email}/${Date.now()}/${verifyKey}`)
                     res.send('verify')
                 })
             }
@@ -159,11 +159,13 @@ function Server(db) {
             } 
             // deletion of category
             req.user.categories.splice(itemForDelete, 1)
-            let multiDeletion = recursiveDeletion([...req.user.categories], req.body.id) // this function is in the bottom of code
-            req.user.categories = req.user.categories.filter(el=>{
-                return (el.parent !== req.body.id)
-                })
-            }
+            // this function is in the bottom of code
+            let multiDeletion = recursiveDeletion([...req.user.categories], req.body.id) 
+            // req.user.categories = req.user.categories.filter(el=>{
+            //     return (el.parent !== req.body.id)
+            //     })
+            req.user.categories = [...multiDeletion]
+            
 
             req.user.save(er=>{
                 if(er) console.log(er)
@@ -300,16 +302,14 @@ function Server(db) {
 function recursiveDeletion(ar, startId){
        
         for(var i in arr) {
-            
                 if(arr[i].parent === startId) {
-                    
-                    recurse(arr, arr[i]._id)
-        
-                   
-                    arr.splice(i, 1)
+                    if(ar[i].children) {
+                        recursiveDeletion(ar, ar[i].id)
+                    } else {
+                        ar.splice(i, 1)
+                        i++
+                    }
                 }
-            
-        
         }
 
     return ar
