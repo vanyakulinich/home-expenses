@@ -11,7 +11,7 @@ import {TextField, MenuItem, List, ListItem} from "@material-ui/core";
 import SimpleSelect from '../../components/Select/SimpleSelect.jsx'
 
 // core components
-import Table from "components/Table/Table.jsx";
+import Table from "components/Table/TableDashboard.jsx";
 import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";

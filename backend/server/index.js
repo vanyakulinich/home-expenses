@@ -14,6 +14,8 @@ function Server(db) {
         UserModel.findOne({email, pass}, (er, user)=>{
             if(er) console.log(er)
             if(user) {
+                if(user.verifyKey) res.json({verify:'verify'})
+
                 jwt.sign({ email, pass }, 'secretKey', (er, token) => {
                     user.save((er)=>{
                     if(er) console.log(er)
@@ -43,7 +45,7 @@ function Server(db) {
                 })
                 newUser.save(er=>{
                     if(er) console.log(er)
-                    console.log(`http://localhost:3000/verify&${email}&${Date.now()}&${verifyKey}`)
+                    console.log(`http://localhost:3000/verify/${email}/${Date.now()}/${verifyKey}`)
                     res.send('verify')
                 })
             }
@@ -156,13 +158,31 @@ function Server(db) {
                     req.user.categories[itemForDelete].isChild = false 
                 }
                 
-            } 
-            // deletion of category
-            req.user.categories.splice(itemForDelete, 1)
-            let multiDeletion = recursiveDeletion([...req.user.categories], req.body.id) // this function is in the bottom of code
-            req.user.categories = req.user.categories.filter(el=>{
-                return (el.parent !== req.body.id)
-                })
+            } else {
+                 // deletion of category
+                req.user.categories.splice(itemForDelete, 1)
+                req.user.categories = recursiveDeletion([...req.user.categories], req.body.id) 
+                
+                // this function is in the bottom of code
+               
+                // req.user.categories = req.user.categories.filter(el=>{
+                //     return (el.parent !== req.body.id)
+                //     })
+                // req.user.categories = [...multiDeletion]
+            }
+               // recursive deletion of all sub categories of parent category    
+            function recursiveDeletion(arr, startId){
+                for(var i in arr) {
+                        if(arr[i].parent === startId) {
+                            if(arr[i].children) {
+                                recursiveDeletion(arr, arr[i].id)
+                            } else {
+                                arr.splice(i, 1)
+                                // i++
+                            }
+                        }
+                }
+                return arr
             }
 
             req.user.save(er=>{
@@ -297,23 +317,6 @@ function Server(db) {
         })
 }
 
-function recursiveDeletion(ar, startId){
-       
-        for(var i in arr) {
-            
-                if(arr[i].parent === startId) {
-                    
-                    recurse(arr, arr[i]._id)
-        
-                   
-                    arr.splice(i, 1)
-                }
-            
-        
-        }
-
-    return ar
-}
 
 
 module.exports = Server

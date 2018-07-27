@@ -15,7 +15,7 @@ const appRoutes = [
   {
     path: "/dashboard",
     sidebarName: "Dashboard",
-    navbarName: "Material Dashboard",
+    navbarName: "Dashboard",
     icon: Dashboard,
     component: DashboardPage,
     token: true,
@@ -54,7 +54,7 @@ const appRoutes = [
   },
   { 
     hidden: true,
-    path: "/verify&:email&:trash&:key",
+    path: "/verify/:email/:trash/:key",
     sidebarName: "Verify Email",
     navbarName: "Verify Email",
     icon: Person,

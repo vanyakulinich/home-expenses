@@ -8,7 +8,6 @@ import {Link} from "react-router-dom";
 import {connect} from 'react-redux';
 import signUpUser from '../../actions/signUpUser.jsx'
 
-
 const styles = {
     cardMain: {
         width: '500px'
@@ -26,8 +25,14 @@ const styles = {
 class SignUp extends Component {
 
     userInput = ()=>{
-        let [email, pass, rePass]  = document.querySelectorAll('[type="text"]')
-    
+        let [email, pass, rePass]  = document.querySelectorAll('[type="text"]');
+        let regex = /^[a-zA-z0-9_\.]{1,30}@{1,}[a-z]{3,10}\.{1}[a-z]{2,9}(\.[a-z]{2,3}|)$/gm;
+        let validEmail = regex.test(email.value);
+        if(!validEmail) {
+            email.value = 'Incorrect Email. Try again';
+            return null;
+        }
+       
         if(pass.value === rePass.value) {
             let newUser = {
                 email: email.value,
@@ -35,25 +40,30 @@ class SignUp extends Component {
             }
             this.props.signUpUser(newUser)
             email.value = pass.value = rePass.value = '';
+        } 
+    }
 
-        } else {
-            console.log('wrong input')
+    clearInput=(e)=>{
+        if(!e.target.value) return null
+        if(e.target.value.indexOf('Incorrect Email. Try again')>=0){
+            e.target.value = '';
         }
     }
 
     render(){
         const {classes, user} = this.props;
-        const isUser = (user==='isuser') ? <span>you are registered</span> : null
-        const toVerify = (user === 'notverified') ? <span>check your email for verification</span> : null 
+        const isUser = (user==='isuser') ? 'YOU ARE ALREADY REGISTERED.PLEASE SIGN IN' : null
+        const toVerify = (user === 'notverified') ? 'CHECK YOUR EMAIL FOR VERIFICATION' : null 
+
         return(
-        
+    
         <Card className={classes.cardMain}>
             <CardHeader color="primary">
                 <h3>Register in Home Expense App</h3>
                 <h5>Please enter your email and password</h5>
             </CardHeader>
             <CardBody className={classes.cardBody}>
-                <TextField label='Enter Email'/>
+                <TextField label='Enter Email' onClick={this.clearInput}/>
                 <TextField label='Enter password'/>
                 <TextField label='Repeat password'/>
                 <Button variant='outlined' 

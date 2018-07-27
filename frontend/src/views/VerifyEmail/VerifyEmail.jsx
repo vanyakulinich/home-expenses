@@ -17,34 +17,23 @@ const styles = {
         flexDirection: 'column',
         alignItems: 'flex-start',
         justifyContent: 'space-around',
-        height: '300px'
-
+        height: '300px',
     }
-}
-
+};
 const inputDisabled = {
     disabled: true,
-  }
-
-
+}
 class VerifyEmail extends Component {
 
-    componentDidMount() {
-        console.log(this.props)
-        console.log(this.props.match.params)
-    }
-
-    verifyUser = ()=>{
-
+    verifyUser =()=>{
         let [email, verifyKey] = document.querySelectorAll('[type="text"]');
-            let verifyUser = {
-                email: email.value,
-                verifyKey: verifyKey.value
-            }
-           email.value = verifyKey.value= '';
-    
-    
-        this.props.signUser(verifyUser, 'verify')
+        let verifyUser = {
+            email: email.value,
+            verifyKey: verifyKey.value
+        };
+        
+        email.value = verifyKey.value= '';
+        this.props.signUser(verifyUser, 'verify');
     }
 
     render(){

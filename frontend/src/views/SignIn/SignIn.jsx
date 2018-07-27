@@ -26,6 +26,12 @@ class SignIn extends Component {
    
     signInClick =()=> {
         let [email, pass] = document.querySelectorAll('[type="text"]');
+        let regex = /^[a-zA-z0-9_\.]{1,30}@{1,}[a-z]{3,10}\.{1}[a-z]{2,9}(\.[a-z]{2,3}|)$/gm;
+        let validEmail = regex.test(email.value)
+        if(!validEmail) {
+            email.value = 'Incorrect Email. Try again'
+            return null
+        }
         let signInUser = {
             email: email.value,
             pass: pass.value
@@ -34,10 +40,18 @@ class SignIn extends Component {
        email.value = pass.value= '';
     }
 
+    clearInput=(e)=>{
+        if(!e.target.value) return null
+        if(e.target.value.indexOf('Incorrect Email. Try again')>=0){
+            e.target.value = ''
+        }
+    }
+
     render() {
         const {classes, user} = this.props;
-
-        const tip = (user==='nouser') ? 'Please check your input or sign up' : null
+        const toVerify = (user === 'notverified') ? 
+                        ' YOU HAVE ALREADY REGISTERED. CHECK YOUR EMAIL FOR VERIFICATION' : null
+        const tip = (user==='nouser') ? 'YOU ARE NOT REGISTERED. PEASE SIGN UP' : null
 
         return(
             <Fragment>
@@ -48,14 +62,14 @@ class SignIn extends Component {
                         <h5>Please enter your email and password</h5>
                     </CardHeader>
                     <CardBody className={classes.cardBody}>
-                        <TextField label='Enter Email' className = 'userInputs'/>
-                        <TextField label='Enter password' className = 'userInputs'/>
+                        <TextField label='Enter Email' onClick={this.clearInput}/>
+                        <TextField label='Enter password'/>
                         <Button variant='outlined' 
                                 color='primary'
                                 onClick={this.signInClick}>Sign In</Button>
                         <Link to='/signup'>first-time user? Sign up</Link>
                         <Paper>
-                            {tip}
+                            {tip || toVerify}
                         </Paper>
                     </CardBody>
                 </Card>
