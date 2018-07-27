@@ -9,11 +9,11 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 // core components
 import tableStyle from "assets/jss/material-dashboard-react/components/tableStyle";
+import { Object } from "parse";
 
 function CustomTable({ ...props }) {
  
-  const { classes, tableHead, tableData, tableHeaderColor } = props;
-  console.log(tableData)
+  const { classes, tableHead, tableData, tableHeaderColor, reports} = props;
   return (
     <div className={classes.tableResponsive}>
       <Table className={classes.table}>
@@ -34,24 +34,61 @@ function CustomTable({ ...props }) {
           </TableHead>
         ) : null}
         <TableBody>
-          {tableData.map((prop, key) => {
-            return (
-              <TableRow key={key}>
-                {prop.map((prop, key) => {
-                  return (
-                    <TableCell className={classes.tableCell} key={key}>
-                      {prop}
-                    </TableCell>
-                  );
-                })}
-              </TableRow>
-            );
-          })}
+          { reports ?
+            tableData.map((prop, key) => {
+              if(prop.children) {
+                return (
+                  <TableRow key={key}>
+                    <TableCell className={classes.tableCell} key={1+key*2}>
+                        {prop.name}
+                      </TableCell>
+                      <TableCell className={classes.tableCell} key={1+key*3}>
+                        <CustomTable
+                        tableHeaderColor="primary"
+                        // tableHead={["Category", "Expenses value, UAH"]}
+                        tableData={prop.children}
+                        reports={true}
+                        
+                        />
+                      </TableCell>
+                  </TableRow>
+                )
+              }
+              return (
+                <TableRow key={key}>
+                      <TableCell className={classes.tableCell} key={1+key*2}>
+                        {prop.name}
+                      </TableCell>
+                      <TableCell className={classes.tableCell} key={1+key*3}>
+                        {prop.value}
+                      </TableCell>
+                  
+                </TableRow>
+              );
+            }) : 
+            tableData.map((prop, key) => {
+                return (
+                  <TableRow key={key}>
+                    {prop.map((prop, key) => {
+                      return (
+                        <TableCell className={classes.tableCell} key={key}>
+                          {prop}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                );
+              })
+          
+
+          }
         </TableBody>
       </Table>
     </div>
   );
 }
+// for dashboard
+
 
 CustomTable.defaultProps = {
   tableHeaderColor: "gray"

@@ -1,5 +1,8 @@
 import React, {Component} from "react";
 import {connect} from 'react-redux';
+import 'react-dates/initialize';
+import { DateRangePicker, SingleDatePicker, DayPickerRangeController } from 'react-dates';
+
 import getUserData from '../../actions/getUserData.jsx'
 import withStyles from "@material-ui/core/styles/withStyles";
 import Card from "components/Card/Card.jsx";
@@ -13,18 +16,45 @@ const styles = {
     dateNav: {
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-around'
+        justifyContent: 'space-around',
+    },
+    dateButtons:{
+        width: '50%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+    },
+
+    buttons: {
+        width: '25px'
+    },
+    buttonsPeriods: {
+        width: '80px'
     }
+
 }
 class Reports extends Component {
 
+    state={
+        startDate: null,
+        endDate: null
+    }
+
     componentDidMount() {
-        if(!this.props.data) getUserData()
-      }
+        if(!this.props.categories) this.props.getUserData()
+    }
+
+    defaultDate=()=>{
+        let date = `${new Date()}`.split(' ')
+        return `${date[0]} ${date[1]} ${date[2]} ${date[3]} / ${date[0]} ${date[1]} ${date[2]} ${date[3]}`
+    }
+    
 
     render(){
-        const date = new Date().toLocaleDateString() 
-        const {classes} = this.props
+        let date = new Date()+''
+        const {classes, categories} = this.props
+        const table = categories ? categories : []
+        console.log(table)
         return(
             <Card>
             <CardHeader color='info'>
@@ -33,27 +63,28 @@ class Reports extends Component {
             </CardHeader>
             <CardBody>
                 <div className={classes.dateNav}>
-                    <h5>{date}</h5>
-                    <div>
-                        <Button color='primary'>
+                
+                    <div>{this.defaultDate()}</div>
+                    <div className={classes.dateButtons}>
+                        <Button color='primary' 
+                        className={classes.buttons}>
                             <ChevronLeft/>
                         </Button>
-                        <Button color='primary'>
+                        <Button color='primary' className={classes.buttons}>
                             <ChevronRight/>
                         </Button>
-                        <Button color='primary'>DAY</Button>
-                        <Button color='primary'>WEEK</Button>
-                        <Button color='primary'>MONTH</Button>
-                        <Button color='primary'>PERIOD</Button>
+                        <Button color='primary' className={classes.buttonsPeriods}
+                        >DAY</Button>
+                        <Button color='primary' className={classes.buttonsPeriods}>WEEK</Button>
+                        <Button color='primary' className={classes.buttonsPeriods}>MONTH</Button>
+                        <Button color='primary' className={classes.buttonsPeriods}>PERIOD</Button>
                     </div>
                 </div>
                 <Table
                     tableHeaderColor="primary"
                     tableHead={["Category", "Expenses value, UAH"]}
-                    tableData={[
-                    ['Category1', '220.12'], // categories and values will be put here
-                    ['Category2', '34.30'],
-                    ]}
+                    tableData={table}
+                    reports={true}
                 />
             </CardBody>
         </Card>
@@ -62,7 +93,7 @@ class Reports extends Component {
 }
 
 const mapStateToProps = state=>({
-    data: state.userData
+    categories: state.data.userCategories
 })
 
 const mapActionsToProps = {

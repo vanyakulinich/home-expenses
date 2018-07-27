@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
-import {TextField, Button} from "@material-ui/core";
+import {TextField, Button, Paper} from "@material-ui/core";
 import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
@@ -35,6 +35,7 @@ class SignUp extends Component {
             }
             this.props.signUpUser(newUser)
             email.value = pass.value = rePass.value = '';
+
         } else {
             console.log('wrong input')
         }
@@ -43,12 +44,10 @@ class SignUp extends Component {
     render(){
         const {classes, user} = this.props;
         const isUser = (user==='isuser') ? <span>you are registered</span> : null
-        const toVerify = (user === 'notverified') ? <span>check your email</span> : null 
+        const toVerify = (user === 'notverified') ? <span>check your email for verification</span> : null 
         return(
         
         <Card className={classes.cardMain}>
-            {isUser || toVerify}
-
             <CardHeader color="primary">
                 <h3>Register in Home Expense App</h3>
                 <h5>Please enter your email and password</h5>
@@ -61,6 +60,9 @@ class SignUp extends Component {
                         color='primary'
                         onClick={this.userInput}>Sign Up</Button>
                 <Link to='/signin'>already have an account? Sign in</Link>
+                <Paper>
+                    { isUser || toVerify}
+                </Paper>
             </CardBody>
         </Card>
         )

@@ -1,5 +1,7 @@
 import USER_CATEGS from '../actionTypes/userCategsType.jsx';
 import CATEG_LIST from '../actionTypes/categListType.jsx';
+import USER_EXPENSE from '../actionTypes/expenseActionType.jsx';
+
 
 export default function configCategories(method, path, body) {
     return (dispatch)=>{
@@ -18,14 +20,24 @@ export default function configCategories(method, path, body) {
             .then(res => res.json())
             .then((data) => {
                 console.log('DATA UPDATED ON SERVER')
-                dispatch([{
-                    type: USER_CATEGS,
-                    userCategories: data.categories,
-                },
-                {
-                    type: CATEG_LIST,
-                    categList: data.categoriesList,
-                }])   
+                if(data.categories) {
+                    dispatch([{
+                        type: USER_CATEGS,
+                        userCategories: data.categories,
+                     },
+                     {
+                        type: CATEG_LIST,
+                        categList: data.categories.map(el=>({name: el.name, id: el.id})),
+                     }
+                    ])
+                }
+
+                if(data.expenses) {
+                    dispatch({
+                        type: USER_EXPENSE,
+                        userExpenses: data.expenses,
+                    })
+                }        
             })
         
             .catch(e => console.log(e))

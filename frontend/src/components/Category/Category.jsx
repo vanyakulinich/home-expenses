@@ -1,6 +1,7 @@
 import React, {Fragment, Component} from 'react';
+import withStyles from "@material-ui/core/styles/withStyles";
 import {connect} from 'react-redux';
-import {TextField, ListItem, Divider, Dialog} from "@material-ui/core";
+import {TextField, ListItem, Divider, Dialog, Paper} from "@material-ui/core";
 import Button from 'components/CustomButtons/Button.jsx'
 import {Clear, ArrowUpward, ArrowDownward, Loupe} from "@material-ui/icons";
 import configCategories from '../../actions/configCategories';
@@ -9,25 +10,38 @@ import FormDialog from 'components/FormDialog/FormDialog.jsx';
 import AlertDialog from 'components/AlertDialog/AlertDialog.jsx';
 import SimpleDialogDemo from 'components/SimpleDialog/SimpleDialog.jsx'
 
+
 import configParams from '../../functions/configFetch.jsx'
+
+
+const styles = {
+    configContainer: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center', 
+        width: '100%'
+    }
+}
 
 // reusable category component
 class Category extends Component{
 
     deleteCategory = (name)=>{
-        this.props.configCategories('DELETE', 'category', configParams(this.props.id, name))
+        this.props.configCategories('DELETE', 'category', configParams(this.props.id))
     }
         
 
-    moveCategoryUp = ()=>{
-      
-        let config = configParams(this.props.id, this.props.categoryName, null, true)
-        console.log(config)
+    moveCategoryUp = (e)=>{
+        console.log(this.props)
+      if(this.props.position == 0) return null
+        let config = configParams(this.props.id, null, null, true)
         this.props.configCategories('PUT', 'move', config)
     }
 
     moveCategoryDown = ()=>{
-        let config = configParams(this.props.id, this.props.categoryName, null, false)
+        console.log(this.props)
+        if (this.props.position == this.props.parentLength) return null
+        let config = configParams(this.props.id, null, null, false)
         this.props.configCategories('PUT', 'move', config)
     }
 
@@ -35,10 +49,11 @@ class Category extends Component{
         this.props.configCategories('PUT', 'category', configParams(this.props.id, name))
     }
     render(){
-        const {categoryName, children, child, userData} = this.props;
+        const {categoryName, children, child, userData, classes} = this.props;
         const buttonColor = (!children && child) ?  'primary'  : 'info'
         return(
-            <Fragment>
+            <Paper className={classes.configContainer}>
+            
                 <FormDialog 
                     name = {categoryName}
                     save = {this.renameCategory}
@@ -52,19 +67,20 @@ class Category extends Component{
                  </Button>
                  <AlertDialog 
                     delete = {this.deleteCategory}
-                    name = {categoryName} />
-                    
-                    {(children && child) ? 
-                        null : 
-                        <SimpleDialogDemo 
-                            list = {userData.filter(item=>(item.name!==categoryName) && 
-                                                            (item.parent == null) &&
-                                                            (!item.children))}
-                            parentitem = {userData.find(item=>item.name==categoryName)}
-                            color={buttonColor}
-                            id={this.props.id}/>}
+                    name = {categoryName}
+                    isChild={child} 
+                 />
+                <SimpleDialogDemo 
+                    list = {userData.filter(item=>(item.name!==categoryName) && 
+                                                    (item.parent == null) &&
+                                                    (!item.children))}
+                    parentitem = {userData.find(item=>item.name==categoryName)}
+                    color={buttonColor}
+                    id={this.props.id}
+                />
                 </div>
-         </Fragment>
+         
+         </Paper>
         )
     }
 }
@@ -77,4 +93,4 @@ const mapActionsToProps = ({
 })
 
 
-export default connect(mapStateToProps, mapActionsToProps)(Category);
+export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(Category));

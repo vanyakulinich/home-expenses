@@ -28,6 +28,7 @@ class AlertDialog extends Component {
   };
 
   render() {
+    const {isChild} = this.props
     return (
       <Fragment>
         <Button color="warning"
@@ -42,7 +43,8 @@ class AlertDialog extends Component {
         >
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              You want to delete a category. Are You Sure?
+            {isChild ? 'This category will be put to upper level. Are you sure?' :
+              'This category will be deleted. Are You Sure?' }
             </DialogContentText>
           </DialogContent>
           <DialogActions>

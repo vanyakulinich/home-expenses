@@ -47,10 +47,10 @@ class SimpleDialog extends Component {
   };
 
   render() {
-    const { classes, onClose, selectedValue, ...other } = this.props;
+    const { classes, onClose, selectedValue, conf, open, ...other } = this.props;
     const {list} = this.props
     return (
-      <Dialog onClose={this.handleClose} aria-labelledby="simple-dialog-title" {...other}>
+      <Dialog onClose={this.handleClose} aria-labelledby="simple-dialog-title" open={open}>
         <DialogTitle id="simple-dialog-title">Chose a category for subcategory</DialogTitle>
         <div>
           <List>
