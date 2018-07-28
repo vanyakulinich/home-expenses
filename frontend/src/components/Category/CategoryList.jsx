@@ -38,13 +38,12 @@ class CategoryList extends Component {
         return (<List className = {classes.configList}>
                 {data.map((item, key)=>{
                     if(item.children) { 
+                       
                         return  <ListItem className = {classes.configList} key={key+item._id}>
-                                  <Fragment>
-                                    
+                                  <Fragment> 
                                     <List key={+item._id+item._id} 
                                     className = {classes.configList}>
                                         <ListItem className = {classes.configList} key={key+item._id+key}>
-                                            {/* <Label className={classes.iconStyle}/> */}
                                             <Category 
                                             categoryName={item.name}
                                             parent={null}

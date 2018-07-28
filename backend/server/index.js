@@ -159,53 +159,11 @@ function Server(db) {
                 }
                 
             } else {
-
+                //deletion of main categories
+                //list of categories without deleted one with all her children comes from front
                 req.user.categories = req.body.name
-                 // deletion of category
-                //  req.user.categories.splice(itemForDelete, 1)
-                //  console.log(req.user.categories)
-                //  req.user.categories = recursiveDeletion(req.user.categories, req.body.id) 
-                
-                
-                // this function is in the bottom of code
-               
-                // req.user.categories = req.user.categories.filter(el=>{
-                //     return (el.parent !== req.body.id)
-                //     })
-                // req.user.categories = [...multiDeletion]
             }
-               // recursive deletion of all sub categories of parent category    
-            function recursiveDeletion(arr, startId){
-
-                for( let i in arr) {
-                    if(arr[i].isChild && arr[i].parent==startId){
-                        if(arr[i].isChild & arr[i].children > 0) {
-                            arr = recursiveDeletion(arr, arr[i]._id)
-                        } else {
-                            arr.splice(i, 1);
-                            --i;
-
-                        }
-                    }
-                }
-                return arr
-
-
-                // for(var i in arr) {
-                //         if(arr[i].parent == startId) {
-                //             if(arr[i].children>0) {
-                //                 console.log('ok')
-                //                 arr = recursiveDeletion(arr, arr[i]._id)
-                //             } else {
-                //                 console.log('del')
-                //                 arr.splice(i, 1);
-                //                 i--;
-                //             }
-                //         }
-                // }
-                // return arr
-            }
-
+        
             req.user.save(er=>{
                 if(er) console.log(er)
                 res.json({  
