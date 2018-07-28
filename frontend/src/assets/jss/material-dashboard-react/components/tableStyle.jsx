@@ -54,7 +54,11 @@ const tableStyle = theme => ({
     width: "100%",
     marginTop: theme.spacing.unit * 3,
     overflowX: "auto"
-  }
+  },
+  deleted: {
+    backgroundColor: '#ffb8b8'
+    }
+  
 });
 
 export default tableStyle;

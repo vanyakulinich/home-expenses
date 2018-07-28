@@ -157,20 +157,36 @@ function Server(db) {
                     req.user.categories[itemForDelete].parent = null
                     req.user.categories[itemForDelete].isChild = false 
                 }
+
+                req.user.save(er=>{
+                    if(er) console.log(er)
+                    res.json({  
+                        categories: req.user.categories, 
+                    })
+                })
                 
             } else {
                 //deletion of main categories
                 //list of categories without deleted one with all her children comes from front
-                req.user.categories = req.body.name
-            }
-        
-            req.user.save(er=>{
-                if(er) console.log(er)
-                res.json({  
-                    categories: req.user.categories, 
+                // and all expenses of deleted category are marked as deleted
+                console.log(req.user.expenses)
+                req.user.expenses.forEach(el=>{
+                    if(el.catId == req.user.categories[itemForDelete]._id) {
+                        console.log(el)
+                        el.category +=' (deleted)'
+                        console.log(el)
+                    }
                 })
-            })
-            
+                req.user.categories = req.body.name
+
+                req.user.save(er=>{
+                    if(er) console.log(er)
+                    res.json({  
+                        categories: req.user.categories, 
+                        expenses: req.user.expenses 
+                    })
+                }) 
+            }    
         })
     
     // add subcategory
@@ -201,10 +217,6 @@ function Server(db) {
             }
             expenses(req.user.categories[parentItem].parent)
         }
-
-                
-
-
         req.user.save(er=>{
             if(er) console.log(er)
         })
@@ -274,7 +286,8 @@ function Server(db) {
             description: req.body.description,
             value: req.body.value,
             date : `${date[0]} ${date[1]} ${date[2]} ${date[3]}`,
-            creationDate: Date.now() 
+            creationDate: Date.now(),
+            catId: req.user.categories[index]._id 
         })
 
         req.user.categories[index].value += req.body.value;

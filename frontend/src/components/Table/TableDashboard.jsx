@@ -36,8 +36,9 @@ function CustomTable({ ...props }) {
         <TableBody>
           { 
             tableData.map((prop, key) => { 
+              let deletedMark = prop[1].indexOf('deleted')>0 ? classes.deleted : null
               return (
-                <TableRow key={key}>
+                <TableRow key={key} className={deletedMark}>
                       {
                         prop.map((el, i)=>{
                           return <TableCell className={classes.tableCell} key={key+el+el}>
