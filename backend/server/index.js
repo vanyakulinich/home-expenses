@@ -185,6 +185,37 @@ function Server(db) {
 
             req.user.categories[parentItem].children +=1;
 
+
+
+                    // function expenses(arr, parentId) {
+                    //     let parentIndex = _.findIndex(req.user.categories, el=>el._id==parentId)
+                    //     req.user.categories[parentIndex].value += req.body.value
+                    //     if(req.user.categories[parentIndex].parent) {
+                    //         expenses(arr, req.user.categories[parentIndex].parent)
+                    //     } else {
+                    //         return
+                    //     }
+                    // }
+                    // expenses(req.user.categories, req.user.categories[index].parent)
+
+            
+            // function deleteExpense(arr, parentId, value){
+            //     req.user.categories[parentId].value -=value
+
+            //     if(req.user.categories[parentIndex].isChild) {
+            //         let upperParentIndex = _find(req.user.categories, el=>{
+            //             return el._id == req.user.categories[parentId].parent
+            //         })
+            //         deleteExpense(arr, arr[upperParentIndex]._id)
+            //     } else {
+            //         return
+            //     }
+            // }
+
+            // deleteExpense(req.user.categories, parentIndex, req.user.categories[itemForDelete].value)
+
+            req.user.categories[parentItem].value+=req.user.categories[itemForSub].value
+
         req.user.save(er=>{
             if(er) console.log(er)
         })
@@ -243,7 +274,7 @@ function Server(db) {
 //-----------------------------------
     // user puts expenses on dashboard page
     server.put('/userdata/expenses', passport.authenticate('jwt', {session: false}), (req, res)=>{
-       console.log(req.body)
+    //    console.log(req.body)
 
         let index = _.findIndex(req.user.categories, el=>el._id==req.body.id)
 
@@ -251,7 +282,7 @@ function Server(db) {
 
         let newExpense = new ExpensesModel({
             category: req.user.categories[index].name,
-            description: req.body. description,
+            description: req.body.description,
             value: req.body.value,
             date : `${date[0]} ${date[1]} ${date[2]} ${date[3]}`,
             creationDate: Date.now() 
@@ -260,11 +291,22 @@ function Server(db) {
         req.user.categories[index].value = req.body.value;
 
         if(req.user.categories[index].parent) { // if category has parent
-            let parentIndex = _.findIndex(req.user.categories, el=>el._id==req.user.categories[index].parent)
-            req.user.categories[parentIndex].value += req.body.value
+
+            function expenses(parentId) {
+                let parentIndex = _.findIndex(req.user.categories, el=>el._id==parentId)
+                req.user.categories[parentIndex].value += req.body.value
+                if(req.user.categories[parentIndex].parent) {
+                    expenses(req.user.categories[parentIndex].parent)
+                } else {
+                    return
+                }
+            }
+            expenses(req.user.categories[index].parent)
         }
 
-        req.user.descriptionBase.push(req.body.description)
+
+        let repeatedDescription = req.user.descriptionBase.some(el=>el===req.body.description)
+        if(!repeatedDescription) req.user.descriptionBase.push(req.body.description)
 
         req.user.expenses.push(newExpense)
 
@@ -274,7 +316,6 @@ function Server(db) {
             res.json({
                 categories: req.user.categories, 
                 expenses,
-
             })
         })
        

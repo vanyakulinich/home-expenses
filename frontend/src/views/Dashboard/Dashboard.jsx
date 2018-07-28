@@ -42,6 +42,9 @@ class Dashboard extends Component {
 
   addExpense=()=>{
    let inputs = document.querySelectorAll('input')
+  if(!inputs[0].value || !inputs[2].value) return null
+
+
    let value = +inputs[2].value
    let body = {
      id: inputs[0].value,

@@ -44,41 +44,44 @@ function CustomTable({ ...props }) {
         ) : null}
         <TableBody>
           { 
-            tableData.map((prop, key) => { // for dashboard
+            tableData.map((prop, key) => {
               if(prop.children) {
                 return (
-                  <Fragment key={prop.name+prop.value}>
+                  // <div key={prop.name+prop.value}>
                     <TableRow key={1+key+prop._id}>
-                    {additionalCells(key)}
                       <TableCell className={classes.tableCell} key={prop._id+key}>
                           {prop.name}
                       </TableCell>
                       <TableCell className={classes.tableCell} key={key+prop._id}>
-                              {prop.value}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow key={prop._id+prop._id}>
-                      <TableCell key={key+prop._id+key+prop._id}>
+                            {prop.value}
                           <CustomTable
-                          tableHeaderColor="primary"
-                          tableHead={undefined}
-                          tableData={prop.children}
-                          classes={classes}
+                            tableHeaderColor="primary"
+                            tableHead={undefined}
+                            tableData={prop.children}
+                            classes={classes}
                           />
+
+
+
                       </TableCell>
                     </TableRow>
-                  </Fragment>
+                    // <TableRow key={prop._id+prop._id}>
+                    //   <TableCell key={key+prop._id+key+prop._id}>
+                         
+                    //   </TableCell>
+                    // </TableRow>
+                  // </div>
                 )
               }
-              return (
-                <TableRow key={1+key+prop._id}>
-                      <TableCell className={classes.tableCell} key={prop._id}>
-                        {prop.name}
-                      </TableCell>
-                      <TableCell className={classes.tableCell} key={prop._id+key+1}>
-                        {prop.value}
-                      </TableCell>
-                </TableRow>
+              return ( prop.value ? 
+                        <TableRow key={1+key+prop._id}>
+                              <TableCell className={classes.tableCell} key={prop._id}>
+                                {prop.name}
+                              </TableCell>
+                              <TableCell className={classes.tableCell} key={prop._id+key+1}>
+                                {prop.value}
+                              </TableCell>
+                        </TableRow> : null
               );
             })
             
