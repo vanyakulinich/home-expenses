@@ -27,6 +27,13 @@ const styles = {
 class Category extends Component{
 
     deleteCategory = (name)=>{
+
+        if(!this.props.child) {
+            let newList = [...this.props.userData].filter(el=>el._id!== this.props.id)
+            console.log(newList)
+            this.props.configCategories('DELETE', 'category', configParams(this.props.id, newList))
+        }
+
         this.props.configCategories('DELETE', 'category', configParams(this.props.id))
     }
         

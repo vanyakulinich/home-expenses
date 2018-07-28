@@ -139,7 +139,7 @@ function Server(db) {
                 return item._id == req.body.id
             })
 
-             //synchonizing with parent category 
+             //synchonizing with parent category when subcategory goes to upper level
               if(req.user.categories[itemForDelete].isChild) { 
                 let parentIndex = _.findIndex(req.user.categories, el=>{
                     return el._id == req.user.categories[itemForDelete].parent
@@ -159,9 +159,13 @@ function Server(db) {
                 }
                 
             } else {
+
+                req.user.categories = req.body.name
                  // deletion of category
-                req.user.categories.splice(itemForDelete, 1)
-                req.user.categories = recursiveDeletion([...req.user.categories], req.body.id) 
+                //  req.user.categories.splice(itemForDelete, 1)
+                //  console.log(req.user.categories)
+                //  req.user.categories = recursiveDeletion(req.user.categories, req.body.id) 
+                
                 
                 // this function is in the bottom of code
                
@@ -172,17 +176,34 @@ function Server(db) {
             }
                // recursive deletion of all sub categories of parent category    
             function recursiveDeletion(arr, startId){
-                for(var i in arr) {
-                        if(arr[i].parent === startId) {
-                            if(arr[i].children) {
-                                recursiveDeletion(arr, arr[i].id)
-                            } else {
-                                arr.splice(i, 1)
-                                // i++
-                            }
+
+                for( let i in arr) {
+                    if(arr[i].isChild && arr[i].parent==startId){
+                        if(arr[i].isChild & arr[i].children > 0) {
+                            arr = recursiveDeletion(arr, arr[i]._id)
+                        } else {
+                            arr.splice(i, 1);
+                            --i;
+
                         }
+                    }
                 }
                 return arr
+
+
+                // for(var i in arr) {
+                //         if(arr[i].parent == startId) {
+                //             if(arr[i].children>0) {
+                //                 console.log('ok')
+                //                 arr = recursiveDeletion(arr, arr[i]._id)
+                //             } else {
+                //                 console.log('del')
+                //                 arr.splice(i, 1);
+                //                 i--;
+                //             }
+                //         }
+                // }
+                // return arr
             }
 
             req.user.save(er=>{
