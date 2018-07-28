@@ -1,10 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
@@ -25,18 +23,12 @@ const styles = theme => ({
 class SimpleSelect extends React.Component {
   state = {
     age: '',
-    name: 'hai',
-    id: ''
-
+    name: '',
   };
 
-  handleChange = event => {
 
-    this.setState({ 
-      [event.target.name]: event.target.value,
-      [event.target.id]: event.target.id  
-    });
-    console.log(this)
+  handleChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
   };
 
   render() {
@@ -48,11 +40,10 @@ class SimpleSelect extends React.Component {
                                  key={key}>{item.name}</MenuItem>
     }) : null
 
-
     return (
       <form className={classes.root} autoComplete="off">
         <FormControl className={classes.formControl}>
-          <InputLabel htmlFor="age-simple"> {items ? items[0].name : null}</InputLabel>
+          <InputLabel htmlFor="age-simple">Select Category</InputLabel>
           <Select
             value={this.state.age}
             onChange={this.handleChange}
