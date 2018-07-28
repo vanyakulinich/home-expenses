@@ -8,7 +8,7 @@ import getUserData from '../../actions/getUserData.jsx';
 import withStyles from "@material-ui/core/styles/withStyles";
 
 import {TextField, MenuItem, List, ListItem} from "@material-ui/core";
-import SimpleSelect from '../../components/Select/SimpleSelect.jsx'
+import MultipleSelect from '../../components/Select/SimpleSelect.jsx'
 
 // core components
 import Table from "components/Table/TableDashboard.jsx";
@@ -86,7 +86,7 @@ class Dashboard extends Component {
             <h5>Please enter new expenses here</h5>         
           </CardHeader>
           <CardBody className = {classes.expensesPerformanse}>
-            <SimpleSelect categList= {categList}/>
+            <MultipleSelect categList= {categList}/>
             <IntegrationAutosuggest/>
             <TextField label='Value'
               InputProps={{defaultValue: 'UAH'}}

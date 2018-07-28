@@ -4,9 +4,11 @@ import { withStyles } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
+import ListItemText from '@material-ui/core/ListItemText';
 import Select from '@material-ui/core/Select';
+import Checkbox from '@material-ui/core/Checkbox';
+import Chip from '@material-ui/core/Chip';
 
 const styles = theme => ({
   root: {
@@ -15,54 +17,79 @@ const styles = theme => ({
   },
   formControl: {
     margin: 0,
-    minWidth: 150,
+    minWidth: 120,
+    maxWidth: 300,
   },
-  selectEmpty: {
-    marginTop: theme.spacing.unit * 2,
+  chips: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  chip: {
+    margin: theme.spacing.unit / 4,
   },
 });
 
-class SimpleSelect extends React.Component {
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+
+class MultipleSelect extends React.Component {
   state = {
-    age: 'hai',
-    name: 'hai',
+    name: [],
   };
 
   handleChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
+    this.setState({ name: event.target.value });
   };
 
   render() {
-    const { classes, categList } = this.props;
-    const items = categList && categList.length>0 ? 
-                  categList.map((item, key)=>{
-                        return <MenuItem 
-                                 value={item.id} 
-                                 key={key}>{item.name}</MenuItem>
-    }) : null
-
+    const { classes, theme, categList } = this.props;
+    const items = categList ? categList : []
     return (
-      <form className={classes.root} autoComplete="off">
+      <div className={classes.root}>
         <FormControl className={classes.formControl}>
-          <InputLabel htmlFor="age-simple">Category</InputLabel>
+          <InputLabel htmlFor="select-multiple">Category</InputLabel>
           <Select
-            value={this.state.age}
+            multiple
+            value={this.state.name}
             onChange={this.handleChange}
-            inputProps={{
-              name: 'age',
-              id: 'age-simple',
-            }}
+            input={<Input id="select-multiple" />}
+            MenuProps={MenuProps}
           >
-             {items}
+            {items.map(name => (
+              <MenuItem
+                key={name.id}
+                value={name.name}
+                style={{
+                  fontWeight:
+                    this.state.name.indexOf(name.name) === -1
+                      ? theme.typography.fontWeightRegular
+                      : theme.typography.fontWeightMedium,
+                }}
+              >
+                {name.name}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
-      </form>
+      </div>
     );
   }
 }
 
-// SimpleSelect.propTypes = {
-//   classes: PropTypes.object.isRequired,
-// };
+MultipleSelect.propTypes = {
+  classes: PropTypes.object.isRequired,
+  theme: PropTypes.object.isRequired,
+};
 
-export default withStyles(styles)(SimpleSelect);
+export default withStyles(styles, { withTheme: true })(MultipleSelect);
+
+
