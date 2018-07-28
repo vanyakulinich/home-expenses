@@ -310,11 +310,11 @@ function Server(db) {
         let repeatedDescription = req.user.descriptionBase.some(el=>el===req.body.description)
         if(!repeatedDescription) req.user.descriptionBase.push(req.body.description)
 
-        req.user.expenses.push(newExpense)
+        req.user.expenses.unshift(newExpense)
 
         req.user.save(er=>{
             if(er) console.log(er)
-            let expenses = req.user.expenses ? [...req.user.expenses].reverse().slice(0, 20) : []
+            let expenses = req.user.expenses ? req.user.expenses.slice(0, 20) : []
             res.json({
                 categories: req.user.categories, 
                 expenses,
