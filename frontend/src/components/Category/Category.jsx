@@ -27,7 +27,6 @@ class Category extends Component{
     deleteCategory = ()=>{
         if(!this.props.child) {
             let newList = [...this.props.userData].filter(el=>el._id!== this.props.id)
-            console.log(newList)
             this.props.configCategories('DELETE', 'category', configParams(this.props.id, newList))
         } else {
             this.props.configCategories('DELETE', 'category', configParams(this.props.id))
@@ -54,6 +53,7 @@ class Category extends Component{
     render(){
         const {categoryName, child, userData, classes} = this.props;
         const buttonColor = child ? 'primary' : 'info'
+        console.log(this.props.userData)
         return(
             <Paper className={classes.configContainer}>
                 <FormDialog 

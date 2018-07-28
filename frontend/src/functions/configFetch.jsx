@@ -1,5 +1,5 @@
 const configParams=(id, name, parent, direction)=>({
-    id,
+    id: id || null,
     name: name,
     parent: parent || null,
     direction

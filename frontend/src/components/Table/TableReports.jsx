@@ -46,31 +46,21 @@ function CustomTable({ ...props }) {
           { 
             tableData.map((prop, key) => {
               if(prop.children) {
-                return (
-                  // <div key={prop.name+prop.value}>
-                    <TableRow key={1+key+prop._id}>
-                      <TableCell className={classes.tableCell} key={prop._id+key}>
-                          {prop.name}
-                      </TableCell>
-                      <TableCell className={classes.tableCell} key={key+prop._id}>
-                            {prop.value}
-                          <CustomTable
-                            tableHeaderColor="primary"
-                            tableHead={undefined}
-                            tableData={prop.children}
-                            classes={classes}
-                          />
-
-
-
-                      </TableCell>
-                    </TableRow>
-                    // <TableRow key={prop._id+prop._id}>
-                    //   <TableCell key={key+prop._id+key+prop._id}>
-                         
-                    //   </TableCell>
-                    // </TableRow>
-                  // </div>
+                return ( prop.value ?
+                          <TableRow key={1+key+prop._id}>
+                            <TableCell className={classes.tableCell} key={prop._id+key}>
+                                {prop.name}
+                            </TableCell>
+                            <TableCell className={classes.tableCell} key={key+prop._id}>
+                                  {prop.value}
+                                <CustomTable
+                                  tableHeaderColor="primary"
+                                  tableHead={undefined}
+                                  tableData={prop.children}
+                                  classes={classes}
+                                />
+                            </TableCell>
+                          </TableRow> : null
                 )
               }
               return ( prop.value ? 

@@ -64,12 +64,13 @@ class Config extends Component {
 }
 
 const mapStateToProps = state=>({
-    userData: state.data.userCategories
+    userData: state.data.userCategories,
+    categList: state.data.categList
 })
 
 const mapActionsToProps = {
     getUserData,
-    configCategories
+    configCategories, 
   }
 
 export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(Config));

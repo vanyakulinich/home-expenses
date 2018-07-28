@@ -185,36 +185,25 @@ function Server(db) {
 
             req.user.categories[parentItem].children +=1;
 
-
-
-                    // function expenses(arr, parentId) {
-                    //     let parentIndex = _.findIndex(req.user.categories, el=>el._id==parentId)
-                    //     req.user.categories[parentIndex].value += req.body.value
-                    //     if(req.user.categories[parentIndex].parent) {
-                    //         expenses(arr, req.user.categories[parentIndex].parent)
-                    //     } else {
-                    //         return
-                    //     }
-                    // }
-                    // expenses(req.user.categories, req.user.categories[index].parent)
-
-            
-            // function deleteExpense(arr, parentId, value){
-            //     req.user.categories[parentId].value -=value
-
-            //     if(req.user.categories[parentIndex].isChild) {
-            //         let upperParentIndex = _find(req.user.categories, el=>{
-            //             return el._id == req.user.categories[parentId].parent
-            //         })
-            //         deleteExpense(arr, arr[upperParentIndex]._id)
-            //     } else {
-            //         return
-            //     }
-            // }
-
-            // deleteExpense(req.user.categories, parentIndex, req.user.categories[itemForDelete].value)
-
             req.user.categories[parentItem].value+=req.user.categories[itemForSub].value
+
+
+           if(req.user.categories[parentItem].parent) { // if category has parent
+            let value = req.user.categories[itemForSub].value
+            function expenses(parentId) { // synchronize expenses with all parents in chain
+                let parentIndex = _.findIndex(req.user.categories, el=>el._id==parentId)
+                req.user.categories[parentIndex].value += value
+                if(req.user.categories[parentIndex].parent) {
+                    expenses(req.user.categories[parentIndex].parent)
+                } else {
+                    return
+                }
+            }
+            expenses(req.user.categories[parentItem].parent)
+        }
+
+                
+
 
         req.user.save(er=>{
             if(er) console.log(er)
@@ -226,7 +215,7 @@ function Server(db) {
 
     // moving categories and subcategories
     server.put('/userdata/config/move', passport.authenticate('jwt', {session: false}), (req, res)=>{
-        console.log(req.body)
+        // console.log(req.body)
         let itemToMove = _.findIndex(req.user.categories, item=>item._id == req.body.id)
         let itemToChangePlace;
         console.log(itemToMove)
@@ -276,7 +265,7 @@ function Server(db) {
     server.put('/userdata/expenses', passport.authenticate('jwt', {session: false}), (req, res)=>{
     //    console.log(req.body)
 
-        let index = _.findIndex(req.user.categories, el=>el._id==req.body.id)
+        let index = _.findIndex(req.user.categories, el=>el.name==req.body.id)
 
         let date = `${new Date()}`.split(' ')
 
@@ -288,11 +277,11 @@ function Server(db) {
             creationDate: Date.now() 
         })
 
-        req.user.categories[index].value = req.body.value;
+        req.user.categories[index].value += req.body.value;
 
         if(req.user.categories[index].parent) { // if category has parent
 
-            function expenses(parentId) {
+            function expenses(parentId) { // synchronize expenses with all parents in chain
                 let parentIndex = _.findIndex(req.user.categories, el=>el._id==parentId)
                 req.user.categories[parentIndex].value += req.body.value
                 if(req.user.categories[parentIndex].parent) {

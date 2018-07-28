@@ -40,7 +40,7 @@ function CustomTable({ ...props }) {
                 <TableRow key={key}>
                       {
                         prop.map((el, i)=>{
-                          return <TableCell className={classes.tableCell} key={key+el+prop._id}>
+                          return <TableCell className={classes.tableCell} key={key+el+el}>
                                     {el}
                                 </TableCell>
                         })

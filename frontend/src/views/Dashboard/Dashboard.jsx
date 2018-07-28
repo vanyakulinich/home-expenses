@@ -8,7 +8,7 @@ import getUserData from '../../actions/getUserData.jsx';
 import withStyles from "@material-ui/core/styles/withStyles";
 
 import {TextField, MenuItem, List, ListItem} from "@material-ui/core";
-import MultipleSelect from '../../components/Select/SimpleSelect.jsx'
+import SimpleSelect from '../../components/Select/SimpleSelect.jsx'
 
 // core components
 import Table from "components/Table/TableDashboard.jsx";
@@ -24,7 +24,7 @@ import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardS
 
 class Dashboard extends Component {
   state = {
-    value: 0
+    value: 0,
   };
 
   componentDidMount() {
@@ -42,14 +42,11 @@ class Dashboard extends Component {
 
   addExpense=()=>{
    let inputs = document.querySelectorAll('input')
-  if(!inputs[0].value || !inputs[2].value) return null
-
-
-   let value = +inputs[2].value
+   console.log(inputs[0])
    let body = {
-     id: inputs[0].value,
+     id: inputs[0].previousElementSibling.innerHTML,
      description: inputs[1].value,
-     value: +value.toFixed(2)
+     value: +inputs[2].value
    }
     this.props.addNewExpense('PUT', body)
     inputs[1].value = ''
@@ -76,7 +73,7 @@ class Dashboard extends Component {
  
 
   render() {
-    const { classes, expenses, categList} = this.props;
+    const { classes, expenses} = this.props;
     const table = this.expensesList(expenses)
     return (
       <div>
@@ -86,7 +83,7 @@ class Dashboard extends Component {
             <h5>Please enter new expenses here</h5>         
           </CardHeader>
           <CardBody className = {classes.expensesPerformanse}>
-            <MultipleSelect categList= {categList}/>
+            <SimpleSelect/>
             <IntegrationAutosuggest/>
             <TextField label='Value'
               InputProps={{defaultValue: 'UAH'}}
@@ -119,7 +116,6 @@ Dashboard.propTypes = {
 
 const mapStateToProps = state=>({
   expenses: state.data.userExpenses,
-  categList: state.data.categList,
 })
 
 const mapActionsToProps = {
