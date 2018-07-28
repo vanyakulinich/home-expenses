@@ -56,8 +56,9 @@ class Category extends Component{
         this.props.configCategories('PUT', 'category', configParams(this.props.id, name))
     }
     render(){
-        const {categoryName, children, child, userData, classes} = this.props;
-        const buttonColor = (!children && child) ?  'primary'  : 'info'
+        const {categoryName, children, child, userData, classes, buttonColor} = this.props;
+        const FlagForDisplayingEditingButton = userData.some(el=>(!el.isChild))
+
         return(
             <Paper className={classes.configContainer}>
             
@@ -77,14 +78,18 @@ class Category extends Component{
                     name = {categoryName}
                     isChild={child} 
                  />
-                <SimpleDialogDemo 
-                    list = {userData.filter(item=>(item.name!==categoryName) && 
-                                                    (item.parent == null) &&
-                                                    (!item.children))}
-                    parentitem = {userData.find(item=>item.name==categoryName)}
-                    color={buttonColor}
-                    id={this.props.id}
-                />
+                {FlagForDisplayingEditingButton ?
+                    <SimpleDialogDemo 
+                        list = {userData.filter(item=>(item.name!==categoryName) && 
+                                                        (item.parent == null) &&
+                                                        (!item.children))}
+                        parentitem = {userData.find(item=>item.name==categoryName)}
+                        color={buttonColor}
+                        id={this.props.id}
+                    /> : null
+
+                }
+                
                 </div>
          
          </Paper>
