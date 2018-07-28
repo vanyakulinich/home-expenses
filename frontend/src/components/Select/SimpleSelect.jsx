@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import {connect} from 'react-redux';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -15,7 +16,7 @@ const styles = theme => ({
   },
   formControl: {
     margin: 0,
-    minWidth: 150,
+    minWidth: 120,
   },
   selectEmpty: {
     marginTop: theme.spacing.unit * 2,
@@ -26,52 +27,54 @@ class SimpleSelect extends React.Component {
   state = {
     age: '',
     name: 'hai',
-    id: ''
-
   };
 
   handleChange = event => {
-
+    console.log(event.target.value)
     this.setState({ 
       [event.target.name]: event.target.value,
-      [event.target.id]: event.target.id  
     });
-    console.log(this)
   };
 
-  render() {
-    const { classes, categList } = this.props;
-    const items = categList ? 
-                  categList.map((item, key)=>{
-                        return <MenuItem 
-                                 value={item.id} 
-                                 key={key}>{item.name}</MenuItem>
-    }) : null
+  addId=(event)=>{
+    this.setState({
+      catid: event.target.catid
+    })
+  }
 
+  render() {
+    const { classes, categList} = this.props;
 
     return (
       <form className={classes.root} autoComplete="off">
-        <FormControl className={classes.formControl}>
-          <InputLabel htmlFor="age-simple"> SelectCategory</InputLabel>
+       <FormControl className={classes.formControl}>
+          <InputLabel htmlFor="age-simple">Category</InputLabel>
           <Select
             value={this.state.age}
+            catid ={this.state.catid}
             onChange={this.handleChange}
             inputProps={{
               name: 'age',
               id: 'age-simple',
             }}
-          >
-            {items}
+          > { categList ?
+              categList.map((el, key)=>{
+                return <MenuItem value={key} key={key}>{el.name}</MenuItem>
+              }) : null
+          }
           </Select>
         </FormControl>
-       
       </form>
     );
   }
 }
 
+const mapStateToProps = state=>({
+  categList: state.data.categList,
+})
+
 SimpleSelect.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(SimpleSelect);
+export default connect(mapStateToProps)(withStyles(styles)(SimpleSelect));

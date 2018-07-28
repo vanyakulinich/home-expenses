@@ -7,6 +7,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
+import {Divider} from "@material-ui/core";
 // core components
 import tableStyle from "assets/jss/material-dashboard-react/components/tableStyle";
 import { Object } from "parse";
@@ -22,7 +23,7 @@ const additionalCells=(number)=>{
 
 function CustomTable({ ...props }) {
  
-  const { classes, tableHead, tableData, tableHeaderColor} = props;
+  const { classes, tableHead, tableData, tableHeaderColor, inside} = props;
   return (
     <div className={classes.tableResponsive}>
       <Table className={classes.table}>
@@ -44,41 +45,40 @@ function CustomTable({ ...props }) {
         ) : null}
         <TableBody>
           { 
-            tableData.map((prop, key) => { // for dashboard
+            tableData.map((prop, key) => {
               if(prop.children) {
-                return (
-                  <Fragment key={prop.name+prop.value}>
-                    <TableRow key={1+key+prop._id}>
-                    {additionalCells(key)}
-                      <TableCell className={classes.tableCell} key={prop._id+key}>
-                          {prop.name}
-                      </TableCell>
-                      <TableCell className={classes.tableCell} key={key+prop._id}>
-                              {prop.value}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow key={prop._id+prop._id}>
-                      <TableCell key={key+prop._id+key+prop._id}>
-                          <CustomTable
-                          tableHeaderColor="primary"
-                          tableHead={undefined}
-                          tableData={prop.children}
-                          classes={classes}
-                          />
-                      </TableCell>
-                    </TableRow>
-                  </Fragment>
+                return ( prop.value ?
+                          <TableRow key={1+key+prop._id}>
+                            <TableCell className={inside ? classes.border : classes.tableReports} key={prop._id+key}>
+                                {prop.name}
+                            </TableCell>
+                            <TableCell className={inside ? classes.border : classes.tableReports} 
+                                        key={key+prop._id}>
+                                  {prop.value}
+                                <CustomTable
+                                  tableHeaderColor="primary"
+                                  tableHead={undefined}
+                                  tableData={prop.children}
+                                  classes={classes}
+                                  inside={true}
+                                />
+                            </TableCell>
+                          </TableRow> : null
                 )
               }
-              return (
-                <TableRow key={1+key+prop._id}>
-                      <TableCell className={classes.tableCell} key={prop._id}>
-                        {prop.name}
-                      </TableCell>
-                      <TableCell className={classes.tableCell} key={prop._id+key+1}>
-                        {prop.value}
-                      </TableCell>
-                </TableRow>
+              return ( prop.value ? 
+                        <TableRow key={1+key+prop._id}>
+                              <TableCell className={prop.isChild ? classes.border : classes.tableReports} 
+                                         key={prop._id}>
+                                {prop.name}
+                                
+                              </TableCell>
+                              <TableCell className={prop.isChild ? classes.border : classes.tableReports} 
+                                         key={prop._id+key+1}>
+                                {prop.value}
+                                
+                              </TableCell>
+                        </TableRow> : null
               );
             })
             

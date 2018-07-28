@@ -21,7 +21,8 @@ const ExpensesSchema = new Schema({
     value: Number,
     description: String,
     date: String,
-    creationDate: Number
+    creationDate: Number,
+    catId: String
 
 
 })

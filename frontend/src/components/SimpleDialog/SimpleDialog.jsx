@@ -15,23 +15,28 @@ import PersonIcon from '@material-ui/icons/Person';
 import AddIcon from '@material-ui/icons/Add';
 import Typography from '@material-ui/core/Typography';
 import blue from '@material-ui/core/colors/blue';
-import {Loupe} from "@material-ui/icons";
+import {Close} from "@material-ui/icons";
 
 import configCategories from '../../actions/configCategories.jsx'
 import configParams from '../../functions/configFetch.jsx'
 
-const emails = ['username@gmail.com', 'user02@gmail.com'];
 const styles = {
   avatar: {
     backgroundColor: blue[100],
     color: blue[600],
   },
+  dialogHead: {
+    display: 'flex',
+    justifyContent: 'space-between'
+  },
+  closeDialog: {
+    cursor: 'pointer'
+  }
 };
 
 class SimpleDialog extends Component {
   handleClose = () => {
     this.props.onClose(this.props.selectedValue);
-    console.log(this.props.selectedValue)
   };
 
   clickListitem = ()=>{
@@ -40,25 +45,34 @@ class SimpleDialog extends Component {
 
   handleListItemClick = (value, id, name) => {
     this.props.onClose(value);
-    console.log(id)
-    console.log(value)
-    console.log(this.props.parentitem)
     this.props.conf(configParams(value, id, this.props.parentid))
   };
 
   render() {
     const { classes, onClose, selectedValue, conf, open, ...other } = this.props;
     const {list} = this.props
+    const title = list.length ? 
+                  'Chose a category for subcategory' : 
+                    'No categories to add for this category. Please add new category'
     return (
       <Dialog onClose={this.handleClose} aria-labelledby="simple-dialog-title" open={open}>
-        <DialogTitle id="simple-dialog-title">Chose a category for subcategory</DialogTitle>
+        <div className={classes.dialogHead}>
+          <DialogTitle id="simple-dialog-title">Chose a subcategory to add </DialogTitle>
+          <Close onClick={this.handleClose} className={classes.closeDialog}/>
+        </div>
         <div>
           <List>
-            {list.map(item => (
+            {list.length ? 
+              list.map(item => (
               <ListItem button onClick={()=>this.handleListItemClick(item._id, item.name)} key={item._id}>
                 <ListItemText primary={item.name} />
               </ListItem>
-            ))}
+            )) :
+            <ListItem>
+                <ListItemText primary={'No categories to add for this category. Please add new category'} />
+              </ListItem>
+          
+          }
           </List>
         </div>
       </Dialog>
@@ -78,7 +92,6 @@ const SimpleDialogWrapped = withStyles(styles)(SimpleDialog);
 class SimpleDialogDemo extends Component {
   state = {
     open: false,
-    selectedValue: emails[1],
   };
 
   handleClickOpen = () => {
@@ -92,7 +105,7 @@ class SimpleDialogDemo extends Component {
   }
 
   handleClose = value => {
-    this.setState({ selectedValue: value, open: false });
+    this.setState({ open: false });
   };
 
   render() {
@@ -100,7 +113,7 @@ class SimpleDialogDemo extends Component {
       <Fragment>
         <Button color='info' 
                 onClick={this.handleClickOpen}>
-            <Loupe/>
+            *
         </Button>
         <SimpleDialogWrapped
           selectedValue={this.state.selectedValue}

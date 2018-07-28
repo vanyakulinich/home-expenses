@@ -24,7 +24,7 @@ import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardS
 
 class Dashboard extends Component {
   state = {
-    value: 0
+    value: 0,
   };
 
   componentDidMount() {
@@ -42,14 +42,15 @@ class Dashboard extends Component {
 
   addExpense=()=>{
    let inputs = document.querySelectorAll('input')
-   let value = +inputs[2].value
+   console.log(inputs[0])
    let body = {
-     id: inputs[0].value,
+     id: inputs[0].previousElementSibling.innerHTML,
      description: inputs[1].value,
-     value: +value.toFixed(2)
+     value: +inputs[2].value
    }
     this.props.addNewExpense('PUT', body)
-    inputs.forEach(el=>el.value='')
+    inputs[1].value = ''
+    inputs[2].value = 'UAH'
   }
 
   clearInput = (e)=>{
@@ -72,7 +73,7 @@ class Dashboard extends Component {
  
 
   render() {
-    const { classes, expenses, categList} = this.props;
+    const { classes, expenses} = this.props;
     const table = this.expensesList(expenses)
     return (
       <div>
@@ -82,19 +83,14 @@ class Dashboard extends Component {
             <h5>Please enter new expenses here</h5>         
           </CardHeader>
           <CardBody className = {classes.expensesPerformanse}>
-          <SimpleSelect categList= {categList}/>
-        
+            <SimpleSelect/>
             <IntegrationAutosuggest/>
-           
             <TextField label='Value'
-              InputProps={{defaultValue:'UAH'}}
+              InputProps={{defaultValue: 'UAH'}}
               onClick={this.clearInput}
             />
-
-            <Button color="primary"
-            onClick={this.addExpense}>ADD EXPENSES</Button>
+            <Button color="primary" onClick={this.addExpense}>ADD EXPENSES</Button>
           </CardBody>
-          {/* <IntegrationDownshift/> */}
         </Card>
         <Card>
           <CardHeader color='info' className={classes.zindex}>
@@ -120,7 +116,6 @@ Dashboard.propTypes = {
 
 const mapStateToProps = state=>({
   expenses: state.data.userExpenses,
-  categList: state.data.categList,
 })
 
 const mapActionsToProps = {

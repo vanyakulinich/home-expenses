@@ -139,7 +139,7 @@ function Server(db) {
                 return item._id == req.body.id
             })
 
-             //synchonizing with parent category 
+             //synchonizing with parent category when subcategory goes to upper level
               if(req.user.categories[itemForDelete].isChild) { 
                 let parentIndex = _.findIndex(req.user.categories, el=>{
                     return el._id == req.user.categories[itemForDelete].parent
@@ -157,41 +157,36 @@ function Server(db) {
                     req.user.categories[itemForDelete].parent = null
                     req.user.categories[itemForDelete].isChild = false 
                 }
+
+                req.user.save(er=>{
+                    if(er) console.log(er)
+                    res.json({  
+                        categories: req.user.categories, 
+                    })
+                })
                 
             } else {
-                 // deletion of category
-                req.user.categories.splice(itemForDelete, 1)
-                req.user.categories = recursiveDeletion([...req.user.categories], req.body.id) 
-                
-                // this function is in the bottom of code
-               
-                // req.user.categories = req.user.categories.filter(el=>{
-                //     return (el.parent !== req.body.id)
-                //     })
-                // req.user.categories = [...multiDeletion]
-            }
-               // recursive deletion of all sub categories of parent category    
-            function recursiveDeletion(arr, startId){
-                for(var i in arr) {
-                        if(arr[i].parent === startId) {
-                            if(arr[i].children) {
-                                recursiveDeletion(arr, arr[i].id)
-                            } else {
-                                arr.splice(i, 1)
-                                // i++
-                            }
-                        }
-                }
-                return arr
-            }
-
-            req.user.save(er=>{
-                if(er) console.log(er)
-                res.json({  
-                    categories: req.user.categories, 
+                //deletion of main categories
+                //list of categories without deleted one with all her children comes from front
+                // and all expenses of deleted category are marked as deleted
+                console.log(req.user.expenses)
+                req.user.expenses.forEach(el=>{
+                    if(el.catId == req.user.categories[itemForDelete]._id) {
+                        console.log(el)
+                        el.category +=' (deleted)'
+                        console.log(el)
+                    }
                 })
-            })
-            
+                req.user.categories = req.body.name
+
+                req.user.save(er=>{
+                    if(er) console.log(er)
+                    res.json({  
+                        categories: req.user.categories, 
+                        expenses: req.user.expenses 
+                    })
+                }) 
+            }    
         })
     
     // add subcategory
@@ -206,6 +201,22 @@ function Server(db) {
 
             req.user.categories[parentItem].children +=1;
 
+            req.user.categories[parentItem].value+=req.user.categories[itemForSub].value
+
+
+           if(req.user.categories[parentItem].parent) { // if category has parent
+            let value = req.user.categories[itemForSub].value
+            function expenses(parentId) { // synchronize expenses with all parents in chain
+                let parentIndex = _.findIndex(req.user.categories, el=>el._id==parentId)
+                req.user.categories[parentIndex].value += value
+                if(req.user.categories[parentIndex].parent) {
+                    expenses(req.user.categories[parentIndex].parent)
+                } else {
+                    return
+                }
+            }
+            expenses(req.user.categories[parentItem].parent)
+        }
         req.user.save(er=>{
             if(er) console.log(er)
         })
@@ -216,7 +227,7 @@ function Server(db) {
 
     // moving categories and subcategories
     server.put('/userdata/config/move', passport.authenticate('jwt', {session: false}), (req, res)=>{
-        console.log(req.body)
+        // console.log(req.body)
         let itemToMove = _.findIndex(req.user.categories, item=>item._id == req.body.id)
         let itemToChangePlace;
         console.log(itemToMove)
@@ -264,38 +275,49 @@ function Server(db) {
 //-----------------------------------
     // user puts expenses on dashboard page
     server.put('/userdata/expenses', passport.authenticate('jwt', {session: false}), (req, res)=>{
-       console.log(req.body)
+    //    console.log(req.body)
 
-        let index = _.findIndex(req.user.categories, el=>el._id==req.body.id)
+        let index = _.findIndex(req.user.categories, el=>el.name==req.body.id)
 
         let date = `${new Date()}`.split(' ')
 
         let newExpense = new ExpensesModel({
             category: req.user.categories[index].name,
-            description: req.body. description,
+            description: req.body.description,
             value: req.body.value,
             date : `${date[0]} ${date[1]} ${date[2]} ${date[3]}`,
-            creationDate: Date.now() 
+            creationDate: Date.now(),
+            catId: req.user.categories[index]._id 
         })
 
-        req.user.categories[index].value = req.body.value;
+        req.user.categories[index].value += req.body.value;
 
         if(req.user.categories[index].parent) { // if category has parent
-            let parentIndex = _.findIndex(req.user.categories, el=>el._id==req.user.categories[index].parent)
-            req.user.categories[parentIndex].value += req.body.value
+
+            function expenses(parentId) { // synchronize expenses with all parents in chain
+                let parentIndex = _.findIndex(req.user.categories, el=>el._id==parentId)
+                req.user.categories[parentIndex].value += req.body.value
+                if(req.user.categories[parentIndex].parent) {
+                    expenses(req.user.categories[parentIndex].parent)
+                } else {
+                    return
+                }
+            }
+            expenses(req.user.categories[index].parent)
         }
 
-        req.user.descriptionBase.push(req.body.description)
 
-        req.user.expenses.push(newExpense)
+        let repeatedDescription = req.user.descriptionBase.some(el=>el===req.body.description)
+        if(!repeatedDescription) req.user.descriptionBase.push(req.body.description)
+
+        req.user.expenses.unshift(newExpense)
 
         req.user.save(er=>{
             if(er) console.log(er)
-            let expenses = req.user.expenses ? [...req.user.expenses].reverse().slice(0, 20) : []
+            let expenses = req.user.expenses ? req.user.expenses.slice(0, 20) : []
             res.json({
                 categories: req.user.categories, 
                 expenses,
-
             })
         })
        

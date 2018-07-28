@@ -1,13 +1,14 @@
-import React, {Fragment, Component} from 'react';
-import {List, ListItem} from "@material-ui/core";
-import {Label} from "@material-ui/icons";
+import React, {Component} from 'react';
+import {List, ListItem, Paper} from "@material-ui/core";
 import Category from './Category'
 import {connect} from 'react-redux';
 import withStyles from "@material-ui/core/styles/withStyles";
 
 //  category list component
-
 const styles = {
+    catPaper: {
+        width: '100%'
+    },
     configList: {
         display: 'flex',
         justifyContent: 'flex-end',
@@ -23,13 +24,10 @@ const styles = {
         position: 'absolute',
         top: '89px',
         left: '21px',
-    
     },
     relat: {
         position: 'relative'
     }
-    
-
 }
 
 class CategoryList extends Component {
@@ -38,13 +36,9 @@ class CategoryList extends Component {
         return (<List className = {classes.configList}>
                 {data.map((item, key)=>{
                     if(item.children) { 
-                        return  <ListItem className = {classes.configList} key={key+item._id}>
-                                  <Fragment>
-                                    
-                                    <List key={+item._id+item._id} 
-                                    className = {classes.configList}>
-                                        <ListItem className = {classes.configList} key={key+item._id+key}>
-                                            {/* <Label className={classes.iconStyle}/> */}
+                        return  <List key={+item._id+item._id} className = {classes.configList}>
+                                    <ListItem className = {classes.configList} key={key+item._id+key}>
+                                        <Paper className={classes.catPaper} key={key+item._id+key+item._id}>
                                             <Category 
                                             categoryName={item.name}
                                             parent={null}
@@ -56,16 +50,13 @@ class CategoryList extends Component {
                                             children = {item.children}
                                             className={classes.relat}
                                             /> 
-                                        </ListItem>
-                                        <ListItem className = {classes.configList} key={key+item._id}>
                                             <CategoryList 
                                                 data={item.children} 
                                                 classes={classes}
                                                 key={key+item._id}/>
-                                        </ListItem>
-                                    </List>
-                                  </Fragment>
-                                </ListItem>   
+                                        </Paper>
+                                    </ListItem>
+                                </List> 
                     } else {
                         return  <ListItem className = {classes.configList} key={key+item._id}>
                                     <Category 
@@ -84,7 +75,6 @@ class CategoryList extends Component {
             )
         }
 }
-
 
 const mapStateToProps = state=>({
     data: state.data.userCategories

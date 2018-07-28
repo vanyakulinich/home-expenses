@@ -1,15 +1,16 @@
 import React, {Component} from "react";
 import {connect} from 'react-redux';
-import getUserData from '../../actions/getUserData';
+
 import withStyles from "@material-ui/core/styles/withStyles";
-import {List} from "@material-ui/core";
 import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import Button from 'components/CustomButtons/Button.jsx';
+
 import configCategories from '../../actions/configCategories';
+import getUserData from '../../actions/getUserData';
+
 import CategoryList from '../../components/Category/CategoryList';
-import Table from "components/Table/TableConfig.jsx";
 
 const styles = {
     configBody: {
@@ -42,7 +43,6 @@ class Config extends Component {
         this.props.configCategories('POST', 'category')
     }
 
-   
     render(){
         const {classes, userData} = this.props;
         return (
@@ -64,12 +64,13 @@ class Config extends Component {
 }
 
 const mapStateToProps = state=>({
-    userData: state.data.userCategories
+    userData: state.data.userCategories,
+    categList: state.data.categList
 })
 
 const mapActionsToProps = {
     getUserData,
-    configCategories
+    configCategories, 
   }
 
 export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(Config));

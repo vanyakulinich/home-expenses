@@ -47,14 +47,36 @@ const tableStyle = theme => ({
   tableCell: {
     ...defaultFont,
     lineHeight: "1.42857143",
-    padding: "12px 8px",
-    verticalAlign: "middle"
+    padding: "0 8px",
+    verticalAlign: "middle",
+    marginBottom: 0
   },
   tableResponsive: {
     width: "100%",
     marginTop: theme.spacing.unit * 3,
     overflowX: "auto"
+  },
+  deleted: {
+    backgroundColor: '#ffb8b8'
+  },
+  tableReports: {
+    verticalAlign: 'initial',
+    ...defaultFont,
+    lineHeight: "1.42857143",
+    padding: "8px 8px 0px 8px",
+    fontSize: '15px',
+    margin: '0px'
+  },
+  border: {
+    border: '0px',
+    verticalAlign: 'initial',
+    ...defaultFont,
+    lineHeight: "1.42857143",
+    padding: "8px 8px 0px 8px",
+    fontSize: '15px',
+    margin: '0px'
   }
+ 
 });
 
 export default tableStyle;

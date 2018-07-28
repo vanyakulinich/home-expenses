@@ -9,7 +9,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 // core components
 import tableStyle from "assets/jss/material-dashboard-react/components/tableStyle";
-import { Object } from "parse";
+
 
 function CustomTable({ ...props }) {
  
@@ -36,14 +36,16 @@ function CustomTable({ ...props }) {
         <TableBody>
           { 
             tableData.map((prop, key) => { 
+              let deletedMark = prop[1].indexOf('deleted')>0 ? classes.deleted : null
               return (
-                <TableRow key={1+key+prop._id}>
-                      <TableCell className={classes.tableCell} key={prop._id}>
-                        {prop.name}
-                      </TableCell>
-                      <TableCell className={classes.tableCell} key={prop._id+key+1}>
-                        {prop.value}
-                      </TableCell>
+                <TableRow key={key} className={deletedMark}>
+                      {
+                        prop.map((el, i)=>{
+                          return <TableCell className={classes.tableCell} key={key+el+el}>
+                                    {el}
+                                </TableCell>
+                        })
+                      }
                 </TableRow>
               );
             })

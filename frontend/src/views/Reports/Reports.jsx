@@ -54,14 +54,13 @@ class Reports extends Component {
         let date = new Date()+''
         const {classes, categories} = this.props
         const table = categories ? categories : []
-        console.log(table)
         return(
             <Card>
             <CardHeader color='info'>
                 <h3>Expenses reports</h3>   
                 <h5>Here below are some expenses reports</h5>         
             </CardHeader>
-            <CardBody>
+            <CardBody >
                 <div className={classes.dateNav}>
                 
                     <div>{this.defaultDate()}</div>
@@ -84,7 +83,7 @@ class Reports extends Component {
                     tableHeaderColor="primary"
                     tableHead={["Category", "Expenses value, UAH"]}
                     tableData={table}
-                    dashboard={false}
+                    inside={false}
                 />
             </CardBody>
         </Card>
