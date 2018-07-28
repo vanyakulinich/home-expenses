@@ -42,11 +42,16 @@ class Dashboard extends Component {
 
   addExpense=()=>{
    let inputs = document.querySelectorAll('input')
-   console.log(inputs[0])
+   let value = inputs[2].value;
+  if(value.indexOf(',')) {
+    value=value.split(',').join('.');
+  } 
+  value=parseFloat(value).toFixed(2);
+
    let body = {
      id: inputs[0].previousElementSibling.innerHTML,
      description: inputs[1].value,
-     value: +inputs[2].value
+     value: parseFloat(value)
    }
     this.props.addNewExpense('PUT', body)
     inputs[1].value = ''
