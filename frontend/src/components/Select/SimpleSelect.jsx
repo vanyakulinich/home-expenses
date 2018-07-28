@@ -52,7 +52,7 @@ class SimpleSelect extends React.Component {
     return (
       <form className={classes.root} autoComplete="off">
         <FormControl className={classes.formControl}>
-          <InputLabel htmlFor="age-simple"> SelectCategory</InputLabel>
+          <InputLabel htmlFor="age-simple"> {items ? items[0].name : null}</InputLabel>
           <Select
             value={this.state.age}
             onChange={this.handleChange}

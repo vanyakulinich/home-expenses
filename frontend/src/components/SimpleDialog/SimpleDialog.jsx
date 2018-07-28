@@ -57,7 +57,7 @@ class SimpleDialog extends Component {
     return (
       <Dialog onClose={this.handleClose} aria-labelledby="simple-dialog-title" open={open}>
         <div className={classes.dialogHead}>
-          <DialogTitle id="simple-dialog-title">Chose a category to add </DialogTitle>
+          <DialogTitle id="simple-dialog-title">Chose a subcategory to add </DialogTitle>
           <Close onClick={this.handleClose} className={classes.closeDialog}/>
         </div>
         <div>

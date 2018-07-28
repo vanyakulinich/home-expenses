@@ -49,7 +49,6 @@ class Dashboard extends Component {
      value: +value.toFixed(2)
    }
     this.props.addNewExpense('PUT', body)
-    inputs.forEach(el=>el.value='')
   }
 
   clearInput = (e)=>{
@@ -83,18 +82,13 @@ class Dashboard extends Component {
           </CardHeader>
           <CardBody className = {classes.expensesPerformanse}>
           <SimpleSelect categList= {categList}/>
-        
             <IntegrationAutosuggest/>
-           
             <TextField label='Value'
-              InputProps={{defaultValue:'UAH'}}
+              InputProps={{value: 'UAH'}}
               onClick={this.clearInput}
             />
-
-            <Button color="primary"
-            onClick={this.addExpense}>ADD EXPENSES</Button>
+            <Button color="primary" onClick={this.addExpense}>ADD EXPENSES</Button>
           </CardBody>
-          {/* <IntegrationDownshift/> */}
         </Card>
         <Card>
           <CardHeader color='info' className={classes.zindex}>
