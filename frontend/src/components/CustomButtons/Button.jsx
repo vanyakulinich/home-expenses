@@ -23,8 +23,10 @@ function RegularButton({ ...props }) {
     justIcon,
     className,
     muiClasses,
+    buttonColor,
     ...rest
   } = props;
+  
   const btnClasses = classNames({
     [classes.button]: true,
     [classes[size]]: size,

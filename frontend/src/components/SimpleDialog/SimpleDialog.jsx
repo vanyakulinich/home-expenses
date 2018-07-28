@@ -26,7 +26,8 @@ const styles = {
     color: blue[600],
   },
   dialogHead: {
-    display: 'flex'
+    display: 'flex',
+    justifyContent: 'space-between'
   },
   closeDialog: {
     cursor: 'pointer'
@@ -50,19 +51,28 @@ class SimpleDialog extends Component {
   render() {
     const { classes, onClose, selectedValue, conf, open, ...other } = this.props;
     const {list} = this.props
+    const title = list.length ? 
+                  'Chose a category for subcategory' : 
+                    'No categories to add for this category. Please add new category'
     return (
-      <Dialog aria-labelledby="simple-dialog-title" open={open}>
+      <Dialog onClose={this.handleClose} aria-labelledby="simple-dialog-title" open={open}>
         <div className={classes.dialogHead}>
-          <DialogTitle id="simple-dialog-title">Chose a category for subcategory</DialogTitle>
+          <DialogTitle id="simple-dialog-title">Chose a category to add </DialogTitle>
           <Close onClick={this.handleClose} className={classes.closeDialog}/>
         </div>
         <div>
           <List>
-            {list.map(item => (
+            {list.length ? 
+              list.map(item => (
               <ListItem button onClick={()=>this.handleListItemClick(item._id, item.name)} key={item._id}>
                 <ListItemText primary={item.name} />
               </ListItem>
-            ))}
+            )) :
+            <ListItem>
+                <ListItemText primary={'No categories to add for this category. Please add new category'} />
+              </ListItem>
+          
+          }
           </List>
         </div>
       </Dialog>

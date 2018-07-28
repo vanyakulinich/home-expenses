@@ -1,23 +1,10 @@
-import React, {Fragment, Component} from 'react';
+import React, {Component} from 'react';
 import {List, ListItem, Paper} from "@material-ui/core";
-import {Label} from "@material-ui/icons";
 import Category from './Category'
 import {connect} from 'react-redux';
 import withStyles from "@material-ui/core/styles/withStyles";
 
 //  category list component
-
-const buttonColors= [
-    "info",
-    "primary",
-    "success",
-    "warning",
-    "danger",
-    "rose",
-    "white",
-    "transparent"
-]
-
 const styles = {
     catPaper: {
         width: '100%'
@@ -37,13 +24,10 @@ const styles = {
         position: 'absolute',
         top: '89px',
         left: '21px',
-    
     },
     relat: {
         position: 'relative'
     }
-    
-
 }
 
 class CategoryList extends Component {
@@ -52,31 +36,27 @@ class CategoryList extends Component {
         return (<List className = {classes.configList}>
                 {data.map((item, key)=>{
                     if(item.children) { 
-                        return  <Fragment> 
-                                    <List key={+item._id+item._id} 
-                                    className = {classes.configList}>
-                                        <ListItem className = {classes.configList} key={key+item._id+key}>
-                                            <Paper className={classes.catPaper}>
-                                                <Category 
-                                                categoryName={item.name}
-                                                parent={null}
-                                                key={+item._id} 
-                                                id={item._id}
-                                                position={key}
-                                                parentLength={data.length-1}
-                                                child={item.isChild}
-                                                children = {item.children}
-                                                className={classes.relat}
-                                                buttonColor={buttonColors[key]}
-                                                /> 
-                                                <CategoryList 
-                                                    data={item.children} 
-                                                    classes={classes}
-                                                    key={key+item._id}/>
-                                            </Paper>
-                                        </ListItem>
-                                    </List>
-                                </Fragment>  
+                        return  <List key={+item._id+item._id} className = {classes.configList}>
+                                    <ListItem className = {classes.configList} key={key+item._id+key}>
+                                        <Paper className={classes.catPaper} key={key+item._id+key+item._id}>
+                                            <Category 
+                                            categoryName={item.name}
+                                            parent={null}
+                                            key={+item._id} 
+                                            id={item._id}
+                                            position={key}
+                                            parentLength={data.length-1}
+                                            child={item.isChild}
+                                            children = {item.children}
+                                            className={classes.relat}
+                                            /> 
+                                            <CategoryList 
+                                                data={item.children} 
+                                                classes={classes}
+                                                key={key+item._id}/>
+                                        </Paper>
+                                    </ListItem>
+                                </List> 
                     } else {
                         return  <ListItem className = {classes.configList} key={key+item._id}>
                                     <Category 
@@ -87,7 +67,6 @@ class CategoryList extends Component {
                                     position={key}
                                     parentLength={data.length-1}
                                     child={item.isChild}
-                                    buttonColor={buttonColors[key]}
                                     />  
                                     
                                 </ListItem>
@@ -96,7 +75,6 @@ class CategoryList extends Component {
             )
         }
 }
-
 
 const mapStateToProps = state=>({
     data: state.data.userCategories
