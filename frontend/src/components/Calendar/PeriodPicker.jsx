@@ -122,6 +122,10 @@ class PeriodPicker extends React.Component {
   onChange = (value) => {
     console.log('onChange', value);
     this.setState({ value });
+    this.props.getPeriod({
+        start: value[0]._d,
+        end: value[1]._d
+  })
   }
 
   onHoverChange = (hoverValue) => {
@@ -130,7 +134,8 @@ class PeriodPicker extends React.Component {
 
   render() {
     const state = this.state;
-    const {classes} = this.props
+    const {classes} = this.props;
+    console.log(now)
     const calendar = (
       <RangeCalendar
         hoverValue={state.hoverValue}
