@@ -11,6 +11,7 @@ import CardBody from "components/Card/CardBody.jsx";
 import Table from "components/Table/TableReports.jsx";
 import Button from 'components/CustomButtons/Button.jsx';
 import {ChevronLeft, ChevronRight} from "@material-ui/icons";
+import PeriodPicker from '../../components/Calendar/PeriodPicker.jsx'
 
 const styles = {
     dateNav: {
@@ -76,7 +77,12 @@ class Reports extends Component {
                         >DAY</Button>
                         <Button color='primary' className={classes.buttonsPeriods}>WEEK</Button>
                         <Button color='primary' className={classes.buttonsPeriods}>MONTH</Button>
-                        <Button color='primary' className={classes.buttonsPeriods}>PERIOD</Button>
+                        {/* <Button color='primary' className={classes.buttonsPeriods}>
+                            PERIOD
+                            
+                        </Button> */}
+                        <PeriodPicker/>
+                        
                     </div>
                 </div>
                 <Table
