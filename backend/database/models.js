@@ -3,7 +3,6 @@ const mongoose = require('./dbConnect');
 const Schema = mongoose.Schema;
 
 // schemas
-
 // single category schema
 const CategorySchema = new Schema({ 
     name: String,

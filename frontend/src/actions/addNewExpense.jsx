@@ -12,7 +12,6 @@ export default function addNewExpense(method, body) {
                 
             }
         }
-        console.log(fetchOptions)
         fetch(`http://localhost:3001/userdata/expenses`, fetchOptions)
             .then(res => res.json())
             .then((data) => {

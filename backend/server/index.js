@@ -5,9 +5,9 @@ var _ = require('lodash');
 // server function
 function Server(db) {
 
-    let {UserModel, CategoryModel, ListOfCatsModel, ExpensesModel} = db;
+    let {UserModel, CategoryModel, ExpensesModel} = db;
 
-// registration routes
+    // registration routes
     // sign in route
     server.post('/signin', (req, res)=>{
         let {email, pass} = req.body;
@@ -69,14 +69,7 @@ function Server(db) {
         })
     })
 
-
-
-// secured route with passport auth for working with user data
-// now the route is tested
-
-
-    // ------rewriting proccess-------------
-    // 
+    // secured route with passport auth for working with user data
 
     // get user data
     server.get('/userdata', passport.authenticate('jwt', {session: false}), (req, res)=>{
@@ -89,7 +82,6 @@ function Server(db) {
     })
 
     // config categories routes
-
     server.route('/userdata/config/category')
         // add new category
         .post(passport.authenticate('jwt', {session: false}), (req, res)=>{
@@ -170,12 +162,10 @@ function Server(db) {
                 console.log(req.user.expenses)
                 req.user.expenses.forEach(el=>{
                     if(el.catId == req.user.categories[itemForDelete]._id) {
-                        console.log(el)
                         el.category +=' (deleted)'
-                        console.log(el)
                     }
                 })
-                req.user.categories = req.body.name
+                req.user.categories = req.body.name // rewrite categories
 
                 req.user.save(er=>{
                     if(er) console.log(er)
@@ -221,15 +211,10 @@ function Server(db) {
         res.json({categories: req.user.categories})
     })
 
-    // =-----------------
-
-    // moving categories and subcategories
+    // moving up and down categories and subcategories
     server.put('/userdata/config/move', passport.authenticate('jwt', {session: false}), (req, res)=>{
-        // console.log(req.body)
         let itemToMove = _.findIndex(req.user.categories, item=>item._id == req.body.id)
         let itemToChangePlace;
-        console.log(itemToMove)
-
         // if category is in head
         if(!req.user.categories[itemToMove].isChild && 
             req.user.categories[itemToMove].children) {
@@ -248,13 +233,11 @@ function Server(db) {
                                             return item.isChild && item.children}, itemToMove+1))
         }
 
-
         // if category is at bottom or at top but with no children
         if((req.user.categories[itemToMove].isChild && !req.user.categories[itemToMove].children) ||
             (!req.user.categories[itemToMove].isChild && !req.user.categories[itemToMove].children)) {
             itemToChangePlace = req.body.direction ? itemToMove-1 : itemToMove+1
         }
-
 
         let bufferAr = [...req.user.categories]
         let bufferItem = bufferAr[itemToChangePlace]
@@ -270,10 +253,8 @@ function Server(db) {
         
     })
 
-//-----------------------------------
     // user puts expenses on dashboard page
     server.put('/userdata/expenses', passport.authenticate('jwt', {session: false}), (req, res)=>{
-    //    console.log(req.body)
 
         let index = _.findIndex(req.user.categories, el=>el.name==req.body.id)
 
@@ -304,8 +285,7 @@ function Server(db) {
             }
             expenses(req.user.categories[index].parent)
     }
-
-
+        // adding new description to base if it is not repeated
         let repeatedDescription = req.user.descriptionBase.some(el=>el===req.body.description)
         if(!repeatedDescription) req.user.descriptionBase.push(req.body.description)
 
@@ -321,14 +301,8 @@ function Server(db) {
        
     })
 
-    server.get('/userdata/get/reports', passport.authenticate('jwt', {session: false}), (req, res)=>{
-        res.json({
-            listForReports: req.user.categories
-        })
-    })
-    
     // ---------------------
-    // test route for postman
+    // test routes for postman
     server.route('/users')
         .get((req,res)=>{
             UserModel.find({email: /./}, (err, data)=>{
@@ -342,7 +316,5 @@ function Server(db) {
             res.sendStatus(200)
         })
 }
-
-
 
 module.exports = Server
