@@ -1,12 +1,10 @@
 /* eslint react/no-multi-comp:0, no-console:0 */
 
 import React from 'react';
-// import {connect} from 'react-redux'
 import Picker from 'rc-calendar/lib/Picker';
 import RangeCalendar from 'rc-calendar/lib/RangeCalendar';
 import zhCN from 'rc-calendar/lib/locale/zh_CN';
 import enUS from 'rc-calendar/lib/locale/en_US';
-import TimePickerPanel from 'rc-time-picker/lib/Panel';
 import 'rc-calendar/assets/index.css';
 import 'rc-time-picker/assets/index.css';
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -99,15 +97,8 @@ class PeriodPicker extends React.Component {
     }
   }
 
-
-
   onChange = (value) => {
     this.setState({ value });
-
-    console.log(value[0]._d.getTime() )
-    console.log(value[1]._d.getTime() )
-
-
     currentPeriods.start = value[0]
     currentPeriods.end = value[1]
     currentPeriods.period = 'custom'
@@ -116,7 +107,6 @@ class PeriodPicker extends React.Component {
     currentPeriods.milisec = customPeriodEnd - customPeriodStart
     currentPeriods.milisecStart = customPeriodStart
     currentPeriods.milisecEnd = customPeriodEnd
-    console.log(currentPeriods)
 
     this.props.getPeriod({
       start: value[0]._d, 
@@ -130,7 +120,6 @@ class PeriodPicker extends React.Component {
   onHoverChange = (hoverValue) => {
     this.setState({ hoverValue });
   }
-
   // function for navifation
   figurePeriod=()=>{
     if(this.props.move) { // moving periods by arrows
@@ -146,8 +135,8 @@ class PeriodPicker extends React.Component {
         this.props.buttonsPeriod({
           start: currentPeriods.start._d, 
           end: currentPeriods.end._d,
-          dayStart: currentPeriods.milisecStart,
-          dayEnd: currentPeriods.milisecEnd
+          dayStart : currentPeriods.start._d,
+          dayEnd: currentPeriods.end._d
         })
       } else { // standart periods
         if(this.props.move=='left') {
@@ -157,9 +146,6 @@ class PeriodPicker extends React.Component {
           currentPeriods.start = currentPeriods.start.clone().add(+1, currentPeriods.period)
           currentPeriods.end = currentPeriods.end.clone().add(+1, currentPeriods.period)
         }
-        // console.log(currentPeriods.period)
-        // if(currentPeriods.period == 'months') currentPeriods.period = 'month'
-        // if(currentPeriods.period == 'weeks') currentPeriods.period ='week'
 
         if(currentPeriods.period == 'months') {
           this.props.buttonsPeriod({
