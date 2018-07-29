@@ -1,6 +1,5 @@
 import SIGN_USER from '../actionTypes/signUser.jsx';
 
-
 export default function signUpUser(user) {
     return (dispatch)=>{
         let fetchOptions = {

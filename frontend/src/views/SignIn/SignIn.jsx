@@ -26,7 +26,7 @@ class SignIn extends Component {
    
     signInClick =()=> {
         let [email, pass] = document.querySelectorAll('[type="text"]');
-        let regex = /^[a-zA-z0-9_\.]{1,30}@{1,}[a-z]{3,10}\.{1}[a-z]{2,9}(\.[a-z]{2,3}|)$/gm;
+        let regex =/^[a-zA-z0-9_.]{1,30}@{1,}[a-z]{3,10}\.{1}[a-z]{2,9}(.[a-z]{2,3}|)$/gm;
         let validEmail = regex.test(email.value)
         if(!validEmail) {
             email.value = 'Incorrect Email. Try again'

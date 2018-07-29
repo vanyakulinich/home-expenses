@@ -4,7 +4,7 @@ export default function recurse(arr, parent) {
 
         for(var i in arr) {
             
-                if(arr[i].parent == parent) {
+                if(arr[i].parent === parent) {
                     var children = recurse(arr, arr[i]._id)
         
                     if(children.length) {
@@ -12,9 +12,6 @@ export default function recurse(arr, parent) {
                     }
                     out.push(arr[i])
                 }
-            
-        
         }
-    
     return out
 }

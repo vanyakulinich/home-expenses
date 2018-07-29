@@ -3,7 +3,7 @@ export default function recurse(arr, parent) {
 
         for(var i in arr) {
             
-                if(arr[i].parentId == parent) {
+                if(arr[i].parentId === parent) {
 
                     var children = recurse(arr, arr[i].catId)
         

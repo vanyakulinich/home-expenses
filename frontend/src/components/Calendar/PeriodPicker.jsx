@@ -3,7 +3,6 @@
 import React from 'react';
 import Picker from 'rc-calendar/lib/Picker';
 import RangeCalendar from 'rc-calendar/lib/RangeCalendar';
-import zhCN from 'rc-calendar/lib/locale/zh_CN';
 import enUS from 'rc-calendar/lib/locale/en_US';
 import 'rc-calendar/assets/index.css';
 import 'rc-time-picker/assets/index.css';
@@ -124,8 +123,8 @@ class PeriodPicker extends React.Component {
   figurePeriod=()=>{
     if(this.props.move) { // moving periods by arrows
       //moving by arrow buttons
-      if(currentPeriods.period == 'custom') { // custom period
-        if(this.props.move=='left') {
+      if(currentPeriods.period === 'custom') { // custom period
+        if(this.props.move==='left') {
           currentPeriods.start = currentPeriods.start.clone().add(-currentPeriods.milisec, 'milliseconds')
           currentPeriods.end = currentPeriods.end.clone().add(-currentPeriods.milisec, 'milliseconds')
         } else {
@@ -139,7 +138,7 @@ class PeriodPicker extends React.Component {
           dayEnd: currentPeriods.end._d
         })
       } else { // standart periods
-        if(this.props.move=='left') {
+        if(this.props.move==='left') {
           currentPeriods.start = currentPeriods.start.clone().add(-1, currentPeriods.period)
           currentPeriods.end = currentPeriods.end.clone().add(-1, currentPeriods.period)
         } else {
@@ -147,7 +146,7 @@ class PeriodPicker extends React.Component {
           currentPeriods.end = currentPeriods.end.clone().add(+1, currentPeriods.period)
         }
 
-        if(currentPeriods.period == 'months') {
+        if(currentPeriods.period === 'months') {
           this.props.buttonsPeriod({
             end: currentPeriods.start._d, 
             start: currentPeriods.end._d,
@@ -155,7 +154,7 @@ class PeriodPicker extends React.Component {
             dayEnd:currentPeriods.start.clone().endOf('month')._d
           })
         }
-        if(currentPeriods.period == 'weeks') {
+        if(currentPeriods.period === 'weeks') {
           this.props.buttonsPeriod({
             end: currentPeriods.start._d, 
             start: currentPeriods.end._d,
@@ -163,7 +162,7 @@ class PeriodPicker extends React.Component {
             dayEnd: currentPeriods.start.clone().endOf('week')._d,
           })
         }
-        if(currentPeriods.period == 'day') {
+        if(currentPeriods.period === 'day') {
           this.props.buttonsPeriod({
             end: currentPeriods.start._d, 
             start: currentPeriods.end._d,
@@ -190,7 +189,7 @@ class PeriodPicker extends React.Component {
           dayStart: now.clone().startOf('week')._d, 
           dayEnd: now.clone().endOf('day')._d
         })
-        currentPeriods.end = now.clone().add(-1, 'weeks'),
+        currentPeriods.end = now.clone().add(-1, 'weeks')
         currentPeriods.period = 'weeks'
       }
       if(this.props.month) {
@@ -200,7 +199,7 @@ class PeriodPicker extends React.Component {
           dayStart: now.clone().startOf('month')._d, 
           dayEnd: now.clone().endOf('day')._d
         })
-        currentPeriods.end = now.clone().add(-1, 'months'),
+        currentPeriods.end = now.clone().add(-1, 'months')
         currentPeriods.period = 'months'
       } 
     }  
@@ -208,7 +207,7 @@ class PeriodPicker extends React.Component {
 
 
   buttonTitle = (move)=>{
-      return move=='left' ? <ChevronLeft/> : <ChevronRight/>
+      return (move==='left') ? <ChevronLeft/> : <ChevronRight/>
   }
 
   render() {

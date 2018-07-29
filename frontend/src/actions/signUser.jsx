@@ -1,6 +1,5 @@
 import SIGN_USER from '../actionTypes/signUser.jsx';
-// import {push} from 'react-router-redux';
-import appHistory from '../index'; // c bindActionCreators еще не разобрался
+import appHistory from '../index';
 
 
 export default function signUser(user, signType) {

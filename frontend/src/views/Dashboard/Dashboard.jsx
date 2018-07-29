@@ -3,11 +3,10 @@ import PropTypes from "prop-types";
 import {connect} from 'react-redux';
 import getUserData from '../../actions/getUserData.jsx';
 
-
 // @material-ui/core
 import withStyles from "@material-ui/core/styles/withStyles";
 
-import {TextField, MenuItem, List, ListItem} from "@material-ui/core";
+import {TextField} from "@material-ui/core";
 import SimpleSelect from '../../components/Select/SimpleSelect.jsx'
 
 // core components

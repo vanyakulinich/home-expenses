@@ -30,6 +30,14 @@ const styles = {
     },
     buttonsPeriods: {
         width: '80px'
+    },
+    message: {
+        display: 'flex',
+        flexDirection: 'column',
+        width: '100%',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        height: '100%'
     }
 
 }
@@ -39,7 +47,7 @@ class Reports extends Component {
     state={
         startDate: null,
         endDate:null,
-        list: []
+        list: null
     }
 
     componentDidMount() {
@@ -67,8 +75,8 @@ class Reports extends Component {
             startDate: this.formatDate(data.start),
             endDate: this.formatDate(data.end)
         })
-        let start = (typeof(data.dayStart)=='number') ? data.dayStart : data.dayStart.getTime()
-        let end =  (typeof(data.dayEnd) =='number') ? data.dayEnd : data.dayEnd.getTime()
+        let start = (typeof(data.dayStart)==='number') ? data.dayStart : data.dayStart.getTime()
+        let end =  (typeof(data.dayEnd) ==='number') ? data.dayEnd : data.dayEnd.getTime()
 
         let filteredExpenses = this.props.expenses ? this.props.expenses.filter(el=>{
             return el.creationDate > start && el.creationDate < end
@@ -88,7 +96,7 @@ class Reports extends Component {
                 <h3>Expenses reports</h3>   
                 <h5>Here below are some expenses reports</h5>         
             </CardHeader>
-            <CardBody >
+            <CardBody>
                 <div className={classes.dateNav}> 
                     <div> {this.state.startDate} / {this.state.endDate}</div>
                     <div className={classes.dateButtons}>
@@ -102,14 +110,18 @@ class Reports extends Component {
                         
                     </div>
                 </div>
-                {   this.state.list.length>0 ? 
+                {   this.state.list && this.state.list.length>0 ? 
                         <Table
                         tableHeaderColor="primary"
                         tableHead={["Category", "Expenses value, UAH"]}
                         tableData={list}
                         inside={false}
                     /> :
-                    <div>Please choose period to see report</div>
+                    <div className={classes.message}>
+                        {this.state.list ? 
+                            'No expenses in this period' :
+                                'Please choose period to see report'} 
+                    </div>
                 }         
             </CardBody>
         </Card>

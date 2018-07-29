@@ -1,3 +1,0 @@
-const GET_REPORTS='GET_REPORTS'
-
-export default GET_REPORTS

@@ -33,27 +33,24 @@ class Category extends Component{
         } 
     }
     
-    moveCategoryUp = (e)=>{
-        console.log(this.props)
-      if(this.props.position == 0) return null
+    moveCategoryUp =(e)=>{
+      if(this.props.position === 0) return null
         let config = configParams(this.props.id, null, null, true)
         this.props.configCategories('PUT', 'move', config)
     }
 
-    moveCategoryDown = ()=>{
-        console.log(this.props)
-        if (this.props.position == this.props.parentLength) return null
+    moveCategoryDown =()=>{
+        if (this.props.position === this.props.parentLength) return null
         let config = configParams(this.props.id, null, null, false)
         this.props.configCategories('PUT', 'move', config)
     }
 
-    renameCategory = (name)=>{
+    renameCategory =(name)=>{
         this.props.configCategories('PUT', 'category', configParams(this.props.id, name))
     }
     render(){
         const {categoryName, child, userData, classes} = this.props;
-        const buttonColor = child ? 'primary' : 'info'
-        console.log(this.props.userData)
+        const buttonColor = child ? 'primary' : 'info';
         return(
             <Paper className={classes.configContainer}>
                 <FormDialog 
@@ -73,9 +70,9 @@ class Category extends Component{
                     isChild={child} />
                     <SimpleDialogDemo 
                         list = {userData.filter(item=>(item._id!==this.props.id) && 
-                                                        (item.parent == null) &&
+                                                        (item.parent === null) &&
                                                         (!item.children))}
-                        parentitem = {userData.find(item=>item.name==categoryName)}
+                        parentitem = {userData.find(item=>item.name===categoryName)}
                         color={buttonColor}
                         id={this.props.id}/> 
                 </div>
