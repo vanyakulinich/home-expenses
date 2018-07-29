@@ -50,7 +50,7 @@ function CustomTable({ ...props }) {
                 return ( prop.value ?
                           <TableRow key={1+key+prop._id}>
                             <TableCell className={inside ? classes.border : classes.tableReports} key={prop._id+key}>
-                                {prop.name}
+                                {prop.category}
                             </TableCell>
                             <TableCell className={inside ? classes.border : classes.tableReports} 
                                         key={key+prop._id}>
@@ -68,12 +68,12 @@ function CustomTable({ ...props }) {
               }
               return ( prop.value ? 
                         <TableRow key={1+key+prop._id}>
-                              <TableCell className={prop.isChild ? classes.border : classes.tableReports} 
+                              <TableCell className={prop.parent ? classes.border : classes.tableReports} 
                                          key={prop._id}>
-                                {prop.name}
+                                {prop.category}
                                 
                               </TableCell>
-                              <TableCell className={prop.isChild ? classes.border : classes.tableReports} 
+                              <TableCell className={prop.parent ? classes.border : classes.tableReports} 
                                          key={prop._id+key+1}>
                                 {prop.value}
                                 

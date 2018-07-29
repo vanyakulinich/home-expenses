@@ -100,8 +100,6 @@ function Server(db) {
                 parent: null,
                 isChild: false,
                 children: 0,
-                prev: (cats.length) ? cats[cats.length-1]._id : null,
-                next: null,
                 date: Date.now(),
                 value: 0,
             })
@@ -287,7 +285,8 @@ function Server(db) {
             value: req.body.value,
             date : `${date[0]} ${date[1]} ${date[2]} ${date[3]}`,
             creationDate: Date.now(),
-            catId: req.user.categories[index]._id 
+            catId: req.user.categories[index]._id,
+            parentId: req.user.categories[index].parent 
         })
 
         req.user.categories[index].value += req.body.value;
@@ -304,7 +303,7 @@ function Server(db) {
                 }
             }
             expenses(req.user.categories[index].parent)
-        }
+    }
 
 
         let repeatedDescription = req.user.descriptionBase.some(el=>el===req.body.description)
@@ -314,13 +313,18 @@ function Server(db) {
 
         req.user.save(er=>{
             if(er) console.log(er)
-            let expenses = req.user.expenses ? req.user.expenses.slice(0, 20) : []
             res.json({
                 categories: req.user.categories, 
-                expenses,
+                expenses: req.user.expenses
             })
         })
        
+    })
+
+    server.get('/userdata/get/reports', passport.authenticate('jwt', {session: false}), (req, res)=>{
+        res.json({
+            listForReports: req.user.categories
+        })
     })
     
     // ---------------------

@@ -6,12 +6,14 @@ import userCategsReducer from './userCategsReducer.jsx';
 import expensesReducer from './expensesReducer.jsx';
 import categoriesListReducer from './catListReducer.jsx';
 import descriptionBaseReducer from './descriptionBaseReducer.jsx';
+import reportsReducer from './descriptionBaseReducer.jsx';
 
 const data = combineReducers({
     userCategories: userCategsReducer,
     userExpenses: expensesReducer,
     categList: categoriesListReducer,
-    descBase: descriptionBaseReducer
+    descBase: descriptionBaseReducer,
+    reportList: reportsReducer
 })
 
 

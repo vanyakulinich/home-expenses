@@ -8,12 +8,10 @@ const Schema = mongoose.Schema;
 const CategorySchema = new Schema({ 
     name: String,
     value: Number,
-    date: Date, // date format will be changed soon
     parent: String,
     isChild: Boolean,
     children: Number,
-    prev: String,
-    next: String
+    date: Number
 })
 
 const ExpensesSchema = new Schema({
@@ -22,7 +20,8 @@ const ExpensesSchema = new Schema({
     description: String,
     date: String,
     creationDate: Number,
-    catId: String
+    catId: String,
+    parentId: String
 
 
 })

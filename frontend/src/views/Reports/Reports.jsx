@@ -13,6 +13,8 @@ import Button from 'components/CustomButtons/Button.jsx';
 import {ChevronLeft, ChevronRight} from "@material-ui/icons";
 import PeriodPicker from '../../components/Calendar/PeriodPicker.jsx'
 
+import recurse from '../../functions/reportsRecurse.jsx'
+
 const styles = {
     dateNav: {
         display: 'flex',
@@ -34,11 +36,13 @@ const styles = {
     }
 
 }
+
 class Reports extends Component {
 
     state={
         startDate: null,
-        endDate:null
+        endDate:null,
+        list: null
     }
 
     componentDidMount() {
@@ -46,8 +50,9 @@ class Reports extends Component {
         let defaultDate = `${new Date()}`
         this.setState({
             startDate: this.formatDate(defaultDate),
-            endDate: this.formatDate(defaultDate)
+            endDate: this.formatDate(defaultDate),
         })
+        
     }
 
     // date navigation functions, working with component PeriodPicker
@@ -57,16 +62,33 @@ class Reports extends Component {
         formatedDate = formatedDate.split(' ')
         return `${formatedDate[0]} ${formatedDate[1]} ${formatedDate[2]} ${formatedDate[3]}`
     }
+
+    buttonsPeriod=(data)=>{
+        this.getPeriod(data)
+    }
+
     getPeriod=(data)=>{
         console.log(data)
         this.setState({
             startDate: this.formatDate(data.start),
             endDate: this.formatDate(data.end)
         })
+        let start = (typeof(data.dayStart)=='number') ? data.dayStart : data.dayStart.getTime()
+        let end =  (typeof(data.dayEnd) =='number') ? data.dayEnd : data.dayEnd.getTime()
+        
+        console.log(this.props.expenses)
+        console.log(data.start.getTime())
+        console.log(data.end.getTime())
+
+        let filteredExpenses = this.props.expenses ? this.props.expenses.filter(el=>{
+            return el.creationDate > start && el.creationDate < end
+        }) : []
+
+        console.log(filteredExpenses) 
+        this.setState({list: filteredExpenses})
     }
-    buttonsPeriod=(data)=>{
-        this.getPeriod(data)
-    }
+
+   
     
     // displaying results
     
@@ -74,8 +96,9 @@ class Reports extends Component {
 
 
     render(){
-        const {classes, categories} = this.props
-        const table = categories ? categories : []
+        const {classes, expenses} = this.props;
+        const table = expenses ? expenses : [];
+        const{list} = this.state;
         return(
             <Card>
             <CardHeader color='info'>
@@ -85,7 +108,7 @@ class Reports extends Component {
             <CardBody >
                 <div className={classes.dateNav}>
                 
-                    <div> {this.state.endDate} / {this.state.startDate}</div>
+                    <div> {this.state.startDate} / {this.state.endDate}</div>
                     <div className={classes.dateButtons}>
 
                         <PeriodPicker buttonsPeriod={this.buttonsPeriod} move='left'/>
@@ -100,7 +123,7 @@ class Reports extends Component {
                 <Table
                     tableHeaderColor="primary"
                     tableHead={["Category", "Expenses value, UAH"]}
-                    tableData={table}
+                    tableData={list ? list : table}
                     inside={false}
                 />
             </CardBody>
@@ -110,7 +133,7 @@ class Reports extends Component {
 }
 
 const mapStateToProps = state=>({
-    categories: state.data.userCategories
+    expenses: state.data.userExpenses
 })
 
 const mapActionsToProps = {

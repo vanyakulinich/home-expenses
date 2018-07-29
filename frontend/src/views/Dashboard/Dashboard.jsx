@@ -81,11 +81,10 @@ class Dashboard extends Component {
     return table
   }
 
- 
-
   render() {
     const { classes, expenses} = this.props;
-    const table = this.expensesList(expenses)
+    const lastTwenty = expenses ? expenses.slice(0, 20) : []
+    const table = this.expensesList(lastTwenty)
     return (
       <div>
         <Card>
@@ -133,8 +132,6 @@ const mapActionsToProps = {
   getUserData,
   addNewExpense
 }
-
-
 
 export default connect(mapStateToProps, mapActionsToProps)(withStyles(dashboardStyle)(Dashboard));
 
