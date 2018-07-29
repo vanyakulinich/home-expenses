@@ -16,7 +16,7 @@ const styles = theme => ({
   },
   formControl: {
     margin: 0,
-    minWidth: 120,
+    minWidth: 150,
   },
   selectEmpty: {
     marginTop: theme.spacing.unit * 2,
@@ -48,10 +48,9 @@ class SimpleSelect extends React.Component {
     return (
       <form className={classes.root} autoComplete="off">
        <FormControl className={classes.formControl}>
-          <InputLabel htmlFor="age-simple">Category</InputLabel>
+          <InputLabel htmlFor="age-simple">Select Category</InputLabel>
           <Select
             value={this.state.age}
-            catid ={this.state.catid}
             onChange={this.handleChange}
             inputProps={{
               name: 'age',
