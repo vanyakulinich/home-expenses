@@ -41,18 +41,24 @@ class Dashboard extends Component {
   };
 
   addExpense=()=>{
-   let inputs = document.querySelectorAll('input')
-   let value = inputs[2].value;
-  if(value.indexOf(',')) {
-    value=value.split(',').join('.');
-  } 
-  value=parseFloat(value).toFixed(2);
+    let inputs = document.querySelectorAll('input')
+   
+    let value = +inputs[2].value ? inputs[2].value : false;
+    if(!value) {
+      inputs[2].value = 'Please enter value'
+      return null
+    }
 
-   let body = {
-     id: inputs[0].previousElementSibling.innerHTML,
-     description: inputs[1].value,
-     value: parseFloat(value)
-   }
+    if(value.indexOf(',')) {
+      value=value.split(',').join('.');
+    } 
+    value=parseFloat(value).toFixed(2);
+
+    let body = {
+      id: inputs[0].previousElementSibling.innerHTML,
+      description: inputs[1].value,
+      value: parseFloat(value)
+    }
     this.props.addNewExpense('PUT', body)
     inputs[1].value = ''
     inputs[2].value = 'UAH'
