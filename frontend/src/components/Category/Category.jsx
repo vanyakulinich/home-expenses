@@ -50,7 +50,6 @@ class Category extends Component{
     }
     render(){
         const {categoryName, child, userData, classes} = this.props;
-        console.log(this.props)
         const buttonColor = child ? 'primary' : 'info';
         return(
             <Paper className={classes.configContainer}>

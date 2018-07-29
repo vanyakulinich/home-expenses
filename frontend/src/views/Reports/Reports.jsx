@@ -81,10 +81,13 @@ class Reports extends Component {
         let filteredExpenses = this.props.expenses ? this.props.expenses.filter(el=>{
             return el.creationDate > start && el.creationDate < end
         }) : []
+        console.log(filteredExpenses)
         let bufferAr = JSON.parse(JSON.stringify(filteredExpenses))
         // recursive organize of report to display
+        
         let result = recurse(bufferAr, null)
         this.setState({list: result})
+        console.log(result)
     }
 
     render(){
