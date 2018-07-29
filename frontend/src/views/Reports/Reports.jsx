@@ -64,6 +64,17 @@ class Reports extends Component {
             endDate: this.formatDate(data.end)
         })
     }
+
+    // dayPeriod=(data)=>{
+    //     this.setState({
+    //         startDate: this.formatDate(data.start),
+    //         endDate: this.formatDate(data.end)
+    //     })
+    // }
+
+    buttonsPeriod=(data)=>{
+        this.getPeriod(data)
+    }
     
 
     render(){
@@ -78,7 +89,7 @@ class Reports extends Component {
             <CardBody >
                 <div className={classes.dateNav}>
                 
-                    <div>{this.state.startDate} / {this.state.endDate}</div>
+                    <div> {this.state.endDate} / {this.state.startDate}</div>
                     <div className={classes.dateButtons}>
                         <Button color='primary' 
                         className={classes.buttons}>
@@ -87,12 +98,17 @@ class Reports extends Component {
                         <Button color='primary' className={classes.buttons}>
                             <ChevronRight/>
                         </Button>
-                        <Button color='primary' className={classes.buttonsPeriods}
-                        >DAY</Button>
-                        <Button color='primary' className={classes.buttonsPeriods}>WEEK</Button>
-                        <Button color='primary' className={classes.buttonsPeriods}>MONTH</Button>
+                        <PeriodPicker buttonsPeriod={this.buttonsPeriod} day={true} name='DAY'/>
+                        <PeriodPicker buttonsPeriod={this.buttonsPeriod} week={true} name='WEEK'/>
+                        <PeriodPicker buttonsPeriod={this.buttonsPeriod} month={true} name='MONTH'/>
+                        {/* <Button color='primary' className={classes.buttonsPeriods}
+                        // dayPeriod = {this.dayPeriod}
+                        >DAY</Button> */}
+                        {/* <Button color='primary' className={classes.buttonsPeriods}>WEEK</Button>
+                        <Button color='primary' className={classes.buttonsPeriods}>MONTH</Button> */}
+
                 
-                        <PeriodPicker getPeriod={this.getPeriod}/>
+                        <PeriodPicker getPeriod={this.getPeriod} period={true} name='PERIOD'/>
                         
                     </div>
                 </div>

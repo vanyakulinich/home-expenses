@@ -53,7 +53,7 @@ function disabledDate(current) {
 }
 
 function disabledTime(time, type) {
-  console.log('disabledTime', time, type);
+  // console.log('disabledTime', time, type);
   if (type === 'start') {
     return {
       disabledHours() {
@@ -104,13 +104,13 @@ function isValidRange(v) {
 }
 
 function onStandaloneChange(value) {
-  console.log('onChange');
-  console.log(value[0] && format(value[0]), value[1] && format(value[1]));
+  // console.log('onChange');
+  // console.log(value[0] && format(value[0]), value[1] && format(value[1]));
 }
 
 function onStandaloneSelect(value) {
-  console.log('onSelect');
-  console.log(format(value[0]), format(value[1]));
+  // console.log('onSelect');
+  // console.log(format(value[0]), format(value[1]));
 }
 
 class PeriodPicker extends React.Component {
@@ -120,7 +120,7 @@ class PeriodPicker extends React.Component {
   }
 
   onChange = (value) => {
-    console.log('onChange', value);
+    // console.log('onChange', value);
     this.setState({ value });
     this.props.getPeriod({
         start: value[0]._d,
@@ -132,9 +132,15 @@ class PeriodPicker extends React.Component {
     this.setState({ hoverValue });
   }
 
+  figurePeriod=()=>{
+    if(this.props.day) this.props.buttonsPeriod({start: now._d, end: now._d})
+    if(this.props.week) this.props.buttonsPeriod({start: now._d, end: now.clone().add(-1, 'weeks')._d})
+    if(this.props.month) this.props.buttonsPeriod({start: now._d, end: now.clone().add(-1, 'months')._d})       
+  }
+
   render() {
     const state = this.state;
-    const {classes} = this.props;
+    const {classes, period} = this.props;
     console.log(now)
     const calendar = (
       <RangeCalendar
@@ -145,7 +151,12 @@ class PeriodPicker extends React.Component {
         defaultValue={[now, now.clone().add(1, 'months')]}
         locale={enUS}
         disabledTime={disabledTime}
-        timePicker={timePickerElement}
+        showDateInput={false}
+        showOk={false}
+        showToday={false}
+        showClear={false}
+        selectTime={false}
+
       />
     );
     return (
@@ -154,13 +165,17 @@ class PeriodPicker extends React.Component {
         onChange={this.onChange}
         animation="slide-up"
         calendar={calendar}
+        disabled={period ? false : true}
+
       >
         {
           ({ value }) => {
             return (<span>
 
-                <Button className={classes.buttonsPeriods} color='primary'>
-                  PERIOD
+                <Button className={classes.buttonsPeriods} 
+                        color='primary'
+                        onClick={this.figurePeriod}>
+                  {this.props.name}
                 </Button>
                 </span>);
           }
