@@ -134,10 +134,6 @@ function Server(db) {
                 let parentIndex = _.findIndex(req.user.categories, el=>{
                     return el._id == req.user.categories[itemForDelete].parent
                 })
-                // delete values from parent category
-                if(req.user.categories[parentIndex].value) {
-                    req.user.categories[parentIndex].value -=req.user.categories[itemForDelete].value
-                }
 
                 if(req.user.categories[parentIndex].children>0) req.user.categories[parentIndex].children -=1
                 
@@ -191,20 +187,6 @@ function Server(db) {
 
             req.user.categories[parentItem].value+=req.user.categories[itemForSub].value
 
-
-           if(req.user.categories[parentItem].parent) { // if category has parent
-            let value = req.user.categories[itemForSub].value
-            function expenses(parentId) { // synchronize expenses with all parents in chain
-                let parentIndex = _.findIndex(req.user.categories, el=>el._id==parentId)
-                req.user.categories[parentIndex].value += value
-                if(req.user.categories[parentIndex].parent) {
-                    expenses(req.user.categories[parentIndex].parent)
-                } else {
-                    return
-                }
-            }
-            expenses(req.user.categories[parentItem].parent)
-        }
         req.user.save(er=>{
             if(er) console.log(er)
         })
@@ -272,19 +254,6 @@ function Server(db) {
 
         req.user.categories[index].value += req.body.value;
 
-        if(req.user.categories[index].parent) { // if category has parent
-
-            function expenses(parentId) { // synchronize expenses with all parents in chain
-                let parentIndex = _.findIndex(req.user.categories, el=>el._id==parentId)
-                req.user.categories[parentIndex].value += req.body.value
-                if(req.user.categories[parentIndex].parent) {
-                    expenses(req.user.categories[parentIndex].parent)
-                } else {
-                    return
-                }
-            }
-            expenses(req.user.categories[index].parent)
-    }
         // adding new description to base if it is not repeated
         let repeatedDescription = req.user.descriptionBase.some(el=>el===req.body.description)
         if(!repeatedDescription) req.user.descriptionBase.push(req.body.description)

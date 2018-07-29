@@ -6,11 +6,9 @@ const Schema = mongoose.Schema;
 // single category schema
 const CategorySchema = new Schema({ 
     name: String,
-    value: Number,
     parent: String,
     isChild: Boolean,
     children: Number,
-    date: Number
 })
 
 const ExpensesSchema = new Schema({
