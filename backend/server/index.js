@@ -155,7 +155,6 @@ function Server(db) {
                 //deletion of main categories
                 //list of categories without deleted one with all her children comes from front
                 // and all expenses of deleted category are marked as deleted
-                console.log(req.user.expenses)
                 req.user.expenses.forEach(el=>{
                     if(el.catId == req.user.categories[itemForDelete]._id) {
                         el.category +=' (deleted)'
@@ -184,8 +183,6 @@ function Server(db) {
             let parentItem = _.findIndex(req.user.categories, el=>el._id==req.body.parent)
 
             req.user.categories[parentItem].children +=1;
-
-            req.user.categories[parentItem].value+=req.user.categories[itemForSub].value
 
         req.user.save(er=>{
             if(er) console.log(er)

@@ -18,9 +18,7 @@ const ExpensesSchema = new Schema({
     date: String,
     creationDate: Number,
     catId: String,
-    parentId: String
-
-
+    parentId: String,
 })
 
 // user schema, includes category schemas as children
