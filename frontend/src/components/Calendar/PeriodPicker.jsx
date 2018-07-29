@@ -11,6 +11,7 @@ import 'rc-calendar/assets/index.css';
 import 'rc-time-picker/assets/index.css';
 import withStyles from "@material-ui/core/styles/withStyles";
 import Button from 'components/CustomButtons/Button.jsx';
+import {ChevronLeft, ChevronRight} from "@material-ui/icons";
 
 import moment from 'moment';
 import 'moment/locale/zh-cn';
@@ -26,15 +27,15 @@ moment.locale('en-gb');
 const now = moment();
 now.utcOffset(0);
 
+let currentPeriods={
+  start: now,
+  end: now,
+  period: 'day',
+  milisec: 0
+}
 
 const defaultCalendarValue = now.clone();
 defaultCalendarValue.add(-1, 'month');
-
-const timePickerElement = (
-  <TimePickerPanel
-    defaultValue={[moment('00:00:00', 'HH:mm:ss'), moment('23:59:59', 'HH:mm:ss')]}
-  />
-);
 
 function newArray(start, end) {
   const result = [];
@@ -44,16 +45,7 @@ function newArray(start, end) {
   return result;
 }
 
-function disabledDate(current) {
-  const date = moment();
-  date.hour(0);
-  date.minute(0);
-  date.second(0);
-  return current.isBefore(date);  // can not select days before today
-}
-
 function disabledTime(time, type) {
-  // console.log('disabledTime', time, type);
   if (type === 'start') {
     return {
       disabledHours() {
@@ -94,54 +86,90 @@ function disabledTime(time, type) {
   };
 }
 
-const formatStr = 'YYYY-MM-DD HH:mm:ss';
-function format(v) {
-  return v ? v.format(formatStr) : '';
-}
-
-function isValidRange(v) {
-  return v && v[0] && v[1];
-}
-
-function onStandaloneChange(value) {
-  // console.log('onChange');
-  // console.log(value[0] && format(value[0]), value[1] && format(value[1]));
-}
-
-function onStandaloneSelect(value) {
-  // console.log('onSelect');
-  // console.log(format(value[0]), format(value[1]));
-}
-
 class PeriodPicker extends React.Component {
-  state = {
-    value: [],
-    hoverValue: [],
+  constructor(props) {
+    super(props)
+    this.state = {
+      value: [],
+      hoverValue: [],
+      start: now,
+      end: now,
+    }
   }
-
   onChange = (value) => {
-    // console.log('onChange', value);
     this.setState({ value });
-    this.props.getPeriod({
-        start: value[0]._d,
-        end: value[1]._d
-  })
+    this.props.getPeriod({end: value[0]._d, start: value[1]._d})
+    currentPeriods.start = value[0]
+    currentPeriods.end = value[1]
+    currentPeriods.period = 'custom'
+    let customPeriodStart = value[0]._d.getTime() 
+    let customPeriodEnd = value[1]._d.getTime()
+    currentPeriods.milisec = customPeriodEnd - customPeriodStart
   }
 
   onHoverChange = (hoverValue) => {
     this.setState({ hoverValue });
   }
 
+  // function for navifation
   figurePeriod=()=>{
-    if(this.props.day) this.props.buttonsPeriod({start: now._d, end: now._d})
-    if(this.props.week) this.props.buttonsPeriod({start: now._d, end: now.clone().add(-1, 'weeks')._d})
-    if(this.props.month) this.props.buttonsPeriod({start: now._d, end: now.clone().add(-1, 'months')._d})       
+    if(this.props.move) { // moving periods by arrows
+      //going left
+      if(this.props.move=='left') {
+        // if user chose custom period he can navigate by arrow buttons using his period
+        if(currentPeriods.period == 'custom') { 
+          currentPeriods.start = currentPeriods.start.clone().add(-currentPeriods.milisec, 'milliseconds')
+          console.log(currentPeriods.start)
+          currentPeriods.end = currentPeriods.end.clone().add(-currentPeriods.milisec, 'milliseconds')
+          this.props.buttonsPeriod({start: currentPeriods.start._d, end: currentPeriods.end._d}) 
+        } else {
+          currentPeriods.start = currentPeriods.start.clone().add(-1, currentPeriods.period)
+          currentPeriods.end = currentPeriods.end.clone().add(-1, currentPeriods.period)
+          this.props.buttonsPeriod({start: currentPeriods.start._d, end: currentPeriods.end._d}) 
+        }
+        // going right
+      } else {
+        if(currentPeriods.period == 'custom') {
+          currentPeriods.start = currentPeriods.start.clone().add(currentPeriods.milisec, 'milliseconds')
+          currentPeriods.end = currentPeriods.end.clone().add(currentPeriods.milisec, 'milliseconds')
+          this.props.buttonsPeriod({start: currentPeriods.start._d, end: currentPeriods.end._d}) 
+        } else {
+          currentPeriods.start = currentPeriods.start.clone().add(+1, currentPeriods.period)
+          currentPeriods.end = currentPeriods.end.clone().add(+1, currentPeriods.period)
+          this.props.buttonsPeriod({start: currentPeriods.start._d, end: currentPeriods.end._d})
+        } 
+      }
+
+    } else { // chosing range by buttons DAY WEEK and MONTH
+      if(this.props.day) {
+        this.props.buttonsPeriod({start: now._d, end: now._d})
+        currentPeriods.period = 'day'
+      }
+      if(this.props.week) {
+        this.props.buttonsPeriod({start: now._d, end: now.clone().add(-1, 'weeks')._d})
+        currentPeriods.end = now.clone().add(-1, 'weeks'),
+        currentPeriods.period = 'weeks'
+      }
+      if(this.props.month) {
+        this.props.buttonsPeriod({start: now._d, end: now.clone().add(-1, 'months')._d})
+        currentPeriods.end = now.clone().add(-1, 'months'),
+        currentPeriods.period = 'months'
+      } 
+    }  
+  }
+
+
+  buttonTitle = (move)=>{
+      return move=='left' ? <ChevronLeft/> : <ChevronRight/>
   }
 
   render() {
     const state = this.state;
-    const {classes, period} = this.props;
-    console.log(now)
+    const {classes, period, move} = this.props;
+
+    const title = move ? this.buttonTitle(move) : this.props.name
+
+    // console.log(now)
     const calendar = (
       <RangeCalendar
         hoverValue={state.hoverValue}
@@ -175,7 +203,7 @@ class PeriodPicker extends React.Component {
                 <Button className={classes.buttonsPeriods} 
                         color='primary'
                         onClick={this.figurePeriod}>
-                  {this.props.name}
+                  {title}
                 </Button>
                 </span>);
           }

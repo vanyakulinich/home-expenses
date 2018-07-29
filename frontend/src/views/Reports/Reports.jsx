@@ -50,13 +50,13 @@ class Reports extends Component {
         })
     }
 
+    // date navigation functions, working with component PeriodPicker
     formatDate=(date)=>{
         let formatedDate = `${date}`
         console.log(formatedDate)
         formatedDate = formatedDate.split(' ')
         return `${formatedDate[0]} ${formatedDate[1]} ${formatedDate[2]} ${formatedDate[3]}`
     }
-
     getPeriod=(data)=>{
         console.log(data)
         this.setState({
@@ -64,18 +64,14 @@ class Reports extends Component {
             endDate: this.formatDate(data.end)
         })
     }
-
-    // dayPeriod=(data)=>{
-    //     this.setState({
-    //         startDate: this.formatDate(data.start),
-    //         endDate: this.formatDate(data.end)
-    //     })
-    // }
-
     buttonsPeriod=(data)=>{
         this.getPeriod(data)
     }
     
+    // displaying results
+    
+
+
 
     render(){
         const {classes, categories} = this.props
@@ -91,23 +87,12 @@ class Reports extends Component {
                 
                     <div> {this.state.endDate} / {this.state.startDate}</div>
                     <div className={classes.dateButtons}>
-                        <Button color='primary' 
-                        className={classes.buttons}>
-                            <ChevronLeft/>
-                        </Button>
-                        <Button color='primary' className={classes.buttons}>
-                            <ChevronRight/>
-                        </Button>
+
+                        <PeriodPicker buttonsPeriod={this.buttonsPeriod} move='left'/>
+                        <PeriodPicker buttonsPeriod={this.buttonsPeriod} move='right'/>
                         <PeriodPicker buttonsPeriod={this.buttonsPeriod} day={true} name='DAY'/>
                         <PeriodPicker buttonsPeriod={this.buttonsPeriod} week={true} name='WEEK'/>
                         <PeriodPicker buttonsPeriod={this.buttonsPeriod} month={true} name='MONTH'/>
-                        {/* <Button color='primary' className={classes.buttonsPeriods}
-                        // dayPeriod = {this.dayPeriod}
-                        >DAY</Button> */}
-                        {/* <Button color='primary' className={classes.buttonsPeriods}>WEEK</Button>
-                        <Button color='primary' className={classes.buttonsPeriods}>MONTH</Button> */}
-
-                
                         <PeriodPicker getPeriod={this.getPeriod} period={true} name='PERIOD'/>
                         
                     </div>
