@@ -50,6 +50,7 @@ class Category extends Component{
     }
     render(){
         const {categoryName, child, userData, classes} = this.props;
+        console.log(this.props)
         const buttonColor = child ? 'primary' : 'info';
         return(
             <Paper className={classes.configContainer}>
@@ -69,9 +70,13 @@ class Category extends Component{
                     name = {categoryName}
                     isChild={child} />
                     <SimpleDialogDemo 
-                        list = {userData.filter(item=>(item._id!==this.props.id) && 
-                                                        (item.parent === null) &&
-                                                        (!item.children))}
+                        list = {userData.filter(item=>{
+
+                            return (item._id!==this.props.id) && 
+                                    (item.parent === null) &&
+                                    (item._id !== this.props.head)
+                                }
+                            )}
                         parentitem = {userData.find(item=>item.name===categoryName)}
                         color={buttonColor}
                         id={this.props.id}/> 

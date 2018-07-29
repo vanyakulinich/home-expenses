@@ -9,6 +9,7 @@ const CategorySchema = new Schema({
     parent: String,
     isChild: Boolean,
     children: Number,
+    head: String
 })
 
 const ExpensesSchema = new Schema({

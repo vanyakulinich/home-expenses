@@ -49,6 +49,7 @@ class CategoryList extends Component {
                                             child={item.isChild}
                                             children = {item.children}
                                             className={classes.relat}
+                                            head={item.head}
                                             /> 
                                             <CategoryList 
                                                 data={item.children} 
@@ -67,6 +68,7 @@ class CategoryList extends Component {
                                     position={key}
                                     parentLength={data.length-1}
                                     child={item.isChild}
+                                    head={item.head}
                                     />  
                                     
                                 </ListItem>

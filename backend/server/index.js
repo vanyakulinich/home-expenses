@@ -92,8 +92,8 @@ function Server(db) {
                 parent: null,
                 isChild: false,
                 children: 0,
-                date: Date.now(),
-                value: 0,
+                head: null
+                
             })
             cats.push(newCat)
             if(cats[cats.length-2]) cats[cats.length-2].next = newCat._id
@@ -142,6 +142,7 @@ function Server(db) {
                 } else {
                     req.user.categories[itemForDelete].parent = null
                     req.user.categories[itemForDelete].isChild = false 
+                    req.user.categories[itemForDelete].head = null
                 }
 
                 req.user.save(er=>{
@@ -184,6 +185,16 @@ function Server(db) {
 
             req.user.categories[parentItem].children +=1;
 
+
+            function findHead(ar, id) {
+                let headIndex = _.findIndex(ar, item=>item._id == id)
+                if(ar[headIndex].parent) {
+                    findHead(ar, ar[headIndex].parent)
+                } else {
+                    req.user.categories[itemForSub].head = req.user.categories[headIndex]._id
+                }
+            }
+            findHead(req.user.categories, req.body.parent)
         req.user.save(er=>{
             if(er) console.log(er)
         })
