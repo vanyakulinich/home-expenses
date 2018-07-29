@@ -6,6 +6,4 @@ mongoose.connect(url, (err)=>{
     console.log('Successfully connected')
 })
 
-
-
 module.exports = mongoose;

@@ -3,11 +3,10 @@ import PropTypes from "prop-types";
 import {connect} from 'react-redux';
 import getUserData from '../../actions/getUserData.jsx';
 
-
 // @material-ui/core
 import withStyles from "@material-ui/core/styles/withStyles";
 
-import {TextField, MenuItem, List, ListItem} from "@material-ui/core";
+import {TextField} from "@material-ui/core";
 import SimpleSelect from '../../components/Select/SimpleSelect.jsx'
 
 // core components
@@ -81,11 +80,10 @@ class Dashboard extends Component {
     return table
   }
 
- 
-
   render() {
     const { classes, expenses} = this.props;
-    const table = this.expensesList(expenses)
+    const lastTwenty = expenses ? expenses.slice(0, 20) : []
+    const table = this.expensesList(lastTwenty)
     return (
       <div>
         <Card>
@@ -133,8 +131,6 @@ const mapActionsToProps = {
   getUserData,
   addNewExpense
 }
-
-
 
 export default connect(mapStateToProps, mapActionsToProps)(withStyles(dashboardStyle)(Dashboard));
 

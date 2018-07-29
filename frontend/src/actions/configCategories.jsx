@@ -15,7 +15,6 @@ export default function configCategories(method, path, body) {
                 
             }
         }
-        console.log(fetchOptions)
         fetch(`http://localhost:3001/userdata/config/`+route, fetchOptions)
             .then(res => res.json())
             .then((data) => {

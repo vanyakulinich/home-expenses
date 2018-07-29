@@ -11,7 +11,7 @@ const data = combineReducers({
     userCategories: userCategsReducer,
     userExpenses: expensesReducer,
     categList: categoriesListReducer,
-    descBase: descriptionBaseReducer
+    descBase: descriptionBaseReducer,
 })
 
 

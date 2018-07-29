@@ -9,7 +9,7 @@ import store from './store';
 import "assets/css/material-dashboard-react.css?v=1.3.0";
 
 import App from "layouts/App/App.jsx";
-// localStorage.clear()
+
 const appHistory = createBrowserHistory();
 ReactDOM.render(
   <Provider store={store}>

@@ -3,17 +3,12 @@ const mongoose = require('./dbConnect');
 const Schema = mongoose.Schema;
 
 // schemas
-
 // single category schema
 const CategorySchema = new Schema({ 
     name: String,
-    value: Number,
-    date: Date, // date format will be changed soon
     parent: String,
     isChild: Boolean,
     children: Number,
-    prev: String,
-    next: String
 })
 
 const ExpensesSchema = new Schema({
@@ -22,9 +17,8 @@ const ExpensesSchema = new Schema({
     description: String,
     date: String,
     creationDate: Number,
-    catId: String
-
-
+    catId: String,
+    parentId: String,
 })
 
 // user schema, includes category schemas as children

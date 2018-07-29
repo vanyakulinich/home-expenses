@@ -1,10 +1,10 @@
 const server = require('express')();
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const PORT = 3001;
+var PORT = process.env.PORT || 3001;
 const passport = require("passport");
 const passportJWT = require("passport-jwt");
-const {UserModel, CategoryModel} = require('../database/models')
+const {UserModel} = require('../database/models')
 
 // psssport init
 const ExtractJwt = passportJWT.ExtractJwt;
@@ -28,6 +28,6 @@ server
     .use(bodyParser.json())
 
 
-server.listen(PORT, console.log('server listen on 3001'))
+server.listen(PORT, console.log('server listen on '+ PORT))
 
 module.exports = {server, passport};
