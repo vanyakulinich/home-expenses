@@ -6,3 +6,6 @@
 #1 В папке backend => npm install => node index.js
 
 #2 В папке frontend => npm install => npm start
+
+# database config is hidden in gitignore
+#you will need to create mongoDB yourself(in this project mongoDB Atlas is used)
