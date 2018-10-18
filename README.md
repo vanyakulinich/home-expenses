@@ -1,11 +1,11 @@
-# home-expenses app
+### home-expenses app
+### ReactJS - NodeJS-Express - MongoDB
 
+###project init
 
-#Запуск проекта
+###1 backend => npm install => node index.js
 
-#1 В папке backend => npm install => node index.js
+###2 frontend => npm install => npm start
 
-#2 В папке frontend => npm install => npm start
-
-# database config is hidden in gitignore
-#you will need to create mongoDB yourself(in this project mongoDB Atlas is used)
+### database config is hidden in gitignore
+##you will need to create mongoDB yourself(in this project mongoDB Atlas is used)
